@@ -61,6 +61,7 @@ public class MainActivity extends Activity
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, mFragmentStartGame)
                         .commit();
+                onSectionAttached(NavigationDrawerFragment.START_TAB_ID);
                 mFragmentStartBasketBallGame = null;    // no leaks
                 break;
 
@@ -71,6 +72,9 @@ public class MainActivity extends Activity
                 mFragmentStartBasketBallGame = null;    // no leaks
                 break;
         }
+
+
+        restoreActionBar();
     }
 
     public void onSectionAttached(int number) {
@@ -168,6 +172,7 @@ public class MainActivity extends Activity
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, mFragmentStartGame)
                 .commit();
+        mNavigationDrawerFragment.selectItem(NavigationDrawerFragment.START_TAB_ID);
     }
 
     /**
