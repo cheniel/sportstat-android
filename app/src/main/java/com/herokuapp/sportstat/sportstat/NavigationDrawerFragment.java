@@ -36,12 +36,12 @@ public class NavigationDrawerFragment extends Fragment {
     public static final String ACTIVITY_LEADERBOARD = "Leaderboard";
     public static final String ACTIVITY_SETTINGS = "Settings";
 
-    public static final int START_TAB_ID = 1;
-    public static final int LOG_TAB_ID = 2;
-    public static final int PROFILE_TAB_ID = 3;
-    public static final int NEWSFEED_TAB_ID = 4;
-    public static final int LEADERBOARD_TAB_ID = 5;
-    public static final int SETTINGS_TAB_ID = 6;
+    public static final int START_TAB_ID = 0;
+    public static final int LOG_TAB_ID = 1;
+    public static final int PROFILE_TAB_ID = 2;
+    public static final int NEWSFEED_TAB_ID = 3;
+    public static final int LEADERBOARD_TAB_ID = 4;
+    public static final int SETTINGS_TAB_ID = 5;
 
     private static final String[] allDrawers = {
             ACTIVITY_CREATE_NEW_GAME_AUTOMATIC,
@@ -92,12 +92,13 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
+        mCurrentSelectedPosition = NEWSFEED_TAB_ID;     // set the default value
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mFromSavedInstanceState = true;
         }
 
-        // Select either the default item (0) or the last selected item.
+        // Select either the default item (4) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
 

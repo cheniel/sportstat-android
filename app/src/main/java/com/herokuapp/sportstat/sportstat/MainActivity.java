@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -26,6 +28,7 @@ public class MainActivity extends Activity
     // the other fragments
     FragmentManager mFragmentManager;
     private FragmentStartGame mFragmentStartGame;
+    private FragmentStartBasketballGame mFragmentStartBasketBallGame;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -43,28 +46,29 @@ public class MainActivity extends Activity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getString(R.string.Start_Game_Tab);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-            }
+    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        switch (position + 1) {
+        switch (position) {
             case (NavigationDrawerFragment.START_TAB_ID):
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, mFragmentStartGame)
                         .commit();
+                mFragmentStartBasketBallGame = null;    // no leaks
                 break;
 
             default:
                 mFragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .replace(R.id.container, PlaceholderFragment.newInstance(position))
                         .commit();
+                mFragmentStartBasketBallGame = null;    // no leaks
                 break;
         }
     }
@@ -132,15 +136,23 @@ public class MainActivity extends Activity
         int id = v.getId();
 
         switch (id){
-            case R.id.menu_action_add:
+            case R.id.Start_New_Basketball_Game_Button:
+                mFragmentStartBasketBallGame = FragmentStartBasketballGame.newInstance(null);
                 mFragmentManager.beginTransaction()
-                        .replace(R.id.container, mFragmentStartGame)
+                        .replace(R.id.container, mFragmentStartBasketBallGame)
                         .commit();
                 break;
-            case R.id.Start_New_Basketball_Game_Button:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.container, new FragmentStartBasketballGame())
-                        .commit();
+            case R.id.new_basketball_game_assist_button:
+                if (mFragmentStartBasketBallGame != null)
+                    mFragmentStartBasketBallGame.increaseAssists();
+                break;
+            case R.id.new_basketball_game_two_point_button:
+                if (mFragmentStartBasketBallGame != null)
+                    mFragmentStartBasketBallGame.increaseTwoPoints();
+                break;
+            case R.id.new_basketball_game_three_point_button:
+                if (mFragmentStartBasketBallGame != null)
+                    mFragmentStartBasketBallGame.increaseThreePoints();
                 break;
             default:
                 Toast.makeText(this, "Button not recognized", Toast.LENGTH_SHORT);
@@ -149,6 +161,7 @@ public class MainActivity extends Activity
     }
 
     public void onMenuItemPressed(MenuItem item){
+        mFragmentStartBasketBallGame = FragmentStartBasketballGame.newInstance(null);
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, mFragmentStartGame)
                 .commit();

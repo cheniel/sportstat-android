@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -16,30 +17,24 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class FragmentStartBasketballGame extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private GameBasketball mGame;
 
+    private TextView mAssistsView;
+    private TextView mTwoPointsView;
+    private TextView mThreePointsView;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment FragmentStartGame.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentStartBasketballGame newInstance(String param1, String param2) {
+    public static FragmentStartBasketballGame newInstance(String param2) {
         FragmentStartBasketballGame fragment = new FragmentStartBasketballGame();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        //args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,21 +46,29 @@ public class FragmentStartBasketballGame extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mGame = new GameBasketball();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_basketball_game, container, false);
+        View v = inflater.inflate(R.layout.fragment_basketball_game, container, false);
+
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mAssistsView = (TextView)
+                getActivity().findViewById(R.id.new_basketball_game_assist_text_view);
+        mTwoPointsView = (TextView)
+                getActivity().findViewById(R.id.new_basketball_game_two_point_text_view);
+        mThreePointsView = (TextView)
+                getActivity().findViewById(R.id.new_basketball_game_three_point_text_view);
 
     }
 
@@ -79,4 +82,20 @@ public class FragmentStartBasketballGame extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+    public void increaseAssists(){
+        mGame.setAssists(mGame.getAssists() + 1);
+        mAssistsView.setText(String.valueOf(mGame.getAssists()));
+    }
+
+    public void increaseTwoPoints(){
+        mGame.setTwoPoints(mGame.getTwoPoints() + 1);
+        mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
+    }
+
+    public void increaseThreePoints(){
+        mGame.setThreePoints(mGame.getThreePoints() + 1);
+        mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
+    }
+
 }
