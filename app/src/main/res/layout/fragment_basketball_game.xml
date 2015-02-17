@@ -82,7 +82,8 @@
             android:id="@+id/new_basketball_game_done_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Done_Button" />
+            android:text="@string/Done_Button"
+            android:onClick="onButtonPressed"/>
 
     </LinearLayout>
 

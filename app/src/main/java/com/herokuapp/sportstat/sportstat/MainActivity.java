@@ -154,6 +154,9 @@ public class MainActivity extends Activity
                 if (mFragmentStartBasketBallGame != null)
                     mFragmentStartBasketBallGame.increaseThreePoints();
                 break;
+            case R.id.new_basketball_game_done_button:
+                if (mFragmentStartBasketBallGame != null)
+                    mFragmentStartBasketBallGame.onDoneButtonPressed();
             default:
                 Toast.makeText(this, "Button not recognized", Toast.LENGTH_SHORT);
                 break;

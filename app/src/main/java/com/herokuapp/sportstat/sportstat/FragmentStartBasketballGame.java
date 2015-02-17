@@ -98,4 +98,8 @@ public class FragmentStartBasketballGame extends Fragment {
         mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
     }
 
+    public void onDoneButtonPressed(){
+
+    }
+
 }
