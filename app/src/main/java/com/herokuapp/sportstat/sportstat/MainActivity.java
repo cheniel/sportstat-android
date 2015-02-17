@@ -5,24 +5,18 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        FragmentStartGame.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -30,6 +24,7 @@ public class MainActivity extends Activity
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     // the other fragments
+    FragmentManager mFragmentManager;
     private FragmentStartGame mFragmentStartGame;
 
     /**
@@ -40,32 +35,34 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFragmentManager = getFragmentManager();
+        mFragmentStartGame = FragmentStartGame.newInstance(NavigationDrawerFragment.START_TAB_ID);
+
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mTitle = getString(R.string.Start_Game_Tab);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
+            }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-
         switch (position + 1) {
             case (NavigationDrawerFragment.START_TAB_ID):
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new FragmentStartGame())
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentStartGame)
                         .commit();
                 break;
 
             default:
-                fragmentManager.beginTransaction()
+                mFragmentManager.beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                         .commit();
                 break;
@@ -109,7 +106,7 @@ public class MainActivity extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+            getMenuInflater().inflate(R.menu.global, menu);
             restoreActionBar();
             return true;
         }
@@ -131,9 +128,30 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        
+    public void onButtonPressed(View v) {
+        int id = v.getId();
+
+        switch (id){
+            case R.id.menu_action_add:
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentStartGame)
+                        .commit();
+                break;
+            case R.id.Start_New_Basketball_Game_Button:
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, new FragmentStartBasketballGame())
+                        .commit();
+                break;
+            default:
+                Toast.makeText(this, "Button not recognized", Toast.LENGTH_SHORT);
+                break;
+        }
+    }
+
+    public void onMenuItemPressed(MenuItem item){
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, mFragmentStartGame)
+                .commit();
     }
 
     /**

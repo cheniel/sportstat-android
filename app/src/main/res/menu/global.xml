@@ -3,5 +3,6 @@
         android:title="@string/menu_action_add"
         android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="100"
-        android:showAsAction="always" />
+        android:showAsAction="always"
+        android:onClick="onMenuItemPressed"/>
 </menu>

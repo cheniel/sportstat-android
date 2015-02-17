@@ -15,5 +15,12 @@
     <string name="action_settings">Settings</string>
     <string name="menu_action_add">Add</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="basketball_new_game_button">START</string>
+    <string name="title_activity_start_game">StartGameActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="Assist_Button">Assist</string>
+    <string name="Two_Point_Button">Two-Point</string>
+    <string name="Three_Point_Button">Three-Point</string>
+    <string name="Done_Button">Done</string>
 
 </resources>
