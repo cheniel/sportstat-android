@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +29,6 @@ public class MainActivity extends Activity
     // the other fragments
     FragmentManager mFragmentManager;
     private FragmentStartGame mFragmentStartGame;
-    private FragmentStartBasketballGame mFragmentStartBasketBallGame;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -62,14 +62,12 @@ public class MainActivity extends Activity
                         .replace(R.id.container, mFragmentStartGame)
                         .commit();
                 onSectionAttached(NavigationDrawerFragment.START_TAB_ID);
-                mFragmentStartBasketBallGame = null;    // no leaks
                 break;
 
             default:
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position))
                         .commit();
-                mFragmentStartBasketBallGame = null;    // no leaks
                 break;
         }
 
@@ -136,39 +134,7 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
-    public void onButtonPressed(View v) {
-        int id = v.getId();
-
-        switch (id){
-            case R.id.Start_New_Basketball_Game_Button:
-                mFragmentStartBasketBallGame = FragmentStartBasketballGame.newInstance(null);
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.container, mFragmentStartBasketBallGame)
-                        .commit();
-                break;
-            case R.id.new_basketball_game_assist_button:
-                if (mFragmentStartBasketBallGame != null)
-                    mFragmentStartBasketBallGame.increaseAssists();
-                break;
-            case R.id.new_basketball_game_two_point_button:
-                if (mFragmentStartBasketBallGame != null)
-                    mFragmentStartBasketBallGame.increaseTwoPoints();
-                break;
-            case R.id.new_basketball_game_three_point_button:
-                if (mFragmentStartBasketBallGame != null)
-                    mFragmentStartBasketBallGame.increaseThreePoints();
-                break;
-            case R.id.new_basketball_game_done_button:
-                if (mFragmentStartBasketBallGame != null)
-                    mFragmentStartBasketBallGame.onDoneButtonPressed();
-            default:
-                Toast.makeText(this, "Button not recognized", Toast.LENGTH_SHORT);
-                break;
-        }
-    }
-
     public void onMenuItemPressed(MenuItem item){
-        mFragmentStartBasketBallGame = FragmentStartBasketballGame.newInstance(null);
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, mFragmentStartGame)
                 .commit();
@@ -213,6 +179,11 @@ public class MainActivity extends Activity
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
+    }
+
+    public void startSportLoggingActivity(View view) {
+        Intent intent = new Intent(".activities.SportLoggingActivity");
+        startActivity(intent);
     }
 
 }

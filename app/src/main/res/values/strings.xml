@@ -22,5 +22,6 @@
     <string name="Two_Point_Button">Two-Point</string>
     <string name="Three_Point_Button">Three-Point</string>
     <string name="Done_Button">Done</string>
+    <string name="title_activity_sport_logging">SportLoggingActivity</string>
 
 </resources>

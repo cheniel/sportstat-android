@@ -1,23 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.herokuapp.sportstat.sportstat.FragmentStartBasketballGame">
+    android:orientation="vertical"
+    tools:context="com.herokuapp.sportstat.sportstat.MainActivity">
 
-    <LinearLayout
+    <Button
+        android:id="@+id/start_new_basketball_game_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@drawable/basketball_button_image"
+        android:text="@string/basketball_new_game_button"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:onClick="startSportLoggingActivity"/>
 
-        <Button
-            android:id="@+id/Start_New_Basketball_Game_Button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/basketball_button_image"
-            android:text="@string/basketball_new_game_button"
-            android:textStyle="bold"
-            android:textSize="24dp"
-            android:onClick="onButtonPressed"/>
+</LinearLayout>
 
-        </LinearLayout>
-
-</FrameLayout>

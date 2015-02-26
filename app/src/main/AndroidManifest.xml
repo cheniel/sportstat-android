@@ -16,9 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".StartGameActivity"
-            android:label="@string/title_activity_start_game" >
+            android:name=".SportLoggingActivity"
+            android:label="@string/title_activity_sport_logging" >
+            <intent-filter>
+                <action android:name=".activities.SportLoggingActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 
