@@ -13,13 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
-
-import java.util.UUID;
+import com.getpebble.android.kit.util.PebbleDictionary;
 
 
 public class SportLoggingActivity extends Activity {
-    private final static UUID PEBBLE_APP_UUID = UUID.fromString("fe649006-bd16-4f05-a0c3-060750535107");
-    private GameBasketball mGame;
+
+    private BasketballGame mGame;
     private TextView mAssistsView;
     private TextView mTwoPointsView;
     private TextView mThreePointsView;
@@ -30,7 +29,7 @@ public class SportLoggingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_logging);
-        mGame = new GameBasketball();
+        mGame = new BasketballGame();
         mAssistsView = (TextView) findViewById(R.id.new_basketball_game_assist_text_view);
         mTwoPointsView = (TextView) findViewById(R.id.new_basketball_game_two_point_text_view);
         mThreePointsView = (TextView) findViewById(R.id.new_basketball_game_three_point_text_view);
@@ -48,7 +47,7 @@ public class SportLoggingActivity extends Activity {
         }
 
         // open up SportStat Pebble app
-        PebbleKit.startAppOnPebble(getApplicationContext(), PEBBLE_APP_UUID);
+        PebbleKit.startAppOnPebble(getApplicationContext(), PebbleApp.APP_UUID);
 
         // register receivers for Pebble disconnect and connect
         mPebbleConnectedReceiver = PebbleKit.registerPebbleConnectedReceiver(this, new BroadcastReceiver() {
@@ -66,6 +65,14 @@ public class SportLoggingActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "Pebble disconnected!", Toast.LENGTH_LONG).show();
             }
         });
+
+        // send initial message to Pebble
+        PebbleDictionary data = new PebbleDictionary();
+        data.addString(PebbleApp.MSG_GENERIC_STRING, "onResume message");
+        data.addUint8(PebbleApp.MSG_ASSIST_COUNT, (byte) mGame.getAssists());
+        data.addUint8(PebbleApp.MSG_TWO_POINT_COUNT, (byte) mGame.getTwoPoints());
+        data.addUint8(PebbleApp.MSG_THREE_POINT_COUNT, (byte) mGame.getThreePoints());
+        PebbleKit.sendDataToPebble(getApplicationContext(), PebbleApp.APP_UUID, data);
     }
 
     @Override
@@ -111,6 +118,8 @@ public class SportLoggingActivity extends Activity {
         mGame.setThreePoints(mGame.getThreePoints() + 1);
         mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
     }
+
+    // TODO: add decrement onLongClick
 
     public void onDoneButtonPressed(View view) {
 

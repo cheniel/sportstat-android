@@ -3,12 +3,12 @@ package com.herokuapp.sportstat.sportstat;
 /**
  * Created by DavidHarmon on 2/16/15.
  */
-public class GameBasketball {
+public class BasketballGame {
     private int mAssists;
     private int mTwoPoints;
     private int mThreePoints;
 
-    public GameBasketball(){
+    public BasketballGame(){
         mAssists = 0;
         mTwoPoints = 0;
         mThreePoints = 0;
