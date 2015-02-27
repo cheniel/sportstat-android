@@ -121,7 +121,12 @@ public class SportLoggingActivity extends Activity {
 
     // TODO: add decrement onLongClick
 
+    //When the user clicks done, launch the GameSummaryActivity
     public void onDoneButtonPressed(View view) {
+
+
+
+
 
     }
 

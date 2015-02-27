@@ -13,9 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class MainActivity extends Activity
@@ -28,7 +25,7 @@ public class MainActivity extends Activity
 
     // the other fragments
     FragmentManager mFragmentManager;
-    private FragmentStartGame mFragmentStartGame;
+    private StartGameFragment mFragmentStartGame;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -40,7 +37,7 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
 
         mFragmentManager = getFragmentManager();
-        mFragmentStartGame = FragmentStartGame.newInstance(NavigationDrawerFragment.START_TAB_ID);
+        mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
 
         setContentView(R.layout.activity_main);
 

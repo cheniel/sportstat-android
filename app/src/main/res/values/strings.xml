@@ -23,5 +23,6 @@
     <string name="Three_Point_Button">Three-Point</string>
     <string name="Done_Button">Done</string>
     <string name="title_activity_sport_logging">SportLoggingActivity</string>
+    <string name="title_activity_game_summary">GameSummaryActivity</string>
 
 </resources>
