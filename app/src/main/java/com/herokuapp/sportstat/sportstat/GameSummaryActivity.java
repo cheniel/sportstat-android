@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -41,6 +42,7 @@ import java.util.Date;
 //NOTE: Graph implementations are mostly from code found here: http://www.geeks.gallery/android-drawing-bar-chart-graph-using-achartengine-library/#comment-9522
 public class GameSummaryActivity extends Activity {
 
+    private static final String TAG = "";
     private int mAssists;
     private int mTwoPoints;
     private int mThreePoints;
@@ -48,8 +50,8 @@ public class GameSummaryActivity extends Activity {
 
 
     private View mChart;
-    private String[] mMonth = new String[] {
-            "Assists", "Two-Points" , "Three-Points"
+    private String[] mLabels = new String[] {
+            "Assists", "Two-Points" , "Three-Points", ""
     };
 
     @Override
@@ -72,22 +74,28 @@ public class GameSummaryActivity extends Activity {
     }
 
     private void openChart(){
-        int[] x = { 0,1,2};
-        int[] barSubstance = { mAssists, mTwoPoints, mThreePoints};
-       // int[] expense = {2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0, 0, 0 };
+        int[] x = {0,1,2,3};
+        int[] barSubstance = {mAssists, mTwoPoints, mThreePoints, 0};
+        // int[] expense = {2200, 2700, 2900, 2800, 2600, 3000, 3300, 3400, 0, 0, 0, 0 };
+
+        Log.d(TAG, "Assists, twos, threes: " + mAssists + " " + mTwoPoints + " " + mThreePoints);
 
         // Creating an XYSeries for Income
         XYSeries scoreSeries = new XYSeries("Income");
+
         // Creating an XYSeries for Expense
         //XYSeries expenseSeries = new XYSeries("Expense");
         // Adding data to Income and Expense Series
         for(int i=0;i<x.length;i++){
             scoreSeries.add(i, barSubstance[i]);
             //expenseSeries.add(i,expense[i]);
+
         }
 
         // Creating a dataset to hold each series
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
+
+
         // Adding Income Series to the dataset
         dataset.addSeries(scoreSeries);
         // Adding Expense Series to dataset
@@ -101,12 +109,12 @@ public class GameSummaryActivity extends Activity {
         incomeRenderer.setDisplayChartValues(true);
         incomeRenderer.setDisplayChartValuesDistance(10); //setting chart value distance
 
-        // Creating XYSeriesRenderer to customize expenseSeries
-        XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
-        expenseRenderer.setColor(Color.GREEN);
-        expenseRenderer.setFillPoints(true);
-        expenseRenderer.setLineWidth(2);
-        expenseRenderer.setDisplayChartValues(true);
+        //Creating XYSeriesRenderer to customize expenseSeries
+//        XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
+//        expenseRenderer.setColor(Color.GREEN);
+//        expenseRenderer.setFillPoints(true);
+//        expenseRenderer.setLineWidth(2);
+//        expenseRenderer.setDisplayChartValues(true);
 
         // Creating a XYMultipleSeriesRenderer to customize the whole chart
         XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
@@ -123,8 +131,12 @@ public class GameSummaryActivity extends Activity {
         multiRenderer.setChartTitleTextSize(28);
         //setting text size of the axis title
         multiRenderer.setAxisTitleTextSize(24);
+        multiRenderer.setShowLegend(false);
+        //TODO: Get rid of tiny numbers above columns
+
+        //multiRenderer.setLegendTextSize(0f);
         //setting text size of the graph lable
-        multiRenderer.setLabelsTextSize(24);
+        multiRenderer.setLabelsTextSize(35);
         //setting zoom buttons visiblity
         multiRenderer.setZoomButtonsVisible(false);
         //setting pan enablity which uses graph to move on both axis
@@ -181,14 +193,14 @@ public class GameSummaryActivity extends Activity {
         multiRenderer.setMargins(new int[]{30, 30, 30, 30});
 
         for(int i=0; i< x.length;i++){
-            multiRenderer.addXTextLabel(i, mMonth[i]);
+            multiRenderer.addXTextLabel(i, mLabels[i]);
         }
 
         // Adding incomeRenderer and expenseRenderer to multipleRenderer
         // Note: The order of adding dataseries to dataset and renderers to multipleRenderer
         // should be same
         multiRenderer.addSeriesRenderer(incomeRenderer);
-       // multiRenderer.addSeriesRenderer(expenseRenderer);
+        //multiRenderer.addSeriesRenderer(expenseRenderer);
 
         //this part is used to display graph on the xml
         LinearLayout chartContainer = (LinearLayout) findViewById(R.id.chart);
