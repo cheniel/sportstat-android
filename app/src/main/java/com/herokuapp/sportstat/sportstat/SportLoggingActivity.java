@@ -17,9 +17,7 @@ import android.widget.Toast;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
 
 
 public class SportLoggingActivity extends Activity {
@@ -271,9 +269,16 @@ public class SportLoggingActivity extends Activity {
         PebbleKit.sendDataToPebble(this, PebbleApp.APP_UUID, data);
     }
 
+    private void sendGameEndToPebble() {
+        PebbleDictionary data = new PebbleDictionary();
+        data.addInt8(PebbleApp.MSG_END_GAME, (byte) 0);
+        PebbleKit.sendDataToPebble(this, PebbleApp.APP_UUID, data);
+    }
+
     //When the user clicks done, launch the GameSummaryActivity,
     //and pass all statistics to it (as well as game
     public void onDoneButtonPressed(View view) {
+        sendGameEndToPebble();
 
         Intent intent = new Intent(this, GameSummaryActivity.class);
         intent.putExtra(ASSISTS, mGame.getAssists());
@@ -289,6 +294,7 @@ public class SportLoggingActivity extends Activity {
 
         startActivity(intent);
 
+        finish();
     }
 
 }
