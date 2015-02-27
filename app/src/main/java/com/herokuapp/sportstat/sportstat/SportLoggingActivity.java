@@ -287,6 +287,8 @@ public class SportLoggingActivity extends Activity {
         //Put the automatically recorded stats here too
 
         startActivity(intent);
+
+        finish();
     }
 
 }
