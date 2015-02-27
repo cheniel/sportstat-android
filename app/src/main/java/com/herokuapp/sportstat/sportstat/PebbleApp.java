@@ -11,4 +11,5 @@ public class PebbleApp {
     public final static int MSG_END_GAME = 4;
     public final static int MSG_GAME_CANCELLED = 5;
     public final static int MSG_REQUEST_RESPONSE = 6;
+    public final static int MSG_INITIAL_POINT_LOAD = 7;
 }

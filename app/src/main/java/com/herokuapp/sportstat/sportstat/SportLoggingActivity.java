@@ -50,7 +50,6 @@ public class SportLoggingActivity extends Activity {
         //Save the time when the user started playing
         mTime = Calendar.getInstance().getTime().toString();
 
-
         mAssistsView = (TextView) findViewById(R.id.new_basketball_game_assist_text_view);
         mTwoPointsView = (TextView) findViewById(R.id.new_basketball_game_two_point_text_view);
         mThreePointsView = (TextView) findViewById(R.id.new_basketball_game_three_point_text_view);
@@ -71,7 +70,7 @@ public class SportLoggingActivity extends Activity {
         Log.i(getLocalClassName(), "Pebble is " + (connected ? "connected" : "not connected"));
         if (connected) {
             Toast.makeText(this, "Pebble is connected!", Toast.LENGTH_SHORT).show();
-            sendPointInfoToPebble("initial data sent from Android");
+            sendPointInfoToPebble("initial data sent from Android", true);
         }
 
         // open up SportStat Pebble app
@@ -86,7 +85,7 @@ public class SportLoggingActivity extends Activity {
                 if (mGame.getAssists() > 0) {
                     mGame.setAssists(mGame.getAssists() - 1);
                     mAssistsView.setText(String.valueOf(mGame.getAssists()));
-                    sendPointInfoToPebble(null);
+                    sendPointInfoToPebble(null, false);
                     return true;
                 }
                 return false;
@@ -99,7 +98,7 @@ public class SportLoggingActivity extends Activity {
                 if (mGame.getTwoPoints() > 0) {
                     mGame.setTwoPoints(mGame.getTwoPoints() - 1);
                     mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
-                    sendPointInfoToPebble(null);
+                    sendPointInfoToPebble(null, false);
                     return true;
                 }
                 return false;
@@ -112,7 +111,7 @@ public class SportLoggingActivity extends Activity {
                 if (mGame.getThreePoints() > 0) {
                     mGame.setThreePoints(mGame.getThreePoints() - 1);
                     mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
-                    sendPointInfoToPebble(null);
+                    sendPointInfoToPebble(null, false);
                     return true;
                 }
                 return false;
@@ -144,7 +143,7 @@ public class SportLoggingActivity extends Activity {
             @Override
             public void receiveNack(Context context, int transactionId) {
                 Log.i(getLocalClassName(), "message failed, retrying" + transactionId);
-                sendPointInfoToPebble(null);
+                sendPointInfoToPebble(null, false);
             }
 
         });
@@ -182,7 +181,7 @@ public class SportLoggingActivity extends Activity {
                 }
 
                 if (data.contains(PebbleApp.MSG_REQUEST_RESPONSE)) {
-                    sendPointInfoToPebble("responding");
+                    sendPointInfoToPebble("responding", false);
                 }
 
                 if (receivedPointData) {
@@ -234,19 +233,19 @@ public class SportLoggingActivity extends Activity {
     public void increaseAssists(View view) {
         mGame.setAssists(mGame.getAssists() + 1);
         mAssistsView.setText(String.valueOf(mGame.getAssists()));
-        sendPointInfoToPebble(null);
+        sendPointInfoToPebble(null, false);
     }
 
     public void increaseTwoPoints(View view) {
         mGame.setTwoPoints(mGame.getTwoPoints() + 1);
         mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
-        sendPointInfoToPebble(null);
+        sendPointInfoToPebble(null, false);
     }
 
     public void increaseThreePoints(View view) {
         mGame.setThreePoints(mGame.getThreePoints() + 1);
         mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
-        sendPointInfoToPebble(null);
+        sendPointInfoToPebble(null, false);
     }
 
     private void updateViewPointValues() {
@@ -256,11 +255,14 @@ public class SportLoggingActivity extends Activity {
     }
 
 
-    private void sendPointInfoToPebble(String message) {
+    private void sendPointInfoToPebble(String message, boolean initial) {
         Log.d(getLocalClassName(), "called sendPointInfoToPebble");
         PebbleDictionary data = new PebbleDictionary();
         if (message != null) {
             data.addString(PebbleApp.MSG_GENERIC_STRING, message);
+        }
+        if (initial) {
+            data.addInt8(PebbleApp.MSG_INITIAL_POINT_LOAD, (byte) 0);
         }
         data.addUint8(PebbleApp.MSG_ASSIST_COUNT, (byte) mGame.getAssists());
         data.addUint8(PebbleApp.MSG_TWO_POINT_COUNT, (byte) mGame.getTwoPoints());
@@ -278,7 +280,6 @@ public class SportLoggingActivity extends Activity {
         intent.putExtra(THREE_POINTS, mGame.getThreePoints());
         intent.putExtra(GAME_TIME, mTime);
         //Put the automatically recorded stats here too
-
 
         startActivity(intent);
 
