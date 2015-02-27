@@ -9,4 +9,5 @@ public class PebbleApp {
     public final static int MSG_TWO_POINT_COUNT = 2;
     public final static int MSG_THREE_POINT_COUNT = 3;
     public final static int MSG_END_GAME = 4;
+    public final static int MSG_IS_GAME_ACTIVE = 5;
 }

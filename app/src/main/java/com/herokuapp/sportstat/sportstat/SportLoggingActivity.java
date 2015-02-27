@@ -67,12 +67,7 @@ public class SportLoggingActivity extends Activity {
         });
 
         // send initial message to Pebble
-        PebbleDictionary data = new PebbleDictionary();
-        data.addString(PebbleApp.MSG_GENERIC_STRING, "onResume message");
-        data.addUint8(PebbleApp.MSG_ASSIST_COUNT, (byte) mGame.getAssists());
-        data.addUint8(PebbleApp.MSG_TWO_POINT_COUNT, (byte) mGame.getTwoPoints());
-        data.addUint8(PebbleApp.MSG_THREE_POINT_COUNT, (byte) mGame.getThreePoints());
-        PebbleKit.sendDataToPebble(getApplicationContext(), PebbleApp.APP_UUID, data);
+        sendPointInfoToPebble("called onResume");
     }
 
     @Override
@@ -107,19 +102,34 @@ public class SportLoggingActivity extends Activity {
     public void increaseAssists(View view) {
         mGame.setAssists(mGame.getAssists() + 1);
         mAssistsView.setText(String.valueOf(mGame.getAssists()));
+        sendPointInfoToPebble(null);
     }
 
     public void increaseTwoPoints(View view) {
         mGame.setTwoPoints(mGame.getTwoPoints() + 1);
         mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
+        sendPointInfoToPebble(null);
     }
 
     public void increaseThreePoints(View view) {
         mGame.setThreePoints(mGame.getThreePoints() + 1);
         mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
+        sendPointInfoToPebble(null);
     }
 
     // TODO: add decrement onLongClick
+
+    private void sendPointInfoToPebble(String message) {
+        Log.d(getLocalClassName(), "called sendPointInfoToPebble");
+        PebbleDictionary data = new PebbleDictionary();
+        if (message != null) {
+            data.addString(PebbleApp.MSG_GENERIC_STRING, message);
+        }
+        data.addUint8(PebbleApp.MSG_ASSIST_COUNT, (byte) mGame.getAssists());
+        data.addUint8(PebbleApp.MSG_TWO_POINT_COUNT, (byte) mGame.getTwoPoints());
+        data.addUint8(PebbleApp.MSG_THREE_POINT_COUNT, (byte) mGame.getThreePoints());
+        PebbleKit.sendDataToPebble(getApplicationContext(), PebbleApp.APP_UUID, data);
+    }
 
     //When the user clicks done, launch the GameSummaryActivity
     public void onDoneButtonPressed(View view) {
