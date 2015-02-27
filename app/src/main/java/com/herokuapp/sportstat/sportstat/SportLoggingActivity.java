@@ -140,16 +140,46 @@ public class SportLoggingActivity extends Activity {
 
             @Override
             public void receiveData(final Context context, final int transactionId, final PebbleDictionary data) {
-                Log.i(getLocalClassName(), "Received value=" + data.getInteger(0) + " for key: 0");
+                Log.d(getLocalClassName(), "Received data from Pebble!");
 
-                handler.post(new Runnable() {
+                boolean receivedPointData = false;
 
-                    @Override
-                    public void run() {
+                String msg = data.getString(PebbleApp.MSG_GENERIC_STRING);
+                if (msg != null) {
+                    Log.d(getLocalClassName(), "Received msg from pebble: " + msg);
+                }
 
-                    }
+                Long assists = data.getUnsignedIntegerAsLong(PebbleApp.MSG_ASSIST_COUNT);
+                if (assists != null) {
+                    mGame.setAssists(assists.intValue());
+                    receivedPointData = true;
+                }
 
-                });
+                Long two_pts = data.getUnsignedIntegerAsLong(PebbleApp.MSG_TWO_POINT_COUNT);
+                if (two_pts != null) {
+                    mGame.setTwoPoints(two_pts.intValue());
+                    receivedPointData = true;
+                }
+
+                Long three_pts = data.getUnsignedIntegerAsLong(PebbleApp.MSG_THREE_POINT_COUNT);
+                if (three_pts != null) {
+                    mGame.setThreePoints(three_pts.intValue());
+                    receivedPointData = true;
+                }
+
+                if (data.contains(PebbleApp.MSG_REQUEST_RESPONSE)) {
+                    sendPointInfoToPebble("responding");
+                }
+
+                if (receivedPointData) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateViewPointValues();
+                        }
+                    });
+                }
+
                 PebbleKit.sendAckToPebble(context, transactionId);
             }
 
@@ -203,6 +233,12 @@ public class SportLoggingActivity extends Activity {
         mGame.setThreePoints(mGame.getThreePoints() + 1);
         mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
         sendPointInfoToPebble(null);
+    }
+
+    private void updateViewPointValues() {
+        mAssistsView.setText(String.valueOf(mGame.getAssists()));
+        mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
+        mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
     }
 
 
