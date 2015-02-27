@@ -15,10 +15,19 @@ import android.widget.Toast;
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class SportLoggingActivity extends Activity {
 
+    public static final String ASSISTS = "assists";
+    public static final String TWO_POINTS = "two_points";
+    public static final String THREE_POINTS = "three_points";
+    public static final String GAME_TIME = "time_of_game";
     private BasketballGame mGame;
+    private String mTime;
     private TextView mAssistsView;
     private TextView mTwoPointsView;
     private TextView mThreePointsView;
@@ -30,6 +39,11 @@ public class SportLoggingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_logging);
         mGame = new BasketballGame();
+
+        //Save the time when the user started playing
+        mTime = Calendar.getInstance().getTime().toString();
+
+
         mAssistsView = (TextView) findViewById(R.id.new_basketball_game_assist_text_view);
         mTwoPointsView = (TextView) findViewById(R.id.new_basketball_game_two_point_text_view);
         mThreePointsView = (TextView) findViewById(R.id.new_basketball_game_three_point_text_view);
@@ -121,12 +135,19 @@ public class SportLoggingActivity extends Activity {
 
     // TODO: add decrement onLongClick
 
-    //When the user clicks done, launch the GameSummaryActivity
+    //When the user clicks done, launch the GameSummaryActivity,
+    //and pass all statistics to it (as well as game
     public void onDoneButtonPressed(View view) {
 
+        Intent intent = new Intent(this, GameSummaryActivity.class);
+        intent.putExtra(ASSISTS, mGame.getAssists());
+        intent.putExtra(TWO_POINTS, mGame.getTwoPoints());
+        intent.putExtra(THREE_POINTS, mGame.getThreePoints());
+        intent.putExtra(GAME_TIME, mTime);
+        //Put the automatically recorded stats here too
 
 
-
+        startActivity(intent);
 
     }
 
