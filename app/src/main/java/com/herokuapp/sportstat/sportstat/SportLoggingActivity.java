@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,11 +24,13 @@ public class SportLoggingActivity extends Activity {
     private TextView mAssistsView;
     private TextView mTwoPointsView;
     private TextView mThreePointsView;
-    private BroadcastReceiver mPebbleConnectedReceiver;
-    private BroadcastReceiver mPebbleDisconnectedReceiver;
     private Button mAssistButton;
     private Button mTwoPointButton;
     private Button mThreePointButton;
+    private BroadcastReceiver mPebbleConnectedReceiver;
+    private BroadcastReceiver mPebbleDisconnectedReceiver;
+    private BroadcastReceiver mPebbleDataReceiver;
+    private BroadcastReceiver mPebbleNackReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,35 +49,22 @@ public class SportLoggingActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        registerPebbleReceivers();
+        setOnLongClickListeners();
+
         // detect if watch is connected
-        boolean connected = PebbleKit.isWatchConnected(getApplicationContext());
+        boolean connected = PebbleKit.isWatchConnected(this);
         Log.i(getLocalClassName(), "Pebble is " + (connected ? "connected" : "not connected"));
         if (connected) {
             Toast.makeText(this, "Pebble is connected!", Toast.LENGTH_SHORT).show();
+            sendPointInfoToPebble("initial data sent from Android");
         }
 
         // open up SportStat Pebble app
-        PebbleKit.startAppOnPebble(getApplicationContext(), PebbleApp.APP_UUID);
+        PebbleKit.startAppOnPebble(this, PebbleApp.APP_UUID);
+    }
 
-        // register receivers for Pebble disconnect and connect
-        mPebbleConnectedReceiver = PebbleKit.registerPebbleConnectedReceiver(this, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.i(getLocalClassName(), "Pebble connected!");
-                Toast.makeText(getApplicationContext(), "Connected!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mPebbleDisconnectedReceiver = PebbleKit.registerPebbleDisconnectedReceiver(this, new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.i(getLocalClassName(), "Pebble disconnected!");
-                Toast.makeText(getApplicationContext(), "Pebble disconnected!", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        // send initial message to Pebble
-        sendPointInfoToPebble("called onResume");
+    private void setOnLongClickListeners() {
 
         mAssistButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -114,7 +104,56 @@ public class SportLoggingActivity extends Activity {
                 return false;
             }
         });
+    }
 
+    private void registerPebbleReceivers() {
+
+        // register receivers for Pebble disconnect and connect
+        mPebbleConnectedReceiver = PebbleKit.registerPebbleConnectedReceiver(this, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i(getLocalClassName(), "Pebble connected!");
+                Toast.makeText(getApplicationContext(), "Connected!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mPebbleDisconnectedReceiver = PebbleKit.registerPebbleDisconnectedReceiver(this, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.i(getLocalClassName(), "Pebble disconnected!");
+                Toast.makeText(getApplicationContext(), "Pebble disconnected!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        mPebbleNackReceiver = PebbleKit.registerReceivedNackHandler(this, new PebbleKit.PebbleNackReceiver(PebbleApp.APP_UUID) {
+
+            @Override
+            public void receiveNack(Context context, int transactionId) {
+                Log.i(getLocalClassName(), "message failed, retrying" + transactionId);
+                sendPointInfoToPebble(null);
+            }
+
+        });
+
+        final Handler handler = new Handler();
+        mPebbleDataReceiver = PebbleKit.registerReceivedDataHandler(this, new PebbleKit.PebbleDataReceiver(PebbleApp.APP_UUID) {
+
+            @Override
+            public void receiveData(final Context context, final int transactionId, final PebbleDictionary data) {
+                Log.i(getLocalClassName(), "Received value=" + data.getInteger(0) + " for key: 0");
+
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                    }
+
+                });
+                PebbleKit.sendAckToPebble(context, transactionId);
+            }
+
+        });
     }
 
     @Override
@@ -122,6 +161,8 @@ public class SportLoggingActivity extends Activity {
         super.onPause();
         unregisterReceiver(mPebbleConnectedReceiver);
         unregisterReceiver(mPebbleDisconnectedReceiver);
+        unregisterReceiver(mPebbleDataReceiver);
+        unregisterReceiver(mPebbleNackReceiver);
     }
 
     @Override
@@ -174,7 +215,7 @@ public class SportLoggingActivity extends Activity {
         data.addUint8(PebbleApp.MSG_ASSIST_COUNT, (byte) mGame.getAssists());
         data.addUint8(PebbleApp.MSG_TWO_POINT_COUNT, (byte) mGame.getTwoPoints());
         data.addUint8(PebbleApp.MSG_THREE_POINT_COUNT, (byte) mGame.getThreePoints());
-        PebbleKit.sendDataToPebble(getApplicationContext(), PebbleApp.APP_UUID, data);
+        PebbleKit.sendDataToPebble(this, PebbleApp.APP_UUID, data);
     }
 
     //When the user clicks done, launch the GameSummaryActivity
