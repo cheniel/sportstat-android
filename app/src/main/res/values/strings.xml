@@ -24,5 +24,8 @@
     <string name="Done_Button">Done</string>
     <string name="title_activity_sport_logging">SportLoggingActivity</string>
     <string name="title_activity_game_summary">Game Summary</string>
+    <string name="shots_attempted_text">Shots attempted:</string>
+    <string name="shots_made_text">Shots made:</string>
+    <string name="shots_percentage_text">%age Shots Made:</string>
 
 </resources>
