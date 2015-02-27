@@ -28,6 +28,7 @@ public class SportLoggingActivity extends Activity {
     public static final String TWO_POINTS = "two_points";
     public static final String THREE_POINTS = "three_points";
     public static final String GAME_TIME = "time_of_game";
+    public static final String SHOTS_ATTEMPTED ="shots_attempted";
     private BasketballGame mGame;
     private String mTime;
     private TextView mAssistsView;
@@ -278,6 +279,11 @@ public class SportLoggingActivity extends Activity {
         intent.putExtra(ASSISTS, mGame.getAssists());
         intent.putExtra(TWO_POINTS, mGame.getTwoPoints());
         intent.putExtra(THREE_POINTS, mGame.getThreePoints());
+
+        //TODO: infer how many shots attempted
+        intent.putExtra(SHOTS_ATTEMPTED, 0);
+
+
         intent.putExtra(GAME_TIME, mTime);
         //Put the automatically recorded stats here too
 

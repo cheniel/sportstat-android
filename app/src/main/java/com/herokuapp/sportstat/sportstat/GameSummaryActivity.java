@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +47,8 @@ public class GameSummaryActivity extends Activity {
     private int mAssists;
     private int mTwoPoints;
     private int mThreePoints;
+    private int mShotsMade;
+    private int mShotsAttempted;
     private String mTime;
 
 
@@ -64,8 +67,22 @@ public class GameSummaryActivity extends Activity {
         mAssists = i.getIntExtra(SportLoggingActivity.ASSISTS, 0);
         mTwoPoints = i.getIntExtra(SportLoggingActivity.TWO_POINTS, 0);
         mThreePoints = i.getIntExtra(SportLoggingActivity.THREE_POINTS, 0);
+        mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
+
+        int shotsMade = mTwoPoints+mThreePoints;
+        String shotsMadePctStr = "";
+         if(mShotsAttempted!=0){
+             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100;
+         }
+
+
         mTime = i.getStringExtra(SportLoggingActivity.GAME_TIME);
         //TODO: insert other stats
+
+        TextView statsText = (TextView) findViewById(R.id.stats_text_view);
+        String linesep = System.getProperty("line separator");
+        statsText.setText("Shots attempted: "+mShotsAttempted+linesep+"Shots made: "+shotsMade
+        +linesep+"Shots Made %age: "+shotsMadePctStr);
 
 
         //Display bargraph
