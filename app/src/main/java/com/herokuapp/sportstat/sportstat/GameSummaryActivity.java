@@ -51,6 +51,8 @@ public class GameSummaryActivity extends Activity {
     private int mShotsAttempted;
     private String mTime;
 
+    BasketballGame mGame;
+
 
     private View mChart;
     private String[] mLabels = new String[] {
@@ -64,25 +66,29 @@ public class GameSummaryActivity extends Activity {
 
         Intent i = getIntent();
 
-        mAssists = i.getIntExtra(SportLoggingActivity.ASSISTS, 0);
-        mTwoPoints = i.getIntExtra(SportLoggingActivity.TWO_POINTS, 0);
-        mThreePoints = i.getIntExtra(SportLoggingActivity.THREE_POINTS, 0);
-        mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
+        mGame = (BasketballGame)i.getSerializableExtra(SportLoggingActivity.BASKETBALL_GAME);
+
+
+        mAssists = mGame.getAssists();
+        mTwoPoints = mGame.getTwoPoints();
+        mThreePoints = mGame.getThreePoints();
+        //mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
 
         int shotsMade = mTwoPoints+mThreePoints;
         String shotsMadePctStr = "";
-         if(mShotsAttempted!=0){
-             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100;
-         }
+//         if(mShotsAttempted!=0){
+//             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100;
+//         }
 
 
         mTime = i.getStringExtra(SportLoggingActivity.GAME_TIME);
         //TODO: insert other stats
 
         TextView statsText = (TextView) findViewById(R.id.stats_text_view);
-        String linesep = System.getProperty("line separator");
-        statsText.setText("Shots attempted: "+mShotsAttempted+linesep+"Shots made: "+shotsMade
-        +linesep+"Shots Made %age: "+shotsMadePctStr);
+        String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
+        statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
+        +lineSep+"Shots Made %age: "+shotsMadePctStr);
+
 
 
         //Display bargraph
@@ -151,6 +157,8 @@ public class GameSummaryActivity extends Activity {
         multiRenderer.setShowLegend(false);
         //TODO: Get rid of tiny numbers above columns
 
+        multiRenderer.setShowTickMarks(false);
+
         //multiRenderer.setLegendTextSize(0f);
         //setting text size of the graph lable
         multiRenderer.setLabelsTextSize(35);
@@ -179,23 +187,27 @@ public class GameSummaryActivity extends Activity {
         //setting to in scroll to false
         multiRenderer.setInScroll(false);
         //setting to set legend height of the graph
-        multiRenderer.setLegendHeight(30);
+        //multiRenderer.setLegendHeight(30);
         //setting x axis label align
         multiRenderer.setXLabelsAlign(Align.CENTER);
         //setting y axis label to align
         multiRenderer.setYLabelsAlign(Align.LEFT);
         //setting text style
         multiRenderer.setTextTypeface("sans_serif", Typeface.NORMAL);
-        //setting no of values to display in y axis
-        multiRenderer.setYLabels(10);
+
         // Setting the Y axis height to scale to displayed data:
         int maxBar = Math.max(Math.max(mAssists, mTwoPoints), mThreePoints);
         int axisHeightGuide = (int)(1.10*maxBar);
         if(axisHeightGuide == 0){axisHeightGuide = 1+maxBar;}
 
         multiRenderer.setYAxisMax(axisHeightGuide);
+
+
+
+        //setting no of values to display in y axis
+        multiRenderer.setYLabels(maxBar);
         //setting used to move the graph on xaxiz to .5 to the right
-        multiRenderer.setXAxisMin(-0.5);
+        multiRenderer.setXAxisMin(-1);
 //setting max values to be display in x axis
         multiRenderer.setXAxisMax(3);
         //setting bar size or space between two bars
@@ -230,6 +242,21 @@ public class GameSummaryActivity extends Activity {
 
     }
 
+
+
+    public void onSaveClicked(View v){
+
+
+
+
+    }
+
+    public void onCancelClicked(View v){
+
+
+
+
+    }
 
 
 }

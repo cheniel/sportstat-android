@@ -1,17 +1,25 @@
 package com.herokuapp.sportstat.sportstat;
 
+import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by DavidHarmon on 2/16/15.
  */
-public class BasketballGame {
+public class BasketballGame implements Serializable{
     private int mAssists;
     private int mTwoPoints;
     private int mThreePoints;
+    private Date mGameTime;
+
+    private static final long serialVersionUID = 1L;
 
     public BasketballGame(){
         mAssists = 0;
         mTwoPoints = 0;
         mThreePoints = 0;
+        mGameTime = Calendar.getInstance().getTime();
     }
 
 

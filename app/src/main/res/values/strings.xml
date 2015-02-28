@@ -26,5 +26,7 @@
     <string name="title_activity_game_summary">Game Summary</string>
     <string name="shots_attempted_text">Shots attempted:</string>
     <string name="stats_text">\"\"</string>
+    <string name="ui_button_save_title">SAVE</string>
+    <string name="ui_button_cancel_title">CANCEL</string>
 
 </resources>
