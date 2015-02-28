@@ -56,7 +56,7 @@ public class GameSummaryActivity extends Activity {
 
     private View mChart;
     private String[] mLabels = new String[] {
-            "Assists", "Two-Points" , "Three-Points", ""
+            "Assists", "2-Points" , "3-Points", ""
     };
 
     @Override
@@ -161,7 +161,7 @@ public class GameSummaryActivity extends Activity {
 
         //multiRenderer.setLegendTextSize(0f);
         //setting text size of the graph lable
-        multiRenderer.setLabelsTextSize(35);
+        multiRenderer.setLabelsTextSize(45);
         //setting zoom buttons visiblity
         multiRenderer.setZoomButtonsVisible(false);
         //setting pan enablity which uses graph to move on both axis
