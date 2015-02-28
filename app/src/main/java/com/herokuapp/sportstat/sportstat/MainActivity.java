@@ -43,6 +43,7 @@ public class MainActivity extends Activity
         mFragmentManager = getFragmentManager();
         mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
         mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
+
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
 
         setContentView(R.layout.activity_main);

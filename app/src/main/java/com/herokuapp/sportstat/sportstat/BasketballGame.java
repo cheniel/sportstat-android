@@ -11,7 +11,10 @@ public class BasketballGame implements Serializable{
     private int mAssists;
     private int mTwoPoints;
     private int mThreePoints;
-    private Date mGameTime;
+    private int mShotsAttempted;
+    private String mGameTime;
+    private String mComment;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -19,8 +22,10 @@ public class BasketballGame implements Serializable{
         mAssists = 0;
         mTwoPoints = 0;
         mThreePoints = 0;
-        mGameTime = Calendar.getInstance().getTime();
+        mGameTime = Calendar.getInstance().getTime().toString();
+        mComment = "";
     }
+
 
 
     public int getAssists() {
@@ -45,5 +50,29 @@ public class BasketballGame implements Serializable{
 
     public void setThreePoints(int ThreePoints) {
         this.mThreePoints = ThreePoints;
+    }
+
+    public String getGameTime() {
+        return mGameTime;
+    }
+
+    public void setGameTime(String mGameTime) {
+        this.mGameTime = mGameTime;
+    }
+
+    public String getComment() {
+        return mComment;
+    }
+
+    public void setComment(String mComment) {
+        this.mComment = mComment;
+    }
+
+    public int getShotsAttempted() {
+        return mShotsAttempted;
+    }
+
+    public void setShotsAttempted(int mShotsAttempted) {
+        this.mShotsAttempted = mShotsAttempted;
     }
 }

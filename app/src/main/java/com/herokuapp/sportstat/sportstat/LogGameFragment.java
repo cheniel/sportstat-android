@@ -33,12 +33,14 @@ public class LogGameFragment extends ListFragment {
 
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private  AdapterView.OnItemClickListener mListener;
+
 
 
     private int mSectionNumber;
 
 
-    static final String[] MANUAL_ITEM_TERMS = {"Date", "Time", "Duration", "Distance", "Calories", "Heart Rate", "Comment"};
+    static final String[] MANUAL_ITEM_TERMS = {"Date", "Time", "Assists", "Two-Points", "Three-Points", "Shots Attempted", "Comment"};
     private static final String TAG = "tag";
     private String mSelectedListItem;
     static Integer numEntry = 0;
@@ -55,6 +57,7 @@ public class LogGameFragment extends ListFragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
 
+
         return fragment;
     }
 
@@ -68,12 +71,6 @@ public class LogGameFragment extends ListFragment {
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
 
 
         //Create a default date string (current time and date)
@@ -91,7 +88,7 @@ public class LogGameFragment extends ListFragment {
         setListAdapter(mAdapter);
 
         // Define the listener interface
-        AdapterView.OnItemClickListener mListener = new AdapterView.OnItemClickListener() {
+        mListener = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
@@ -102,13 +99,13 @@ public class LogGameFragment extends ListFragment {
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[1])) {
                     displayDialog(SportStatDialogFragment.DIALOG_ID_TIME_PICKER);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[2])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_DURATION_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_ASSISTS_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[3])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_DISTANCE_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_TWO_POINTS_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[4])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_CALORIES_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_THREE_POINTS_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[5])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_HEARTRATE_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_SHOTS_ATTEMPTED_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[6])) {
                     displayDialog(SportStatDialogFragment.DIALOG_ID_COMMENT_ALERT);
                 }
@@ -116,16 +113,27 @@ public class LogGameFragment extends ListFragment {
             }
         };
 
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+
+
+
+        return inflater.inflate(R.layout.fragment_log_game, container, false);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         // Get the ListView and wired the listener
         ListView listView = getListView();
         listView.setOnItemClickListener(mListener);
-
-
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_log_game, container, false);
     }
-
 
     public void displayDialog(int id) {
         android.app.DialogFragment fragment = SportStatDialogFragment.newInstance(id);
@@ -137,6 +145,10 @@ public class LogGameFragment extends ListFragment {
     //onClick methods for the save and cancel buttons; they return the user to the Start fragment.
     //onSaveClicked saves the entry to the database
     public void onSaveClicked(View v) {
+
+
+        Log.d(TAG, "SAVING GAME ENTRY. Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
+                " Threes: "+mGame.getThreePoints()+" Comment: "+mGame.getComment());
 
         //String saveToast = "Game Saved!";
 
@@ -158,24 +170,25 @@ public class LogGameFragment extends ListFragment {
         mGame.setAssists(as);
     }
 
-    public void setExerciseEntryDistance(double distance) {
-        newEntry.setmDistance(distance);
+    public void setBasketBallGameTwoPoints(int twoPts) {
+        mGame.setTwoPoints(twoPts);
     }
 
-    public void setExerciseEntryCalories(int calories) {
-        newEntry.setmCalorie(calories);
+    public void setBasketBallGameThreePoints(int threePts) {
+        mGame.setThreePoints(threePts);
     }
 
-    public void setExerciseEntryHeartrate(int heartrate) {
-        newEntry.setmHeartRate(heartrate);
+    public void setBasketBallGameComment(String comment) {
+        mGame.setComment(comment);
     }
 
-    public void setExerciseEntryComment(String comment) {
-        newEntry.setComment(comment);
+    //TODO: should we include shots attempted in manual entry?
+    public void setBasketBallGameShotsAttempted(int shots) {
+       mGame.setShotsAttempted(shots);
     }
 
     //Date and time setting method
-    public void setExerciseEntryDate(int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
+    public void setBasketBallGameDate(int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
         int i = 0;
         String minStr;
         String secStr;
@@ -193,19 +206,67 @@ public class LogGameFragment extends ListFragment {
             secStr = "" + dayOrsec;
         }
 
-        String curDate = newEntry.getmDateTime();
+        String curDate = mGame.getGameTime();
 
         StringBuilder newDate = new StringBuilder();
 
         if (dateorTime == 0) {
-            newDate.append(newEntry.getmDateTime(), 0, 8);
+            newDate.append(mGame.getGameTime(), 0, 8);
             newDate.append(" " + findMonthName(monthOrmin) + " " + dayOrsec + " " + yrOrhr);
         } else {
             newDate.append(yrOrhr + ":" + minStr + ":" + secStr);
             newDate.append(curDate, 8, curDate.length());
         }
 
-        newEntry.setmDateTime(newDate.toString());
+        mGame.setGameTime(newDate.toString());
+    }
+
+
+
+    //Helper method to convert int stored month to its 3 letter name
+    private String findMonthName(int monthOrmin) {
+        String monthName;
+        switch (monthOrmin) {
+            case 0:
+                monthName = "Jan";
+                break;
+            case 1:
+                monthName = "Feb";
+                break;
+            case 2:
+                monthName = "Mar";
+                break;
+            case 3:
+                monthName = "Apr";
+                break;
+            case 4:
+                monthName = "May";
+                break;
+            case 5:
+                monthName = "Jun";
+                break;
+            case 6:
+                monthName = "Jul";
+                break;
+            case 7:
+                monthName = "Aug";
+                break;
+            case 8:
+                monthName = "Sep";
+                break;
+            case 9:
+                monthName = "Oct";
+                break;
+            case 10:
+                monthName = "Nov";
+                break;
+            case 11:
+                monthName = "Dec";
+                break;
+            default:
+                monthName = "";
+        }
+        return monthName;
     }
 
 

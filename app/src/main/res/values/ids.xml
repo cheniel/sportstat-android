@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="assist_edit_text" type="id">assist_edit_text</item>
+    <item name="two_points_edit_text" type="id">two_points_edit_text</item>
+    <item name="three_points_edit_text" type="id">three_points_edit_text</item>
+    <item name="shots_attempted_edit_text" type="id">shots_attempted_edit_text</item>
+    <item name="comment_edit_text" type="id">comment_edit_text</item>
+</resources>

@@ -75,8 +75,8 @@ public class SportStatDialogFragment extends DialogFragment {
         date = new Date();
 
 
-        final Fragment parent = getParentFragment();
 
+        final Fragment parent = getActivity().getFragmentManager().findFragmentById(R.id.log_game_fragment_id);
         // Setup dialog appearance and onClick Listeners
         switch (dialog_id) {
             //The following case is based on the Camera example app
@@ -93,8 +93,8 @@ public class SportStatDialogFragment extends DialogFragment {
                         // Call the onPhotoPickerItemSelected in the parent
                         // activity, i.e., SettingsTabActivity in this case
 
-                        ((SettingsFragment) parent)
-                                .onPhotoPickerItemSelected(item);
+//                        ((SettingsFragment) parent)
+//                                .onPhotoPickerItemSelected(item);
                     }
                 };
 
@@ -118,7 +118,9 @@ public class SportStatDialogFragment extends DialogFragment {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 //Set the user entered date in the ExerciseEntry
-                                ((ManualEntryActivity) parent).setExerciseEntryDate(0, year, monthOfYear, dayOfMonth);
+                                ((LogGameFragment) parent).setBasketBallGameDate(0, year, monthOfYear, dayOfMonth);
+
+
 
                             }
 
@@ -144,18 +146,18 @@ public class SportStatDialogFragment extends DialogFragment {
                                 Calendar cal = Calendar.getInstance();
 
                                 //Set the user-entered time in the exercise entry
-                                ((ManualEntryActivity) parent).setExerciseEntryDate(1, hourOfDay, minute, cal.get(Calendar.SECOND));
+                                ((LogGameFragment) parent).setBasketBallGameDate(1, hourOfDay, minute, cal.get(Calendar.SECOND));
                             }
                         }, mHour, mMinute, false);
                 return (tpd);
 
             case DIALOG_ID_ASSISTS_ALERT:
                 //Launch an alert dialog prompting user to enter Duration (numeric entry)
-                AlertDialog.Builder durationBuilder = new AlertDialog.Builder(parent);
-                durationBuilder.setTitle(R.string.duration_dialog_title);
+                AlertDialog.Builder durationBuilder = new AlertDialog.Builder(parent.getActivity());
+                durationBuilder.setTitle(R.string.assist_dialog_title);
 
                 EditText durationEditText = new EditText(this.getActivity());
-                durationEditText.setId(R.id.duration_edit_text);
+                durationEditText.setId(R.id.assist_edit_text);
 
                 //The setInputType parameters were taken from StackOverFlow
                 durationEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -167,11 +169,11 @@ public class SportStatDialogFragment extends DialogFragment {
 
             case DIALOG_ID_TWO_POINTS_ALERT:
                 //Launch an alert dialog prompting user to enter Distance (numeric entry)
-                AlertDialog.Builder distanceBuilder = new AlertDialog.Builder(parent);
-                distanceBuilder.setTitle(R.string.distance_dialog_title);
+                AlertDialog.Builder distanceBuilder = new AlertDialog.Builder(parent.getActivity());
+                distanceBuilder.setTitle(R.string.two_points_dialog_title);
 
                 EditText distanceEditText = new EditText(this.getActivity());
-                distanceEditText.setId(R.id.distance_edit_text);
+                distanceEditText.setId(R.id.two_points_edit_text);
 
 
                 distanceEditText.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
@@ -183,11 +185,11 @@ public class SportStatDialogFragment extends DialogFragment {
 
             case DIALOG_ID_THREE_POINTS_ALERT:
                 //Launch an alert dialog prompting user to enter Calories (numeric entry)
-                AlertDialog.Builder caloriesBuilder = new AlertDialog.Builder(parent);
-                caloriesBuilder.setTitle(R.string.calories_dialog_title);
+                AlertDialog.Builder caloriesBuilder = new AlertDialog.Builder(parent.getActivity());
+                caloriesBuilder.setTitle(R.string.three_points_dialog_title);
 
                 EditText caloriesEditText = new EditText(this.getActivity());
-                caloriesEditText.setId(R.id.calories_edit_text);
+                caloriesEditText.setId(R.id.three_points_edit_text);
 
                 caloriesEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 caloriesBuilder.setView(caloriesEditText);
@@ -198,11 +200,11 @@ public class SportStatDialogFragment extends DialogFragment {
 
             case DIALOG_ID_SHOTS_ATTEMPTED_ALERT:
                 //Launch an alert dialog prompting user to enter Heart Rate (numeric entry)
-                AlertDialog.Builder heartrateBuilder = new AlertDialog.Builder(parent);
-                heartrateBuilder.setTitle(R.string.heartrate_dialog_title);
+                AlertDialog.Builder heartrateBuilder = new AlertDialog.Builder(parent.getActivity());
+                heartrateBuilder.setTitle(R.string.shots_attempted_dialog_title);
 
                 EditText heartrateEditText = new EditText(this.getActivity());
-                heartrateEditText.setId(R.id.heartrate_edit_text);
+                heartrateEditText.setId(R.id.shots_attempted_edit_text);
 
                 heartrateEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 heartrateBuilder.setView(heartrateEditText);
@@ -212,7 +214,7 @@ public class SportStatDialogFragment extends DialogFragment {
                 return heartrateBuilder.create();
             case DIALOG_ID_COMMENT_ALERT:
                 //Launch an alert dialog prompting user to enter Comment (text entry)
-                AlertDialog.Builder commentBuilder = new AlertDialog.Builder(parent);
+                AlertDialog.Builder commentBuilder = new AlertDialog.Builder(parent.getActivity());
                 commentBuilder.setTitle(R.string.comment_dialog_title);
 
                 EditText commentEditText = new EditText(this.getActivity());
@@ -251,57 +253,60 @@ public class SportStatDialogFragment extends DialogFragment {
                         Dialog d = (Dialog) dialog;
                         String userEnteredText;
 
+                        //TODO: Have something where if the user doesn't enter a value, alert them and
+                        //dont let them save?
+
                         switch (field) {
                             case 1:
-                                userEnteredText = ((EditText) d.findViewById(R.id.duration_edit_text)).getText().toString();
-                                double duration;
+                                userEnteredText = ((EditText) d.findViewById(R.id.assist_edit_text)).getText().toString();
+                                int assists;
 
                                 try {
-                                    duration = Double.parseDouble(userEnteredText);
+                                    assists = Integer.parseInt(userEnteredText);
 
                                 } catch (Exception e) {
                                     //If the user entered nothing, make duration 0.
 
-                                    duration = 0;
+                                    assists = 0;
                                 }
-                                ((LogGameFragment)parent).setBasketBallGameAssists(duration);
+                                ((LogGameFragment)parent).setBasketBallGameAssists(assists);
                                 break;
                             case 2:
-                                userEnteredText = ((EditText) d.findViewById(R.id.distance_edit_text)).getText().toString();
-                                double distance;
+                                userEnteredText = ((EditText) d.findViewById(R.id.two_points_edit_text)).getText().toString();
+                                int twoPoints;
 
                                 try {
-                                    distance = Double.parseDouble(userEnteredText);
+                                    twoPoints = Integer.parseInt(userEnteredText);
                                 } catch (Exception e) {
-                                    distance = 0.0;
+                                    twoPoints = 0;
                                 }
-                                ((ManualEntryActivity) parent).setExerciseEntryDistance(distance);
+                                ((LogGameFragment)parent).setBasketBallGameTwoPoints(twoPoints);
                                 break;
                             case 3:
-                                userEnteredText = ((EditText) d.findViewById(R.id.calories_edit_text)).getText().toString();
-                                int calories;
+                                userEnteredText = ((EditText) d.findViewById(R.id.three_points_edit_text)).getText().toString();
+                                int threePoints;
 
                                 try {
-                                    calories = Integer.parseInt(userEnteredText);
+                                    threePoints = Integer.parseInt(userEnteredText);
                                 } catch (Exception e) {
-                                    calories = 0;
+                                    threePoints = 0;
                                 }
 
-                                ((ManualEntryActivity) parent).setExerciseEntryCalories(calories);
+                                ((LogGameFragment)parent).setBasketBallGameThreePoints(threePoints);
                                 break;
                             case 4:
-                                userEnteredText = ((EditText) d.findViewById(R.id.heartrate_edit_text)).getText().toString();
-                                int heartrate;
+                                userEnteredText = ((EditText) d.findViewById(R.id.shots_attempted_edit_text)).getText().toString();
+                                int shotsAttempted;
                                 try {
-                                    heartrate = Integer.parseInt(userEnteredText);
+                                    shotsAttempted = Integer.parseInt(userEnteredText);
                                 } catch (Exception e) {
-                                    heartrate = 0;
+                                    shotsAttempted = 0;
                                 }
-                                ((ManualEntryActivity) parent).setExerciseEntryHeartrate(heartrate);
+                                ((LogGameFragment)parent).setBasketBallGameShotsAttempted(shotsAttempted);
                                 break;
                             case 5:
                                 userEnteredText = ((EditText) d.findViewById(R.id.comment_edit_text)).getText().toString();
-                                ((ManualEntryActivity) parent).setExerciseEntryComment(userEnteredText);
+                                ((LogGameFragment)parent).setBasketBallGameComment(userEnteredText);
                                 break;
                             default:
                         }

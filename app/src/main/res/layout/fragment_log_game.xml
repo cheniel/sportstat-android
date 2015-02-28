@@ -1,10 +1,44 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.herokuapp.sportstat.sportstat.LogGameFragment">
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--Some parts of this layout were based on ideas from StackOverflow-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/log_game_fragment_id"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ListView android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight = "1"
+        android:id="@android:id/list">
 
-</FrameLayout>
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+
+        >
+        <Button
+            android:id="@+id/manualEntryBtnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSaveClicked"
+            android:text="@string/ui_button_save_title" >
+        </Button>
+
+        <Button
+            android:id="@+id/manualEntryBtnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onCancelClicked"
+            android:text="@string/ui_button_cancel_title" >
+        </Button>
+    </LinearLayout>
+
+
+</LinearLayout>
+
