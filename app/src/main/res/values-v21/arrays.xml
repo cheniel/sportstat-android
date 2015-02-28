@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="input_type_array">
+        <item>Manual Entry</item>
+        <item>GPS</item>
+        <item>Automatic</item>
+    </string-array>
+    <string-array name="activity_array">
+        <item>Running</item>
+        <item>Walking</item>
+        <item>Standing</item>
+        <item>Cycling</item>
+        <item>Hiking</item>
+        <item>Downhill Skiing</item>
+        <item>Cross-Country Skiing</item>
+        <item>Snowboarding</item>
+        <item>Skating</item>
+        <item>Swimming</item>
+        <item>Mountain Biking</item>
+        <item>Wheelchair</item>
+        <item>Elliptical</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="unit_list_preference" >
+        <item>Metric (Kilometers)</item>
+        <item>Imperial (Miles)</item>
+        </string-array>
+    <string-array name="unit_list_preference_values">
+        <item>Kilometers</item>
+        <item>Miles</item>
+    </string-array>
+    <string-array name="ui_profile_photo_picker_items" >
+        <item>Take picture from camera </item>
+        <item>Choose from gallery</item>
+       </string-array>
+</resources>

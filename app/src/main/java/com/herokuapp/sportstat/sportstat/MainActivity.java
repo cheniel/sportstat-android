@@ -26,11 +26,15 @@ public class MainActivity extends Activity
     // the other fragments
     FragmentManager mFragmentManager;
     private StartGameFragment mFragmentStartGame;
+    private LogGameFragment mFragmentLogGame;
+    private SettingsFragment mFragmentSettings;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,8 @@ public class MainActivity extends Activity
 
         mFragmentManager = getFragmentManager();
         mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
+        mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
+        mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
 
         setContentView(R.layout.activity_main);
 
@@ -60,6 +66,21 @@ public class MainActivity extends Activity
                         .commit();
                 onSectionAttached(NavigationDrawerFragment.START_TAB_ID);
                 break;
+
+            case (NavigationDrawerFragment.LOG_TAB_ID):
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentLogGame)
+                        .commit();
+                onSectionAttached(NavigationDrawerFragment.LOG_TAB_ID);
+                break;
+
+            case (NavigationDrawerFragment.SETTINGS_TAB_ID):
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentSettings)
+                        .commit();
+                onSectionAttached(NavigationDrawerFragment.LOG_TAB_ID);
+                break;
+
 
             default:
                 mFragmentManager.beginTransaction()
