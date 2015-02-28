@@ -155,6 +155,9 @@ public class LogGameFragment extends ListFragment {
         Log.d(TAG, "SAVING GAME ENTRY. Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
                 " Threes: "+mGame.getThreePoints()+" Comment: "+mGame.getComment());
 
+
+
+
         //String saveToast = "Game Saved!";
 
         //Tell the user that the entry was saved, indicating the number entry

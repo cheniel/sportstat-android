@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,6 +62,7 @@ public class NavigationDrawerFragment extends Fragment {
      * expands it. This shared preference tracks this.
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+    private static final String TAG = "a";
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -99,6 +101,8 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         // Select either the default item (4) or the last selected item.
+
+
         selectItem(mCurrentSelectedPosition);
     }
 
@@ -126,6 +130,7 @@ public class NavigationDrawerFragment extends Fragment {
                 android.R.id.text1,
                 allDrawers));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 

@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    private static final String TAG = "a";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -28,38 +30,48 @@ public class MainActivity extends Activity
     private StartGameFragment mFragmentStartGame;
     private LogGameFragment mFragmentLogGame;
     private SettingsFragment mFragmentSettings;
+    private NewsfeedFragment mFragmentNewsfeed;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-
+    private boolean itemSelected = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "on create callllle");
+
         mFragmentManager = getFragmentManager();
         mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
         mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
-
+        mFragmentNewsfeed = NewsfeedFragment.newInstance(NavigationDrawerFragment.NEWSFEED_TAB_ID);
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
 
         setContentView(R.layout.activity_main);
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         // Set up the drawer.
+
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+
+        Log.d(TAG, "AAA: nav drawer sel"+position);
+        itemSelected = true;
+
         switch (position) {
             case (NavigationDrawerFragment.START_TAB_ID):
                 mFragmentManager.beginTransaction()
@@ -79,7 +91,14 @@ public class MainActivity extends Activity
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, mFragmentSettings)
                         .commit();
-                onSectionAttached(NavigationDrawerFragment.LOG_TAB_ID);
+                onSectionAttached(NavigationDrawerFragment.SETTINGS_TAB_ID);
+                break;
+
+            case (NavigationDrawerFragment.NEWSFEED_TAB_ID):
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentNewsfeed)
+                        .commit();
+                onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
                 break;
 
 
@@ -90,36 +109,43 @@ public class MainActivity extends Activity
                 break;
         }
 
-
         restoreActionBar();
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
-            case NavigationDrawerFragment.START_TAB_ID:
-                mTitle = getString(R.string.Start_Game_Tab);
-                break;
-            case NavigationDrawerFragment.LOG_TAB_ID:
-                mTitle = getString(R.string.Log_Game_Tab);
-                break;
-            case NavigationDrawerFragment.PROFILE_TAB_ID:
-                mTitle = getString(R.string.My_Profile_Tab);
-                break;
-            case NavigationDrawerFragment.NEWSFEED_TAB_ID:
-                mTitle = getString(R.string.Newsfeed_Tab);
-                break;
-            case NavigationDrawerFragment.LEADERBOARD_TAB_ID:
-                mTitle = getString(R.string.Leaderboard_Tab);
-                break;
-            case NavigationDrawerFragment.SETTINGS_TAB_ID:
-                mTitle = getString(R.string.Settings_Tab);
-                break;
+
+        if(itemSelected) {
+            Log.d(TAG, "AAA: sectionAtteched " + number);
+            switch (number) {
+                case NavigationDrawerFragment.START_TAB_ID:
+                    mTitle = getString(R.string.Start_Game_Tab);
+                    break;
+                case NavigationDrawerFragment.LOG_TAB_ID:
+                    mTitle = getString(R.string.Log_Game_Tab);
+                    break;
+                case NavigationDrawerFragment.PROFILE_TAB_ID:
+                    mTitle = getString(R.string.My_Profile_Tab);
+                    break;
+                case NavigationDrawerFragment.NEWSFEED_TAB_ID:
+                    Log.d(TAG, "attached: " + getString(R.string.Newsfeed_Tab));
+                    mTitle = getString(R.string.Newsfeed_Tab);
+                    break;
+                case NavigationDrawerFragment.LEADERBOARD_TAB_ID:
+                    mTitle = getString(R.string.Leaderboard_Tab);
+                    break;
+                case NavigationDrawerFragment.SETTINGS_TAB_ID:
+                    mTitle = getString(R.string.Settings_Tab);
+                    break;
+            }
+            restoreActionBar();
         }
+        itemSelected = false;
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
+        Log.d(TAG, "AAA: TITLE: "+mTitle);
         actionBar.setTitle(mTitle);
     }
 
@@ -164,6 +190,7 @@ public class MainActivity extends Activity
         }
 
         public PlaceholderFragment() {
+
         }
 
         @Override
@@ -189,6 +216,14 @@ public class MainActivity extends Activity
     //On save and on cancel clicked methods for LogGameFragment
     public void onSaveClicked(View v){
         LogGameFragment.onSaveClicked(v);
+
+        getFragmentManager().beginTransaction().remove(mFragmentLogGame).commit();
+
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, mFragmentNewsfeed)
+                .commit();
+        onSectionAttached(NavigationDrawerFragment.LOG_TAB_ID);
+
     }
 
     //On save and on cancel clicked methods for LogGameFragment
