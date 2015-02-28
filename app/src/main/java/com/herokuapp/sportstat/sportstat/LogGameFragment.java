@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,6 @@ public class LogGameFragment extends ListFragment {
     private  AdapterView.OnItemClickListener mListener;
 
 
-
     private int mSectionNumber;
 
 
@@ -45,7 +45,7 @@ public class LogGameFragment extends ListFragment {
     private String mSelectedListItem;
     static Integer numEntry = 0;
 
-    private BasketballGame mGame;
+    private static BasketballGame mGame;
 
 
 
@@ -68,6 +68,9 @@ public class LogGameFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
@@ -136,7 +139,7 @@ public class LogGameFragment extends ListFragment {
     }
 
     public void displayDialog(int id) {
-        android.app.DialogFragment fragment = SportStatDialogFragment.newInstance(id);
+        android.app.DialogFragment fragment = SportStatDialogFragment.newInstance(id, this);
         fragment.show(getFragmentManager(),
                 getString(R.string.dialog_fragment_list_item_tag));
     }
@@ -144,7 +147,9 @@ public class LogGameFragment extends ListFragment {
 
     //onClick methods for the save and cancel buttons; they return the user to the Start fragment.
     //onSaveClicked saves the entry to the database
-    public void onSaveClicked(View v) {
+
+
+    public static void onSaveClicked(View v) {
 
 
         Log.d(TAG, "SAVING GAME ENTRY. Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
@@ -157,7 +162,7 @@ public class LogGameFragment extends ListFragment {
         //finish();
     }
 
-    public void onCancelClicked(View v) {
+    public static void onCancelClicked(View v) {
         //Tell the user any changes they made have not been saved
         //Toast.makeText(this.getApplicationContext(), R.string.discard_entry_text, Toast.LENGTH_SHORT).show();
 

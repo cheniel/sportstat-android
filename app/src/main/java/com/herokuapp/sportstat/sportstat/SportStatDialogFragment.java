@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+
+
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -42,11 +44,13 @@ public class SportStatDialogFragment extends DialogFragment {
     private String cancelButtonString = "Cancel";
 
 
+
     // For photo picker selection:
     public static final int ID_PHOTO_PICKER_FROM_CAMERA = 0;
     public static final int ID_PHOTO_PICKER_FROM_GALLERY = 1;
 
     private static final String DIALOG_ID_KEY = "dialog_id";
+    private static LogGameFragment mParentFragment;
 
     //A date object to store user-entered date and time
     private Date date;
@@ -59,11 +63,13 @@ public class SportStatDialogFragment extends DialogFragment {
     private boolean dateInitialized;
 
 
-    public static SportStatDialogFragment newInstance(int dialog_id) {
+    public static SportStatDialogFragment newInstance(int dialog_id, LogGameFragment parentFrag) {
         SportStatDialogFragment frag = new SportStatDialogFragment();
         Bundle args = new Bundle();
         args.putInt(DIALOG_ID_KEY, dialog_id);
         frag.setArguments(args);
+        mParentFragment = parentFrag;
+
         return frag;
     }
 
@@ -76,7 +82,8 @@ public class SportStatDialogFragment extends DialogFragment {
 
 
 
-        final Fragment parent = getActivity().getFragmentManager().findFragmentById(R.id.log_game_fragment_id);
+        final Fragment parent = mParentFragment;
+                //MainActivity.getFragmentManager().findFragmentById(R.id.log_game_fragment_id);
         // Setup dialog appearance and onClick Listeners
         switch (dialog_id) {
             //The following case is based on the Camera example app
@@ -243,7 +250,7 @@ public class SportStatDialogFragment extends DialogFragment {
     //that specific dialog will set
     private void createOkCancelButtons(AlertDialog.Builder builder, final int field) {
 
-        final Fragment parent = getParentFragment();
+        final Fragment parent = mParentFragment;
 
         builder.setPositiveButton(
                 okButtonString,

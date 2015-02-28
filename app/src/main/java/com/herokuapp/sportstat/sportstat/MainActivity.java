@@ -186,4 +186,14 @@ public class MainActivity extends Activity
         startActivity(intent);
     }
 
+    //On save and on cancel clicked methods for LogGameFragment
+    public void onSaveClicked(View v){
+        LogGameFragment.onSaveClicked(v);
+    }
+
+    //On save and on cancel clicked methods for LogGameFragment
+    public void onCancelClicked(View v){
+        LogGameFragment.onCancelClicked(v);
+    }
+
 }

@@ -41,10 +41,15 @@ public class SportLoggingActivity extends Activity {
     private BroadcastReceiver mPebbleDataReceiver;
     private BroadcastReceiver mPebbleNackReceiver;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_logging);
+
+
+
+
         mGame = new BasketballGame();
 
         //Save the time when the user started playing

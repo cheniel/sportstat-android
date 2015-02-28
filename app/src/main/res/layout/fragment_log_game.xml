@@ -21,7 +21,7 @@
 
         >
         <Button
-            android:id="@+id/manualEntryBtnSave"
+            android:id="@+id/logGameBtnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -30,7 +30,7 @@
         </Button>
 
         <Button
-            android:id="@+id/manualEntryBtnCancel"
+            android:id="@+id/logGameBtnCancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,6 +38,8 @@
             android:text="@string/ui_button_cancel_title" >
         </Button>
     </LinearLayout>
+
+
 
 
 </LinearLayout>
