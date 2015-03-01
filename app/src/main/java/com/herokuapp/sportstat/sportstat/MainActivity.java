@@ -97,6 +97,7 @@ public class MainActivity extends Activity
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, mFragmentSettings)
                         .commit();
+                SettingsFragment.getFromSharedPrefs = true;
                 onSectionAttached(NavigationDrawerFragment.SETTINGS_TAB_ID);
                 break;
 
@@ -234,13 +235,34 @@ public class MainActivity extends Activity
 
         getFragmentManager().beginTransaction().remove(mFragmentLogGame).commit();
 
-        mFragmentManager.beginTransaction()
-                .replace(R.id.container, mFragmentNewsfeed)
-                .commit();
-        itemSelected = true;
-        onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
+        returnToNewsfeed();
 
     }
+
+    public void onCancelClicked(View v){
+        LogGameFragment.onCancelClicked(v);
+    }
+
+    //OnSave, OnCancel, and OnChangePhoto clicked methods for Settings Fragment
+
+    public void onSettingsSaveClicked(View v){
+        SettingsFragment.onSaveClicked(v, this);
+
+        returnToNewsfeed();
+    }
+
+    public void onSettingsCancelClicked(View v){
+        SettingsFragment.onCancelClicked(v, this.getApplicationContext());
+
+        returnToNewsfeed();
+    }
+
+    public void onChangePhotoClicked(View v){
+        SettingsFragment.onChangePhotoClicked(v, this);
+
+    }
+
+
 
     @Override
     protected void onResume() {
@@ -250,9 +272,14 @@ public class MainActivity extends Activity
         Globals.context = this.getApplicationContext();
     }
 
-    //On save and on cancel clicked methods for LogGameFragment
-    public void onCancelClicked(View v){
-        LogGameFragment.onCancelClicked(v);
-    }
+    //Helper method to restore the default view
+    private void returnToNewsfeed(){
+        getFragmentManager().beginTransaction().remove(mFragmentLogGame).commit();
 
+        mFragmentManager.beginTransaction()
+                .replace(R.id.container, mFragmentNewsfeed)
+                .commit();
+        itemSelected = true;
+        onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
+    }
 }

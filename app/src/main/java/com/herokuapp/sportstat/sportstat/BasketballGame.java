@@ -2,6 +2,8 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 
 import java.io.Serializable;
@@ -11,7 +13,7 @@ import java.util.Calendar;
 /**
  * Created by DavidHarmon on 2/16/15.
  */
-public class BasketballGame implements Serializable{
+public class BasketballGame implements Serializable {
     private long mUserId;
     private int mAssists;
     private int mTwoPoints;
@@ -22,14 +24,13 @@ public class BasketballGame implements Serializable{
 
 
     private static final long serialVersionUID = 1L;
-    private SharedPreferences mPreferences;
 
     public BasketballGame(Context context){
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
 
         //Default set the user's id to this user's
-        mUserId = mPreferences.getInt(Globals.USER_ID, 0);
+        mUserId = PreferenceManager.getDefaultSharedPreferences(context).getInt(Globals.USER_ID, 0);
         mAssists = 0;
         mTwoPoints = 0;
         mThreePoints = 0;
@@ -121,10 +122,10 @@ public class BasketballGame implements Serializable{
 
         //If the id matches the user's return my username. Else, lookup in the cloud
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        int uId = mPreferences.getInt(Globals.USER_ID, 0);
+
+        int uId = PreferenceManager.getDefaultSharedPreferences(context).getInt(Globals.USER_ID, 0);
         if(id == uId){
-            userNameStr =  mPreferences.getString(Globals.USERNAME, "");
+            userNameStr = PreferenceManager.getDefaultSharedPreferences(context).getString(Globals.USERNAME, "");
         }else{
             userNameStr = "IDZ DONT MATCH";
             //GET USERNAME FROM CLOUD
@@ -135,4 +136,6 @@ public class BasketballGame implements Serializable{
 
 
     }
+
+
 }

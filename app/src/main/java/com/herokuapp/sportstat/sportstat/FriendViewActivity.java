@@ -3,12 +3,19 @@ package com.herokuapp.sportstat.sportstat;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -44,6 +51,19 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_view);
 
+
+       // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
+
+        ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
+        imageView.setImageResource(R.drawable.blank_profile);
+        TextView textView = (TextView) findViewById(R.id.profile_text_edit);
+
+        String linesep = System.getProperty("line.separator");
+
+        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+
+
+        textView.setText("HEEEEEY");
 
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.
@@ -87,6 +107,9 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
         });
+
+
+
 
 
 

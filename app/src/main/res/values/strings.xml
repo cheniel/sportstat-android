@@ -28,10 +28,7 @@
     <string name="stats_text">\"\"</string>
     <string name="ui_button_save_title">SAVE</string>
     <string name="ui_button_cancel_title">CANCEL</string>
-    <string name="ui_profile_photo_title">Profile photo:</string>
-    <string name="ui_button_change_title">Change</string>
-    <string name="ui_profile_photo_content_description">Your profile photo</string>
-    <string name="ui_profile_photo_picker_title">Select profile image</string>
+
     <string name="dialog_fragment_tag_photo_picker">Photo picker</string>
     <string name="profile_photo_file_name">profile_photo.png</string>
     <string name="assist_dialog_title">Assists</string>
@@ -48,5 +45,29 @@
     <string name="register_button_text">Register</string>
     <string name="sportstat_url">http://sportstat.herokuapp.com/</string>
     <string name="title_activity_friend_view">FriendViewActivity</string>
+    <string name="ui_profile_name_title">Username:</string>
+    <string name="ui_profile_name_hint">Your username here</string>
+    <string name="ui_profile_email_title">Email:</string>
+    <string name="ui_profile_email_hint">Your Email here</string>
+    <string name="ui_profile_phone_title">Phone:</string>
+    <string name="ui_profile_phone_hint">Your phone number here</string>
+    <string name="ui_profile_gender_title">Gender:</string>
+    <string name="ui_profile_gender_female">Female</string>
+    <string name="ui_profile_gender_male">Male</string>
+    <string name="ui_profile_class_title">Class:</string>
+    <string name="ui_profile_class_hint">e.g. 2017</string>
+    <string name="ui_profile_major_title">Major:</string>
+    <string name="ui_profile_major_hint">Your major here</string>
+    <string name="save_button">Save</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="ui_profile_photo_title">Profile photo:</string>
+    <string name="ui_button_change_title">Change</string>
+    <string name="ui_profile_photo_content_description">Your profile photo</string>
+    <string name="ui_profile_photo_picker_title">Select profile image</string>
+    <string name="ui_profile_handle_title">Handle:</string>
+    <string name="ui_profile_handle_hint">Your nickname here</string>
+    <string name="ui_profile_toast_save_text">Saved!</string>
+    <string name="ui_profile_toast_cancel_text">Cancelled</string>
+    <string name="title_activity_avatar_gallery">AvatarGalleryActivity</string>
 
 </resources>

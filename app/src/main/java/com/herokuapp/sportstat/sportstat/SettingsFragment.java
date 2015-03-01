@@ -44,7 +44,8 @@ public class SettingsFragment extends Fragment {
     private static final String URI_INSTANCE_STATE_KEY = "saved_uri";
     private static final String NAME_TEXT = "saved_name";
     private static final String EMAIL_TEXT = "saved_email";
-
+    private static final java.lang.String GET_FROM_PREFS = "get_img_from_prefs";
+    private static int mImageId;
 
     private static final String HANDLE = "user_handle";
     private static final int PHOTO_SELECTED = 99;
@@ -64,6 +65,7 @@ public class SettingsFragment extends Fragment {
 
     private static SharedPreferences sharedPref;
     private boolean copyExceptionThrown = false;
+    public static boolean getFromSharedPrefs;
 
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -89,16 +91,23 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
 
-        if (savedInstanceState != null) {
-            mImageCaptureUri = savedInstanceState
-                    .getParcelable(URI_INSTANCE_STATE_KEY);
+        if(getFromSharedPrefs){
+            Log.d(TAG, "fuck me 1");
         }
 
-        mImgSharedPref = getActivity().getSharedPreferences(SAVED_PREFERENCES, Context.MODE_PRIVATE);
+
+
+            if (savedInstanceState != null) {
+
+                getFromSharedPrefs =
+                        savedInstanceState.getBoolean(GET_FROM_PREFS, false);
+
+            }
 
 
     }
@@ -134,30 +143,32 @@ public class SettingsFragment extends Fragment {
     }
 
     public static void setImage(int pos){
+
         switch(pos){
             case 0:
-                mImageView.setImageResource(R.drawable.sample_1);
+                mImageId = R.drawable.sample_1;
                 break;
             case 1:
-                mImageView.setImageResource(R.drawable.sample_2);
+                mImageId = R.drawable.sample_2;
                 break;
             case 2:
-                mImageView.setImageResource(R.drawable.sample_3);
+                mImageId = R.drawable.sample_3;
                 break;
             case 3:
-                mImageView.setImageResource(R.drawable.sample_4);
+                mImageId = R.drawable.sample_4;
                 break;
             case 4:
-                mImageView.setImageResource(R.drawable.sample_5);
+                mImageId = R.drawable.sample_5;
                 break;
             case 5:
-                mImageView.setImageResource(R.drawable.sample_6);
+                mImageId = R.drawable.sample_6;
                 break;
             default:
-                mImageView.setImageResource(R.drawable.blank_profile);
+                mImageId = R.drawable.blank_profile;
                 break;
-        }
 
+        }
+        mImageView.setImageResource(mImageId);
     }
 
 
@@ -191,13 +202,6 @@ public class SettingsFragment extends Fragment {
     }
 
 
-
-
-
-
-
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -221,8 +225,7 @@ public class SettingsFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
 
 
-        saveSnap(act);
-
+        editor.putInt(Globals.USER_PROFILE_IMG_ID, mImageId);
         editor.putString(Globals.USERNAME, mNameEditText.getText().toString());
         editor.putString(Globals.USER_EMAIL, mEmailEditText.getText().toString());
         editor.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
@@ -237,6 +240,10 @@ public class SettingsFragment extends Fragment {
         //loadSnap(mImageCaptureUri);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
+        if(sharedPref.contains(Globals.USER_PROFILE_IMG_ID)&&getFromSharedPrefs){
+            mImageId = sharedPref.getInt(Globals.USER_PROFILE_IMG_ID, 99);
+            mImageView.setImageResource(mImageId);
+        }
         if(sharedPref.contains(Globals.USERNAME)){
             mNameEditText.setText(sharedPref.getString(Globals.USERNAME, ""));
         }
@@ -249,42 +256,7 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    //This method is based on the saveSnap method from the Camera example app
-    private static void saveSnap(MainActivity act) {
 
-        // Commit all the changes into preference file
-        // Save profile image into internal storage.
-        mImageView.buildDrawingCache();
-        Bitmap bmap = mImageView.getDrawingCache();
-        try {
-            FileOutputStream fos = act.openFileOutput(
-                    act.getString(R.string.profile_photo_file_name), Context.MODE_PRIVATE);
-            bmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-    }
-
-    //This method is based on the  method from the Camera example app
-    private void loadSnap(Uri u) {
-
-        // Load profile photo from internal storage
-        if (u != null) {
-            mImageView.setImageURI(u);
-        } else {
-            try {
-                FileInputStream fis = getActivity().openFileInput(getString(R.string.profile_photo_file_name));
-                Bitmap bmap = BitmapFactory.decodeStream(fis);
-                mImageView.setImageBitmap(bmap);
-                fis.close();
-            } catch (IOException e) {
-                //Default profile photo if no photo saved before.
-                mImageView.setImageResource(R.drawable.blank_profile);
-            }
-        }
-    }
 
     @Override
     //Save entered fields
@@ -293,7 +265,8 @@ public class SettingsFragment extends Fragment {
         boolean instanceExceptionThrown = false;
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable(URI_INSTANCE_STATE_KEY, mImageCaptureUri);
+        outState.putBoolean(GET_FROM_PREFS, getFromSharedPrefs);
+        outState.putInt(Globals.USER_PROFILE_IMG_ID, mImageId);
         outState.putString(Globals.USERNAME, mNameEditText.getText().toString());
         outState.putString(Globals.USER_EMAIL, mEmailEditText.getText().toString());
         outState.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
