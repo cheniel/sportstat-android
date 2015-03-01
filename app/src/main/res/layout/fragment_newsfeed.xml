@@ -1,12 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id ="@+id/newsfeed_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.herokuapp.sportstat.sportstat.NewsfeedFragment">
+    android:orientation="vertical"
+    android:paddingStart="0dp"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart = "0dp"
+        />
+
+</LinearLayout>

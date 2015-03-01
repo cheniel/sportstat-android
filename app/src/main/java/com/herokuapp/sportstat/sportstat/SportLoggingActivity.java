@@ -50,7 +50,7 @@ public class SportLoggingActivity extends Activity {
 
 
 
-        mGame = new BasketballGame();
+        mGame = new BasketballGame(this);
 
         //Save the time when the user started playing
         mTime = Calendar.getInstance().getTime().toString();

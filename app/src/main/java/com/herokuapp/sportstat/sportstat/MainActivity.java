@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +34,8 @@ public class MainActivity extends Activity
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
 
+
+
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
@@ -52,6 +56,8 @@ public class MainActivity extends Activity
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
 
         setContentView(R.layout.activity_main);
+
+
 
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -222,8 +228,17 @@ public class MainActivity extends Activity
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, mFragmentNewsfeed)
                 .commit();
-        onSectionAttached(NavigationDrawerFragment.LOG_TAB_ID);
+        itemSelected = true;
+        onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Globals.sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Globals.context = this.getApplicationContext();
     }
 
     //On save and on cancel clicked methods for LogGameFragment

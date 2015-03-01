@@ -7,26 +7,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.client.methods.HttpGet;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class LoginActivity extends Activity {
 
     private EditText mUsernameField;
+
     private SharedPreferences mPreferences;
 
     @Override
@@ -40,11 +34,15 @@ public class LoginActivity extends Activity {
         super.onResume();
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String username = mPreferences.getString(PreferenceKeys.USERNAME, null);
-
-        if (username != null) { launchApp(); }
-
+        String username = mPreferences.getString(Globals.USERNAME, null);
         mUsernameField = (EditText) findViewById(R.id.username_field);
+
+        if (username != null) {
+
+            launchApp();
+        }
+
+
     }
 
     private void launchApp() {
@@ -59,8 +57,8 @@ public class LoginActivity extends Activity {
 
     private void saveUsernameAndUserId(String username, int userId) {
         SharedPreferences.Editor editor = mPreferences.edit();
-        editor.putString(PreferenceKeys.USERNAME, username);
-        editor.putInt(PreferenceKeys.USER_ID, userId);
+        editor.putString(Globals.USERNAME, username);
+        editor.putInt(Globals.USER_ID, userId);
         editor.apply();
     }
 
@@ -82,7 +80,7 @@ public class LoginActivity extends Activity {
 
                 Log.d(getLocalClassName(), loginResponseString);
 
-                try{
+                try {
                     JSONObject loginResponse = new JSONObject(loginResponseString);
 
                     if (loginResponse.has("status")) {
@@ -100,7 +98,7 @@ public class LoginActivity extends Activity {
                         return "success";
                     }
 
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -110,12 +108,12 @@ public class LoginActivity extends Activity {
 
             private void makeToast(final String toast) {
                 handler.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
                 );
             }
         }.execute();
@@ -148,7 +146,7 @@ public class LoginActivity extends Activity {
 
                 Log.d(getLocalClassName(), registrationResponseString);
 
-                try{
+                try {
                     JSONObject registrationResponse = new JSONObject(registrationResponseString);
 
                     if (registrationResponse.has("status")) {
@@ -170,7 +168,7 @@ public class LoginActivity extends Activity {
                         }
                     }
 
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -190,5 +188,8 @@ public class LoginActivity extends Activity {
             }
         }.execute();
 
+
     }
+
+
 }

@@ -12,6 +12,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -32,12 +33,13 @@ public class SportStatDialogFragment extends DialogFragment {
     public static final int DIALOG_ID_ERROR = -1;
     public static final int DIALOG_ID_PHOTO_PICKER = 9;
     public static final int DIALOG_ID_DATE_PICKER = 0;
-    public static final int DIALOG_ID_TIME_PICKER = 1;
-    public static final int DIALOG_ID_ASSISTS_ALERT = 2;
-    public static final int DIALOG_ID_TWO_POINTS_ALERT = 3;
-    public static final int DIALOG_ID_THREE_POINTS_ALERT = 4;
-    public static final int DIALOG_ID_SHOTS_ATTEMPTED_ALERT = 5;
-    public static final int DIALOG_ID_COMMENT_ALERT = 6;
+    public static final int DIALOG_ID_START_TIME_PICKER = 1;
+    public static final int DIALOG_ID_END_TIME_PICKER = 2;
+    public static final int DIALOG_ID_ASSISTS_ALERT = 3;
+    public static final int DIALOG_ID_TWO_POINTS_ALERT = 4;
+    public static final int DIALOG_ID_THREE_POINTS_ALERT = 5;
+    public static final int DIALOG_ID_SHOTS_ATTEMPTED_ALERT = 6;
+    public static final int DIALOG_ID_COMMENT_ALERT = 7;
     private static final String TAG = "tag";
 
     private String okButtonString = "Ok";
@@ -125,7 +127,7 @@ public class SportStatDialogFragment extends DialogFragment {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 //Set the user entered date in the ExerciseEntry
-                                ((LogGameFragment) parent).setBasketBallGameDate(0, year, monthOfYear, dayOfMonth);
+                                ((LogGameFragment) parent).setBasketBallGameDate(false, 0, year, monthOfYear, dayOfMonth);
 
 
 
@@ -135,7 +137,7 @@ public class SportStatDialogFragment extends DialogFragment {
                         }, mYear, mMonth, mDay);
 
                 return (dpd);
-            case DIALOG_ID_TIME_PICKER:
+            case DIALOG_ID_START_TIME_PICKER:
                 //The timepicker code is from http://pulse7.net/android/date-picker-dialog-time-picker-dialog-android/
                 //Launch a timepicker alert dialog
                 // Process to get Current Time
@@ -153,10 +155,33 @@ public class SportStatDialogFragment extends DialogFragment {
                                 Calendar cal = Calendar.getInstance();
 
                                 //Set the user-entered time in the exercise entry
-                                ((LogGameFragment) parent).setBasketBallGameDate(1, hourOfDay, minute, cal.get(Calendar.SECOND));
+                                ((LogGameFragment) parent).setBasketBallGameDate(false, 1, hourOfDay, minute, cal.get(Calendar.SECOND));
                             }
                         }, mHour, mMinute, false);
                 return (tpd);
+
+            case DIALOG_ID_END_TIME_PICKER:
+                //The timepicker code is from http://pulse7.net/android/date-picker-dialog-time-picker-dialog-android/
+                //Launch a timepicker alert dialog
+                // Process to get Current Time
+                final Calendar c3 = Calendar.getInstance();
+                int mHourEnd = c3.get(Calendar.HOUR_OF_DAY);
+                int mMinuteEnd = c3.get(Calendar.MINUTE);
+
+                TimePickerDialog tpdEnd = new TimePickerDialog(this.getActivity(),
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+
+                                Calendar cal = Calendar.getInstance();
+
+                                //Set the user-entered time in the exercise entry
+                                ((LogGameFragment) parent).setBasketBallGameDate(true, 1, hourOfDay, minute, cal.get(Calendar.SECOND));
+                            }
+                        }, mHourEnd, mMinuteEnd, false);
+                return (tpdEnd);
 
             case DIALOG_ID_ASSISTS_ALERT:
                 //Launch an alert dialog prompting user to enter Duration (numeric entry)
@@ -205,20 +230,20 @@ public class SportStatDialogFragment extends DialogFragment {
 
                 return caloriesBuilder.create();
 
-            case DIALOG_ID_SHOTS_ATTEMPTED_ALERT:
-                //Launch an alert dialog prompting user to enter Heart Rate (numeric entry)
-                AlertDialog.Builder heartrateBuilder = new AlertDialog.Builder(parent.getActivity());
-                heartrateBuilder.setTitle(R.string.shots_attempted_dialog_title);
-
-                EditText heartrateEditText = new EditText(this.getActivity());
-                heartrateEditText.setId(R.id.shots_attempted_edit_text);
-
-                heartrateEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                heartrateBuilder.setView(heartrateEditText);
-
-                createOkCancelButtons(heartrateBuilder, 4);
-
-                return heartrateBuilder.create();
+//            case DIALOG_ID_SHOTS_ATTEMPTED_ALERT:
+//                //Launch an alert dialog prompting user to enter Heart Rate (numeric entry)
+//                AlertDialog.Builder heartrateBuilder = new AlertDialog.Builder(parent.getActivity());
+//                heartrateBuilder.setTitle(R.string.shots_attempted_dialog_title);
+//
+//                EditText heartrateEditText = new EditText(this.getActivity());
+//                heartrateEditText.setId(R.id.shots_attempted_edit_text);
+//
+//                heartrateEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                heartrateBuilder.setView(heartrateEditText);
+//
+//                createOkCancelButtons(heartrateBuilder, 4);
+//
+//                return heartrateBuilder.create();
             case DIALOG_ID_COMMENT_ALERT:
                 //Launch an alert dialog prompting user to enter Comment (text entry)
                 AlertDialog.Builder commentBuilder = new AlertDialog.Builder(parent.getActivity());
@@ -302,14 +327,15 @@ public class SportStatDialogFragment extends DialogFragment {
                                 ((LogGameFragment)parent).setBasketBallGameThreePoints(threePoints);
                                 break;
                             case 4:
-                                userEnteredText = ((EditText) d.findViewById(R.id.shots_attempted_edit_text)).getText().toString();
-                                int shotsAttempted;
-                                try {
-                                    shotsAttempted = Integer.parseInt(userEnteredText);
-                                } catch (Exception e) {
-                                    shotsAttempted = 0;
-                                }
-                                ((LogGameFragment)parent).setBasketBallGameShotsAttempted(shotsAttempted);
+//                                userEnteredText = ((EditText) d.findViewById(R.id.shots_attempted_edit_text)).getText().toString();
+//                                int shotsAttempted;
+//                                try {
+//                                    shotsAttempted = Integer.parseInt(userEnteredText);
+//                                } catch (Exception e) {
+//                                    shotsAttempted = 0;
+//                                }
+//                                ((LogGameFragment)parent).setBasketBallGameShotsAttempted(shotsAttempted);
+                                Log.d(getActivity().getLocalClassName(), "case 4" );
                                 break;
                             case 5:
                                 userEnteredText = ((EditText) d.findViewById(R.id.comment_edit_text)).getText().toString();

@@ -81,7 +81,7 @@ public class LogGameFragment extends ListFragment {
         SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm:ss MMM d yyyy");
 
         //Create a blank new game
-        mGame = new BasketballGame();
+        mGame = new BasketballGame(this.getActivity());
 
 
         ArrayAdapter<String> mAdapter = new ArrayAdapter<String>(this.getActivity(),
