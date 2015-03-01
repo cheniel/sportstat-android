@@ -28,6 +28,7 @@ public class BasketballGame implements Serializable{
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
+        //Default set the user's id to this user's
         mUserId = mPreferences.getInt(Globals.USER_ID, 0);
         mAssists = 0;
         mTwoPoints = 0;

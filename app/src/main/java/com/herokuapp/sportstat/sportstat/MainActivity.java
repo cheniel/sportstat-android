@@ -107,6 +107,15 @@ public class MainActivity extends Activity
                 onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
                 break;
 
+            case (NavigationDrawerFragment.PROFILE_TAB_ID):
+                Intent i = new Intent(this, FriendViewActivity.class);
+                startActivity(i);
+
+
+                onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
+                break;
+
+
 
             default:
                 mFragmentManager.beginTransaction()
