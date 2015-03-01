@@ -2,20 +2,18 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 
 import java.util.ArrayList;
 
 
-public class FriendViewActivity extends Activity {
+public class FriendViewActivity extends Activity implements StatsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "tag";
     private SlidingTabLayout slidingTabLayout;
@@ -32,6 +30,11 @@ public class FriendViewActivity extends Activity {
     private IntentFilter mMessageIntentFilter;
 
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
     /**
      * Called when the activity is first created.
      */
@@ -41,7 +44,7 @@ public class FriendViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_view);
 
-/
+
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.
         // Get their instances.
@@ -52,9 +55,9 @@ public class FriendViewActivity extends Activity {
 
         // create a fragment list in order.
         fragments = new ArrayList<Fragment>();
-        fragments.add(new StartFragment());
+        fragments.add(new StatsFragment());
         fragments.add(histFrag);
-        fragments.add(new SettingsFragment());
+
 
         // use FragmentPagerAdapter to bind the slidingTabLayout (tabs with different titles)
         // and ViewPager (different pages of fragment) together.
@@ -72,7 +75,7 @@ public class FriendViewActivity extends Activity {
             @Override
             public void onPageSelected(int position) {
                 if (fragments.get(position).equals(histFrag)) {
-                    histFrag.updateView();
+                    //histFrag.updateView();
                 }
             }
 
@@ -84,6 +87,13 @@ public class FriendViewActivity extends Activity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
         });
+
+
+
+
+
+
+
 
     }
 }

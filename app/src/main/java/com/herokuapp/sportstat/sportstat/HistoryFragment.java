@@ -80,7 +80,7 @@ public class HistoryFragment extends ListFragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_newsfeed, container, false);
+        return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
@@ -98,7 +98,7 @@ public class HistoryFragment extends ListFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        ((MainActivity) activity).onSectionAttached(mSectionNumber);
+        //((FriendViewActivity) activity).onSectionAttached(mSectionNumber);
     }
 
     @Override
