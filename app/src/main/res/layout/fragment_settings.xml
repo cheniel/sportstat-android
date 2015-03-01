@@ -34,6 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="100dp"
                 android:layout_margin="5dp"
+                android:layout_marginStart="0dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/ui_profile_photo_content_description"
                 android:focusable="true"
