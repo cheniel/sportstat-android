@@ -40,7 +40,7 @@ public class LogGameFragment extends ListFragment {
     private int mSectionNumber;
 
 
-    static final String[] MANUAL_ITEM_TERMS = {"Date", "Time", "Assists", "Two-Points", "Three-Points", "Shots Attempted", "Comment"};
+    static final String[] MANUAL_ITEM_TERMS = {"Date", "Start Time", "End Time", "Assists", "Two-Points", "Three-Points", "Comment"};
     private static final String TAG = "tag";
     private String mSelectedListItem;
     static Integer numEntry = 0;
@@ -100,15 +100,15 @@ public class LogGameFragment extends ListFragment {
                 if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[0])) {
                     displayDialog(SportStatDialogFragment.DIALOG_ID_DATE_PICKER);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[1])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_TIME_PICKER);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_START_TIME_PICKER);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[2])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_ASSISTS_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_END_TIME_PICKER);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[3])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_TWO_POINTS_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_ASSISTS_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[4])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_THREE_POINTS_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_TWO_POINTS_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[5])) {
-                    displayDialog(SportStatDialogFragment.DIALOG_ID_SHOTS_ATTEMPTED_ALERT);
+                    displayDialog(SportStatDialogFragment.DIALOG_ID_THREE_POINTS_ALERT);
                 } else if (mSelectedListItem.equals(MANUAL_ITEM_TERMS[6])) {
                     displayDialog(SportStatDialogFragment.DIALOG_ID_COMMENT_ALERT);
                 }
@@ -152,7 +152,7 @@ public class LogGameFragment extends ListFragment {
     public static void onSaveClicked(View v) {
 
 
-        Log.d(TAG, "SAVING GAME ENTRY. Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
+        Log.d(TAG, "SAVING GAME ENTRY. Start time: " +mGame.getStartTime()+" End time: "+mGame.getEndTime()+" Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
                 " Threes: "+mGame.getThreePoints()+" Comment: "+mGame.getComment());
 
 
@@ -190,13 +190,8 @@ public class LogGameFragment extends ListFragment {
         mGame.setComment(comment);
     }
 
-    //TODO: should we include shots attempted in manual entry?
-    public void setBasketBallGameShotsAttempted(int shots) {
-       mGame.setShotsAttempted(shots);
-    }
-
     //Date and time setting method
-    public void setBasketBallGameDate(int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
+    public void setBasketBallGameDate(boolean isEnd, int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
         int i = 0;
         String minStr;
         String secStr;
@@ -214,19 +209,34 @@ public class LogGameFragment extends ListFragment {
             secStr = "" + dayOrsec;
         }
 
-        String curDate = mGame.getGameTime();
-
+        String dateTimeStr;
         StringBuilder newDate = new StringBuilder();
 
-        if (dateorTime == 0) {
-            newDate.append(mGame.getGameTime(), 0, 8);
-            newDate.append(" " + findMonthName(monthOrmin) + " " + dayOrsec + " " + yrOrhr);
-        } else {
-            newDate.append(yrOrhr + ":" + minStr + ":" + secStr);
-            newDate.append(curDate, 8, curDate.length());
+
+        if(!isEnd){
+            dateTimeStr = mGame.getStartTime();
+            Log.d(TAG, "Start time: "+dateTimeStr);
+        }else{
+            dateTimeStr = mGame.getEndTime();
+            Log.d(TAG, "End time: "+dateTimeStr);
         }
 
-        mGame.setGameTime(newDate.toString());
+
+
+        if (dateorTime == 0) {
+            newDate.append(dateTimeStr, 0, 8);
+            newDate.append(" " + findMonthName(monthOrmin) + " " + dayOrsec + " " + yrOrhr);
+        } else {
+            newDate.append(yrOrhr + ":" + minStr + ":" + secStr+" ");
+            newDate.append(dateTimeStr, 8, dateTimeStr.length());
+            //Log.d(TAG, "formatted time: "+newDate.toString());
+        }
+
+        if(!isEnd) {
+            mGame.setStartTime(newDate.toString());
+        }else{
+            mGame.setEndTime(newDate.toString());
+        }
     }
 
 
