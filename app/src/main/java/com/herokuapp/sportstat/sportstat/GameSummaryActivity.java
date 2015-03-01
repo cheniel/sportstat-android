@@ -243,10 +243,11 @@ public class GameSummaryActivity extends Activity {
     }
 
 
-
+    //TODO: implement that when the user clicks Save or cancel, they are brought back to Newsfeed
     public void onSaveClicked(View v){
 
 
+        finish();
 
 
     }
@@ -254,7 +255,7 @@ public class GameSummaryActivity extends Activity {
     public void onCancelClicked(View v){
 
 
-
+        finish();
 
     }
 
