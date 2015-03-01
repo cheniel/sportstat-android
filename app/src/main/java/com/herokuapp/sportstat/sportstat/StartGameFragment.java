@@ -20,8 +20,6 @@ public class StartGameFragment extends Fragment {
 
     private int mSectionNumber;
 
-    private Button mButton;
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.

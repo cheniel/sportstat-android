@@ -41,5 +41,11 @@
     <string name="comment_dialog_title">Comment</string>
     <string name="comment_hint">How did the game go?</string>
     <string name="dialog_fragment_list_item_tag">dialog_fragment_list_item_tag</string>
+    <string name="title_activity_login">SportStat</string>
+    <string name="username_hint">username</string>
+    <string name="login_prompt">Login or register!</string>
+    <string name="login_button_text">Login</string>
+    <string name="register_button_text">Register</string>
+    <string name="sportstat_url">http://sportstat.herokuapp.com/</string>
 
 </resources>
