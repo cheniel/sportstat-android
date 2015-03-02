@@ -103,6 +103,7 @@ public class NewsfeedFragment extends ListFragment {
             return;
         }
 
+        final Handler handler = new Handler(Looper.getMainLooper());
         new AsyncTask<String, Void, String>() {
 
             @Override
@@ -114,9 +115,17 @@ public class NewsfeedFragment extends ListFragment {
                 Log.d(getActivity().getLocalClassName(), newsfeedString);
 
                 try {
-                    JSONArray newsfeed = new JSONArray(newsfeedString);
+                    final JSONArray newsfeed = new JSONArray(newsfeedString);
 
-                    updateViewUsingJSONArray(newsfeed);
+                    handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                updateViewUsingJSONArray(newsfeed);
+                            }
+                        }
+                    );
+
 
                     return "success";
                 } catch (Exception e) {
@@ -137,8 +146,8 @@ public class NewsfeedFragment extends ListFragment {
             try {
                 JSONObject basketballObject = newsfeed.getJSONObject(i);
                 feed.add(
-                    BasketballGame.getBasketballGameFromJSONObject(
-                            basketballObject));
+                        BasketballGame.getBasketballGameFromJSONObject(
+                                basketballObject));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
