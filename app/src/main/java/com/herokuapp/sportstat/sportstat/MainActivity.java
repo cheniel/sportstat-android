@@ -33,7 +33,7 @@ public class MainActivity extends Activity
     private LogGameFragment mFragmentLogGame;
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
-
+    private FriendFinderFragment mFragmentFriendFinder;
 
 
     /**
@@ -41,6 +41,7 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
     private boolean itemSelected = false;
+
 
 
     @Override
@@ -54,6 +55,7 @@ public class MainActivity extends Activity
         mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
         mFragmentNewsfeed = NewsfeedFragment.newInstance(NavigationDrawerFragment.NEWSFEED_TAB_ID);
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
+        mFragmentFriendFinder = FriendFinderFragment.newInstance(NavigationDrawerFragment.FRIEND_TAB_ID);
 
         setContentView(R.layout.activity_main);
 
@@ -75,7 +77,6 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
 
-        Log.d(TAG, "AAA: nav drawer sel"+position);
         itemSelected = true;
 
         switch (position) {
@@ -113,7 +114,16 @@ public class MainActivity extends Activity
                 startActivity(i);
 
 
-                onSectionAttached(NavigationDrawerFragment.NEWSFEED_TAB_ID);
+                onSectionAttached(NavigationDrawerFragment.PROFILE_TAB_ID);
+                break;
+
+            case (NavigationDrawerFragment.FRIEND_TAB_ID):
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentFriendFinder)
+                        .commit();
+
+
+                onSectionAttached(NavigationDrawerFragment.FRIEND_TAB_ID);
                 break;
 
 
@@ -151,6 +161,10 @@ public class MainActivity extends Activity
                     break;
                 case NavigationDrawerFragment.SETTINGS_TAB_ID:
                     mTitle = getString(R.string.Settings_Tab);
+                    break;
+
+                case NavigationDrawerFragment.FRIEND_TAB_ID:
+                    mTitle = getString(R.string.Friend_Tab);
                     break;
             }
             restoreActionBar();
