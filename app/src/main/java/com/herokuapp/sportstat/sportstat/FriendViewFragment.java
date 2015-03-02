@@ -24,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -128,13 +129,14 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
 
         imageView.setLayoutParams(params);
         TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);
-
         String linesep = System.getProperty("line.separator");
-
         String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
-
         textView.setText(userName+linesep+"StatScore: "+mStatScore);
+
+
+
+
 
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.
@@ -154,7 +156,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
 
         // use FragmentPagerAdapter to bind the slidingTabLayout (tabs with different titles)
         // and ViewPager (different pages of fragment) together.
-        myViewPageAdapter = new ActionTabsViewPagerAdapter(getFragmentManager(),
+        myViewPageAdapter = new ActionTabsViewPagerAdapter(getChildFragmentManager(),
                 fragments);
         viewPager.setAdapter(myViewPageAdapter);
 
@@ -209,6 +211,8 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
                                 public void run() {
                                     mBasketballGames = getBasketballGameListFromJSONArray(newsfeed);
 
+                                    displayAverages(mBasketballGames);
+
                                     histFrag.updateView(mBasketballGames, getActivity());
                                     statFrag.updateStats(mBasketballGames, getActivity());
                                 }
@@ -225,6 +229,39 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
             }
 
         }.execute();
+
+
+
+    }
+
+    private void displayAverages(ArrayList<BasketballGame> mBasketballGames) {
+
+        double avgAssists, avgTwos, avgThrees;
+
+        int assistsSum = 0;
+        int twosSum = 0;
+        int threesSum = 0;
+        int count = 0;
+        TextView avgTextView = (TextView) getView().findViewById(R.id.avg_stats_text_view);
+
+        for(BasketballGame game : mBasketballGames){
+            count++;
+            assistsSum+=game.getAssists();
+            twosSum+=game.getTwoPoints();
+            threesSum+=game.getThreePoints();
+        }
+
+        avgAssists = assistsSum/((double)count);
+        avgTwos = twosSum/((double)count);
+        avgThrees = threesSum/((double)count);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+
+        String linesep = System.getProperty("line.separator");
+        avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
+                +decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees));
+
     }
 
     private ArrayList<BasketballGame> getBasketballGameListFromJSONArray(JSONArray newsfeed) {

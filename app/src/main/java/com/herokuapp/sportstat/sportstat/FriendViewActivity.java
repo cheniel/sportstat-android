@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -177,6 +178,8 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                                 public void run() {
                                     mBasketballGames = getBasketballGameListFromJSONArray(newsfeed);
 
+                                    displayAverages(mBasketballGames);
+
                                     histFrag.updateView(mBasketballGames, getApplicationContext());
                                     statFrag.updateStats(mBasketballGames, getApplicationContext());
                                 }
@@ -210,5 +213,35 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         }
 
         return feed;
+    }
+
+    private void displayAverages(ArrayList<BasketballGame> mBasketballGames) {
+
+        double avgAssists, avgTwos, avgThrees;
+
+        int assistsSum = 0;
+        int twosSum = 0;
+        int threesSum = 0;
+        int count = 0;
+        TextView avgTextView = (TextView) findViewById(R.id.avg_stats_text_view);
+
+        for(BasketballGame game : mBasketballGames){
+            count++;
+            assistsSum+=game.getAssists();
+            twosSum+=game.getTwoPoints();
+            threesSum+=game.getThreePoints();
+        }
+
+        avgAssists = assistsSum/((double)count);
+        avgTwos = twosSum/((double)count);
+        avgThrees = threesSum/((double)count);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+
+        String linesep = System.getProperty("line.separator");
+        avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
+                +decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees));
+
     }
 }
