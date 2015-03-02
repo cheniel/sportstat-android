@@ -47,10 +47,9 @@ public class SportLoggingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport_logging);
 
+        mGame = new BasketballGame();
 
-
-
-        mGame = new BasketballGame(this);
+        // TODO: set userId and username in BasketballGame.
 
         //Save the time when the user started playing
         mTime = Calendar.getInstance().getTime().toString();

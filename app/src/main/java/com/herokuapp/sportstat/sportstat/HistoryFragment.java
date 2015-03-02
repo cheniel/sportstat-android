@@ -71,7 +71,7 @@ public class HistoryFragment extends ListFragment {
 
 
         ArrayList<BasketballGame> gamesArray = new ArrayList<>();
-        BasketballGame one = new BasketballGame(this.getActivity());
+        BasketballGame one = new BasketballGame();
         gamesArray.add(one);
 
 
