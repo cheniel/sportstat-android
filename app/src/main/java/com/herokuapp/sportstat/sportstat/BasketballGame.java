@@ -38,7 +38,7 @@ public class BasketballGame implements Serializable {
     public static BasketballGame getBasketballGameFromJSONObject(JSONObject j) {
         BasketballGame bg = new BasketballGame();
 
-        String username = j.optString("user_name");
+        String username = j.optString("username");
         if (username != null) {
             bg.setUsername(username);
         }
