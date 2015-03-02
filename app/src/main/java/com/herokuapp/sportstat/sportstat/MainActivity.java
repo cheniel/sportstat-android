@@ -121,12 +121,8 @@ public class MainActivity extends Activity
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, mFragmentFriendFinder)
                         .commit();
-
-
                 onSectionAttached(NavigationDrawerFragment.FRIEND_TAB_ID);
                 break;
-
-
 
             default:
                 mFragmentManager.beginTransaction()
@@ -141,7 +137,7 @@ public class MainActivity extends Activity
     public void onSectionAttached(int number) {
 
         if(itemSelected) {
-            Log.d(TAG, "AAA: sectionAtteched " + number);
+
             switch (number) {
                 case NavigationDrawerFragment.START_TAB_ID:
                     mTitle = getString(R.string.Start_Game_Tab);
@@ -153,7 +149,6 @@ public class MainActivity extends Activity
                     mTitle = getString(R.string.My_Profile_Tab);
                     break;
                 case NavigationDrawerFragment.NEWSFEED_TAB_ID:
-                    Log.d(TAG, "attached: " + getString(R.string.Newsfeed_Tab));
                     mTitle = getString(R.string.Newsfeed_Tab);
                     break;
                 case NavigationDrawerFragment.LEADERBOARD_TAB_ID:
@@ -162,7 +157,6 @@ public class MainActivity extends Activity
                 case NavigationDrawerFragment.SETTINGS_TAB_ID:
                     mTitle = getString(R.string.Settings_Tab);
                     break;
-
                 case NavigationDrawerFragment.FRIEND_TAB_ID:
                     mTitle = getString(R.string.Friend_Tab);
                     break;
@@ -174,9 +168,10 @@ public class MainActivity extends Activity
 
     public void restoreActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        Log.d(TAG, "AAA: TITLE: "+mTitle);
-        actionBar.setTitle(mTitle);
+        if(actionBar!=null){
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+        }
     }
 
 

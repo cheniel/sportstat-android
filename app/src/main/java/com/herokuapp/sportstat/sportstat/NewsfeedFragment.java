@@ -78,15 +78,6 @@ public class NewsfeedFragment extends ListFragment {
 
         }
 
-        ArrayList<BasketballGame> gamesArray = new ArrayList<>();
-        BasketballGame one = new BasketballGame();
-        gamesArray.add(one);
-
-
-        //Fill the gamesArray with the users friends' saved games in chronological order
-        updateView(gamesArray);
-
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_newsfeed, container, false);
     }

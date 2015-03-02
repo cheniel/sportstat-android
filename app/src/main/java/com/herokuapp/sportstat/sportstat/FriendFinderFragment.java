@@ -81,7 +81,7 @@ public class FriendFinderFragment extends ListFragment {
 
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_newsfeed, container, false);
+        return inflater.inflate(R.layout.fragment_friend_finder, container, false);
     }
 
 
