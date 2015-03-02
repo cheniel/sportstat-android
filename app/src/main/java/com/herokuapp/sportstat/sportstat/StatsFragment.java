@@ -213,7 +213,7 @@ public class StatsFragment extends Fragment {
 //setting used to move the graph on xaxiz to .5 to the right
         multiRenderer.setXAxisMin(-0.5);
 //setting used to move the graph on xaxiz to .5 to the right
-        multiRenderer.setXAxisMax(11);
+        multiRenderer.setXAxisMax(mGamesArray.size());
 //setting bar size or space between two bars
 //multiRenderer.setBarSpacing(0.5);
 //Setting background color of the graph to transparent
