@@ -69,5 +69,6 @@
     <string name="ui_profile_toast_save_text">Saved!</string>
     <string name="ui_profile_toast_cancel_text">Cancelled</string>
     <string name="title_activity_avatar_gallery">AvatarGalleryActivity</string>
+    <string name="Friend_Tab">Friends</string>
 
 </resources>

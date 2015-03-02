@@ -35,6 +35,7 @@ public class NavigationDrawerFragment extends Fragment {
     public static final String ACTIVITY_MY_PROFILE = "My Profile";
     public static final String ACTIVITY_NEWSFEED = "Newsfeed";
     public static final String ACTIVITY_LEADERBOARD = "Leaderboard";
+    public static final String ACTIVITY_FRIEND_FINDER = "Friends";
     public static final String ACTIVITY_SETTINGS = "Settings";
 
     public static final int START_TAB_ID = 0;
@@ -42,7 +43,9 @@ public class NavigationDrawerFragment extends Fragment {
     public static final int PROFILE_TAB_ID = 2;
     public static final int NEWSFEED_TAB_ID = 3;
     public static final int LEADERBOARD_TAB_ID = 4;
-    public static final int SETTINGS_TAB_ID = 5;
+    public static final int FRIEND_TAB_ID = 5;
+    public static final int SETTINGS_TAB_ID = 6;
+
 
     private static final String[] allDrawers = {
             ACTIVITY_CREATE_NEW_GAME_AUTOMATIC,
@@ -50,6 +53,7 @@ public class NavigationDrawerFragment extends Fragment {
             ACTIVITY_MY_PROFILE,
             ACTIVITY_NEWSFEED,
             ACTIVITY_LEADERBOARD,
+            ACTIVITY_FRIEND_FINDER,
             ACTIVITY_SETTINGS };
 
     /**
@@ -63,6 +67,7 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
     private static final String TAG = "a";
+
 
     /**
      * A pointer to the current callbacks instance (the Activity).
