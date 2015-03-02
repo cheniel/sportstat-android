@@ -49,7 +49,7 @@ public class MainActivity extends Activity
      */
     private CharSequence mTitle;
     private boolean itemSelected = false;
-
+    private boolean profileOpen = false;
 
 
     @Override
@@ -88,6 +88,7 @@ public class MainActivity extends Activity
 
         itemSelected = true;
 
+        profileOpen = position == NavigationDrawerFragment.PROFILE_TAB_ID;
         switch (position) {
             case (NavigationDrawerFragment.START_TAB_ID):
                 mFragmentManager.beginTransaction()
@@ -109,6 +110,7 @@ public class MainActivity extends Activity
                         .commit();
                 SettingsFragment.getFromSharedPrefs = true;
                 onSectionAttached(NavigationDrawerFragment.SETTINGS_TAB_ID);
+
                 break;
 
             case (NavigationDrawerFragment.NEWSFEED_TAB_ID):
@@ -121,7 +123,6 @@ public class MainActivity extends Activity
             case (NavigationDrawerFragment.PROFILE_TAB_ID):
 //                Intent i = new Intent(this, FriendViewActivity.class);
 //                startActivity(i);
-
                 mFragmentManager.beginTransaction()
                         .replace(R.id.container, mFragmentFriendView)
                         .commit();
@@ -356,8 +357,9 @@ public class MainActivity extends Activity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-
+    if(profileOpen) {
         returnToNewsfeed();
+    }
 
         super.onSaveInstanceState(outState);
 
