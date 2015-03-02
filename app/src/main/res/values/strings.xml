@@ -74,5 +74,7 @@
     <string name="friend_search_hint">Enter a username to search</string>
     <string name="user_search_button_text">SEARCH</string>
     <string name="current_friend_search_text">Friends you follow:</string>
+    <string name="stats_chart_title">Performance Over Time</string>
+    <string name="stats_chart_x_label">Entries Since Inception</string>
 
 </resources>

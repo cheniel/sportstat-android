@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -19,7 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, FriendViewFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "a";
     /**
@@ -31,6 +32,7 @@ public class MainActivity extends Activity
     FragmentManager mFragmentManager;
     private StartGameFragment mFragmentStartGame;
     private LogGameFragment mFragmentLogGame;
+    private FriendViewFragment mFragmentFriendView;
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
     private FriendFinderFragment mFragmentFriendFinder;
@@ -53,6 +55,7 @@ public class MainActivity extends Activity
         mFragmentManager = getFragmentManager();
         mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
         mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
+        mFragmentFriendView = FriendViewFragment.newInstance(NavigationDrawerFragment.PROFILE_TAB_ID);
         mFragmentNewsfeed = NewsfeedFragment.newInstance(NavigationDrawerFragment.NEWSFEED_TAB_ID);
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
         mFragmentFriendFinder = FriendFinderFragment.newInstance(NavigationDrawerFragment.FRIEND_TAB_ID);
@@ -110,8 +113,12 @@ public class MainActivity extends Activity
                 break;
 
             case (NavigationDrawerFragment.PROFILE_TAB_ID):
-                Intent i = new Intent(this, FriendViewActivity.class);
-                startActivity(i);
+//                Intent i = new Intent(this, FriendViewActivity.class);
+//                startActivity(i);
+
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentFriendView)
+                        .commit();
 
 
                 onSectionAttached(NavigationDrawerFragment.PROFILE_TAB_ID);
@@ -277,6 +284,11 @@ public class MainActivity extends Activity
     }
 
 
+    //OnFragmentInteraction method needed for FriendViewFragment
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 
     @Override
     protected void onResume() {
