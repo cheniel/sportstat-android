@@ -354,6 +354,17 @@ public class MainActivity extends Activity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+
+        returnToNewsfeed();
+
+        super.onSaveInstanceState(outState);
+
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 

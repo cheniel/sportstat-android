@@ -238,7 +238,6 @@ public class StatsFragment extends Fragment {
         multiRenderer.addSeriesRenderer(expenseRenderer);
         multiRenderer.addSeriesRenderer(threeRenderer);
 
-        chartContainer = (LinearLayout) mView.findViewById(R.id.profile_stats_chart);
 
 //this part is used to display graph on the xml
 //remove any views before u paint the chart
@@ -318,6 +317,14 @@ public class StatsFragment extends Fragment {
 
         Log.d(TAG, "onResume called");
         //openChart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        chartContainer = (LinearLayout) mView.findViewById(R.id.profile_stats_chart);
+
     }
 
     //Update graphs in the StatsFragent
