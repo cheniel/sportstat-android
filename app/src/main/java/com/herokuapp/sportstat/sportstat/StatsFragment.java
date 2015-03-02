@@ -1,9 +1,11 @@
 package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,18 +42,13 @@ import android.widget.LinearLayout;
 public class StatsFragment extends Fragment {
 
 
-
+    private static final String TAG = "tagStats";
     private View mChart;
-//    private String[] mMonth = new String[] {
-//            "Jan", "Feb" , "Mar", "Apr", "May", "Jun",
-//            "Jul", "Aug" , "Sep", "Oct", "Nov", "Dec"
-//    };
-
-
-
 
     private OnFragmentInteractionListener mListener;
     private ArrayList<BasketballGame> mGamesArray;
+    private LinearLayout chartContainer;
+    private View mView;
 
     /**
      * Use this factory method to create a new instance of
@@ -77,12 +74,9 @@ public class StatsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
-
-    private void openChart(){
+    private void openChart(Context c){
 
         int[] x = new int[mGamesArray.size()];
         int[] assists = new int[mGamesArray.size()];
@@ -160,7 +154,7 @@ public class StatsFragment extends Fragment {
 // Creating a XYMultipleSeriesRenderer to customize the whole chart
         XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
         multiRenderer.setXLabels(0);
-        multiRenderer.setChartTitle(getString(R.string.stats_chart_title));
+        multiRenderer.setChartTitle(c.getString(R.string.stats_chart_title));
 
         multiRenderer.setXTitle("Entries from "+mGamesArray.get(0).getTimeString()
                 +" to "+mGamesArray.get(mGamesArray.size()-1).getTimeString());
@@ -225,7 +219,7 @@ public class StatsFragment extends Fragment {
 //Setting background color of the graph to transparent
         multiRenderer.setBackgroundColor(Color.TRANSPARENT);
 //Setting margin color of the graph to transparent
-        multiRenderer.setMarginsColor(getResources().getColor(R.color.transparent_background));
+        multiRenderer.setMarginsColor(c.getResources().getColor(R.color.transparent_background));
         multiRenderer.setApplyBackgroundColor(true);
         multiRenderer.setScale(2f);
 //setting x axis point size
@@ -244,8 +238,9 @@ public class StatsFragment extends Fragment {
         multiRenderer.addSeriesRenderer(expenseRenderer);
         multiRenderer.addSeriesRenderer(threeRenderer);
 
+        chartContainer = (LinearLayout) mView.findViewById(R.id.profile_stats_chart);
+
 //this part is used to display graph on the xml
-        LinearLayout chartContainer = (LinearLayout) getView().findViewById(R.id.profile_stats_chart);
 //remove any views before u paint the chart
         chartContainer.removeAllViews();
 //drawing bar chart
@@ -271,8 +266,11 @@ public class StatsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_stats, container, false);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stats, container, false);
+
+        Log.d(TAG, "onCreateView");
+        return mView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -315,17 +313,19 @@ public class StatsFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
 
+        Log.d(TAG, "onResume called");
         //openChart();
     }
 
     //Update graphs in the StatsFragent
-    public void updateStats(ArrayList<BasketballGame> gamesArray){
+    public void updateStats(ArrayList<BasketballGame> gamesArray, Context context){
+        Log.d(TAG, "Update stats");
         mGamesArray = gamesArray;
 
-        openChart();
+        openChart(context);
 
     }
 
