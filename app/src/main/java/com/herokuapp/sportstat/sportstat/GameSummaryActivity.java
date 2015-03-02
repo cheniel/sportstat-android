@@ -304,6 +304,7 @@ public class GameSummaryActivity extends Activity {
 
     }
 
+    //TODO: make this return NewsFeedFragment to main view
     public void onCancelClicked(View v){
 
 

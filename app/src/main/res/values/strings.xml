@@ -22,7 +22,7 @@
     <string name="Two_Point_Button">Two-Point</string>
     <string name="Three_Point_Button">Three-Point</string>
     <string name="Done_Button">Done</string>
-    <string name="title_activity_sport_logging">SportLoggingActivity</string>
+    <string name="title_activity_sport_logging">Sport Logger</string>
     <string name="title_activity_game_summary">Game Summary</string>
     <string name="shots_attempted_text">Shots attempted:</string>
     <string name="stats_text">\"\"</string>
@@ -44,7 +44,7 @@
     <string name="login_button_text">Login</string>
     <string name="register_button_text">Register</string>
     <string name="sportstat_url">http://sportstat.herokuapp.com/</string>
-    <string name="title_activity_friend_view">FriendViewActivity</string>
+    <string name="title_activity_friend_view">User Profile</string>
     <string name="ui_profile_name_title">Username:</string>
     <string name="ui_profile_name_hint">Your username here</string>
     <string name="ui_profile_email_title">Email:</string>
@@ -68,7 +68,7 @@
     <string name="ui_profile_handle_hint">Your nickname here</string>
     <string name="ui_profile_toast_save_text">Saved!</string>
     <string name="ui_profile_toast_cancel_text">Cancelled</string>
-    <string name="title_activity_avatar_gallery">AvatarGalleryActivity</string>
+    <string name="title_activity_avatar_gallery">Avatars</string>
     <string name="Friend_Tab">Friends</string>
     <string name="friend_search_text">Follow new friends:</string>
     <string name="friend_search_hint">Enter a username to search</string>
