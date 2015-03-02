@@ -271,6 +271,11 @@ public class MainActivity extends Activity
 
     }
 
+    //OnSearchClicked methods for FriendFinderFragment
+    public void onSearchClicked(View v){
+        FriendFinderFragment.onSearchClicked(v, this);
+    }
+
 
 
     @Override

@@ -203,7 +203,7 @@ public class StatsFragment extends Fragment {
         multiRenderer.addSeriesRenderer(expenseRenderer);
 
         //this part is used to display graph on the xml
-        LinearLayout chartContainer = (LinearLayout) getView().findViewById(R.id.chart);
+        LinearLayout chartContainer = (LinearLayout) getView().findViewById(R.id.profile_stats_chart);
         //remove any views before u paint the chart
         chartContainer.removeAllViews();
         //drawing bar chart

@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:hint="@string/friend_search_hint"
-                android:inputType="textCapWords"
+                android:inputType="text"
                 android:singleLine="true"></EditText>
 
 
