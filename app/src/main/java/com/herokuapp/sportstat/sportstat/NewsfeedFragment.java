@@ -3,12 +3,22 @@ package com.herokuapp.sportstat.sportstat;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -68,10 +78,8 @@ public class NewsfeedFragment extends ListFragment {
 
         }
 
-
-
         ArrayList<BasketballGame> gamesArray = new ArrayList<>();
-        BasketballGame one = new BasketballGame(this.getActivity());
+        BasketballGame one = new BasketballGame();
         gamesArray.add(one);
 
 
@@ -83,15 +91,66 @@ public class NewsfeedFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_newsfeed, container, false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        final int userId = PreferenceManager.getDefaultSharedPreferences(
+                getActivity()).getInt(Globals.USER_ID, -1);
+
+        if (userId == -1) {
+            Log.e(getActivity().getLocalClassName(), "preference error");
+            return;
+        }
+
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String newsfeedString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "users/" + userId
+                                 + "/feed.json");
+
+                Log.d(getActivity().getLocalClassName(), newsfeedString);
+
+                try {
+                    JSONArray newsfeed = new JSONArray(newsfeedString);
+
+                    updateViewUsingJSONArray(newsfeed);
+
+                    return "success";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "failure";
+            }
+
+        }.execute();
+
+    }
+
+    private void updateViewUsingJSONArray(JSONArray newsfeed) {
+        ArrayList<BasketballGame> feed = new ArrayList<>();
+
+        for (int i = 0; i < newsfeed.length(); i++) {
+            try {
+                JSONObject basketballObject = newsfeed.getJSONObject(i);
+                feed.add(
+                    BasketballGame.getBasketballGameFromJSONObject(
+                            basketballObject));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        updateView(feed);
+    }
+
     //Takes an ArrayList of BasketBallGame objects and updates the listview
     private void updateView(ArrayList<BasketballGame> gamesArray) {
-
-
         defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
         setListAdapter(defAdapter);
-
-
-
     }
 
     @Override

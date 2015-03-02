@@ -38,10 +38,8 @@ public class LoginActivity extends Activity {
         mUsernameField = (EditText) findViewById(R.id.username_field);
 
         if (username != null) {
-
             launchApp();
         }
-
 
     }
 
@@ -108,12 +106,12 @@ public class LoginActivity extends Activity {
 
             private void makeToast(final String toast) {
                 handler.post(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-                            }
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
                         }
+                    }
                 );
             }
         }.execute();

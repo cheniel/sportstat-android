@@ -1,19 +1,14 @@
 package com.herokuapp.sportstat.sportstat;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-/**
- * Created by DavidHarmon on 2/16/15.
- */
 public class BasketballGame implements Serializable {
+    private String mUsername;
     private long mUserId;
     private int mAssists;
     private int mTwoPoints;
@@ -25,24 +20,66 @@ public class BasketballGame implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public BasketballGame(Context context){
-
-
+    public BasketballGame() {
 
         //Default set the user's id to this user's
-        mUserId = PreferenceManager.getDefaultSharedPreferences(context).getInt(Globals.USER_ID, 0);
+        mUsername = "not set";
+        mUserId = -1;
         mAssists = 0;
         mTwoPoints = 0;
         mThreePoints = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm:ss MMM d yyyy");
         mStartTime = dateFormat.format(Calendar.getInstance().getTime());
-
-
         mEndTime = mStartTime;
         mComment = "";
+
     }
 
+    public static BasketballGame getBasketballGameFromJSONObject(JSONObject j) {
+        BasketballGame bg = new BasketballGame();
 
+        String username = j.optString("user_name");
+        if (username != null) {
+            bg.setUsername(username);
+        }
+
+        int userId = j.optInt("user_id", -1);
+        if (userId != -1) {
+            bg.setUserId(userId);
+        }
+
+        bg.setAssists(j.optInt("assists", 0));
+        bg.setTwoPoints(j.optInt("two_pointers", 0));
+        bg.setThreePoints(j.optInt("three_pointers", 0));
+
+        String startTime = j.optString("start_time");
+        if (startTime != null) {
+            bg.setStartTime(startTime);
+        }
+
+        String endTime = j.optString("end_time");
+        if (endTime != null) {
+            bg.setEndTime(endTime);
+        }
+
+        return bg;
+    }
+
+    public String getUsername() {
+        return mUsername;
+    }
+
+    public void setUsername(String username) {
+        mUsername = username;
+    }
+
+    public long getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(long userId) {
+        mUserId = userId;
+    }
 
     public int getAssists() {
         return mAssists;
@@ -100,42 +137,13 @@ public class BasketballGame implements Serializable {
         this.mShotsAttempted = mShotsAttempted;
     }
 
-
     @Override
     public String toString() {
         String linesep = System.getProperty("line.separator");
 
-
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(getUserName(mUserId, Globals.context)+" played from "+mStartTime+" to "+mEndTime+linesep
-        + "Assists: "+mAssists+"  2-Points: "+mTwoPoints+ "  3-Points: "+mThreePoints);
-
-        return(sb.toString());
-
+        return mUsername + " played from " + mStartTime + " to " + mEndTime +
+                linesep + "Assists: " + mAssists + "  2-Points: " + mTwoPoints +
+                "  3-Points: " + mThreePoints;
     }
-
-
-    private String getUserName(long id, Context context){
-        String userNameStr;
-
-
-        //If the id matches the user's return my username. Else, lookup in the cloud
-
-
-        int uId = PreferenceManager.getDefaultSharedPreferences(context).getInt(Globals.USER_ID, 0);
-        if(id == uId){
-            userNameStr = PreferenceManager.getDefaultSharedPreferences(context).getString(Globals.USERNAME, "");
-        }else{
-            userNameStr = "IDZ DONT MATCH";
-            //GET USERNAME FROM CLOUD
-        }
-
-
-        return userNameStr;
-
-
-    }
-
 
 }
