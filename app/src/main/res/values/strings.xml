@@ -70,5 +70,9 @@
     <string name="ui_profile_toast_cancel_text">Cancelled</string>
     <string name="title_activity_avatar_gallery">AvatarGalleryActivity</string>
     <string name="Friend_Tab">Friends</string>
+    <string name="friend_search_text">Follow new friends:</string>
+    <string name="friend_search_hint">Enter a username to search</string>
+    <string name="user_search_button_text">SEARCH</string>
+    <string name="current_friend_search_text">Friends you follow:</string>
 
 </resources>

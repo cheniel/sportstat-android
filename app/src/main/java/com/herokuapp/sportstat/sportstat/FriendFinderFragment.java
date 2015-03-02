@@ -72,7 +72,11 @@ public class FriendFinderFragment extends ListFragment {
 
 
 
+
+
         mFriendsArray = new ArrayList<>();
+        mFriendsArray.add("Scruffy");
+        mFriendsArray.add("Ishmael");
 
 
 
