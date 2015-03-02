@@ -5,16 +5,23 @@ import android.app.Fragment;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -35,6 +42,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
     private String regid;
     private IntentFilter mMessageIntentFilter;
+    private ArrayList<BasketballGame> mBasketballGames;
 
 
     @Override
@@ -111,12 +119,69 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        final int userId = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
+
+        if (userId == -1) {
+            Log.e(getLocalClassName(), "preference error");
+            return;
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String newsfeedString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "users/" + userId
+                                + "/basketball_games.json");
+
+                Log.d(getLocalClassName(), newsfeedString);
+
+                try {
+                    final JSONArray newsfeed = new JSONArray(newsfeedString);
+
+                    handler.post(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    mBasketballGames = getBasketballGameListFromJSONArray(newsfeed);
+                                    histFrag.updateView(mBasketballGames);
+                                }
+                            }
+                    );
 
 
+                    return "success";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+                return "failure";
+            }
 
+        }.execute();
+    }
 
+    private ArrayList<BasketballGame> getBasketballGameListFromJSONArray(JSONArray newsfeed) {
+        ArrayList<BasketballGame> feed = new ArrayList<>();
 
+        for (int i = 0; i < newsfeed.length(); i++) {
+            try {
+                JSONObject basketballObject = newsfeed.getJSONObject(i);
+                feed.add(
+                        BasketballGame.getBasketballGameFromJSONObject(
+                                basketballObject));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
+        return feed;
     }
 }

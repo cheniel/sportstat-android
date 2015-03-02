@@ -92,73 +92,9 @@ public class HistoryFragment extends ListFragment {
         return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        final int userId = PreferenceManager.getDefaultSharedPreferences(
-                getActivity()).getInt(Globals.USER_ID, -1);
-
-        if (userId == -1) {
-            Log.e(getActivity().getLocalClassName(), "preference error");
-            return;
-        }
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-        new AsyncTask<String, Void, String>() {
-
-            @Override
-            protected String doInBackground(String... arg0) {
-                String newsfeedString = CloudUtilities.getJSON(
-                        getString(R.string.sportstat_url) + "users/" + userId
-                                + "/basketball_games.json");
-
-                Log.d(getActivity().getLocalClassName(), newsfeedString);
-
-                try {
-                    final JSONArray newsfeed = new JSONArray(newsfeedString);
-
-                    handler.post(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateViewUsingJSONArray(newsfeed);
-                                }
-                            }
-                    );
-
-
-                    return "success";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "failure";
-            }
-
-        }.execute();
-
-    }
-
-    private void updateViewUsingJSONArray(JSONArray newsfeed) {
-        ArrayList<BasketballGame> feed = new ArrayList<>();
-
-        for (int i = 0; i < newsfeed.length(); i++) {
-            try {
-                JSONObject basketballObject = newsfeed.getJSONObject(i);
-                feed.add(
-                        BasketballGame.getBasketballGameFromJSONObject(
-                                basketballObject));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        updateView(feed);
-    }
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    private void updateView(ArrayList<BasketballGame> gamesArray) {
+    public void updateView(ArrayList<BasketballGame> gamesArray) {
         defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
         setListAdapter(defAdapter);
     }
