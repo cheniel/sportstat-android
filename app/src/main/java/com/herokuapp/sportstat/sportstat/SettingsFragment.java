@@ -102,12 +102,12 @@ public class SettingsFragment extends Fragment {
 
 
 
-            if (savedInstanceState != null) {
+        if (savedInstanceState != null) {
 
-                getFromSharedPrefs =
-                        savedInstanceState.getBoolean(GET_FROM_PREFS, false);
+            getFromSharedPrefs =
+                    savedInstanceState.getBoolean(GET_FROM_PREFS, false);
 
-            }
+        }
 
 
     }
@@ -117,7 +117,7 @@ public class SettingsFragment extends Fragment {
 
         // Making a "toast" informing the user the picture is saved.
 
-         saveProfile(act);
+        saveProfile(act);
 
         Toast.makeText(act.getApplicationContext(),
                 "Changes Saved!",
@@ -136,9 +136,9 @@ public class SettingsFragment extends Fragment {
     //When the user clicks Change Photo, bring up a gallery of standard avatars. Allow
     //the user to choose one of them.
     public static void onChangePhotoClicked(View v, MainActivity context){
-            Intent i = new Intent(context, AvatarGalleryActivity.class);
+        Intent i = new Intent(context, AvatarGalleryActivity.class);
 
-            context.startActivity(i);
+        context.startActivity(i);
 
     }
 
@@ -195,6 +195,7 @@ public class SettingsFragment extends Fragment {
         mImageView = (ImageView) getView().findViewById(R.id.imageProfile);
 
         mNameEditText = (EditText) getView().findViewById(R.id.editName);
+        mNameEditText.setKeyListener(null);
         mHandleEditText = (EditText) getView().findViewById(R.id.editHandle);
         mEmailEditText = (EditText) getView().findViewById(R.id.editEmail);
 

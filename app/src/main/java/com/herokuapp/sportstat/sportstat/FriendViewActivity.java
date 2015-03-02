@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
@@ -39,10 +40,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private HistoryFragment histFrag = null;
+    private StatsFragment statFrag = null;
 
     private String regid;
     private IntentFilter mMessageIntentFilter;
     private ArrayList<BasketballGame> mBasketballGames;
+    private int mStatScore;
 
 
     @Override
@@ -60,10 +63,14 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         setContentView(R.layout.activity_friend_view);
 
 
-       // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
+        // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
 
         ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
-        imageView.setImageResource(R.drawable.blank_profile);
+        imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_PROFILE_IMG_ID, 99));
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
+
+        imageView.setLayoutParams(params);
         TextView textView = (TextView) findViewById(R.id.profile_text_edit);
 
         String linesep = System.getProperty("line.separator");
@@ -71,7 +78,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
 
 
-        textView.setText("HEEEEEY");
+        textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.
@@ -80,10 +87,11 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         histFrag = new HistoryFragment();
+        statFrag = new StatsFragment();
 
         // create a fragment list in order.
         fragments = new ArrayList<Fragment>();
-        fragments.add(new StatsFragment());
+        fragments.add(statFrag);
         fragments.add(histFrag);
 
 
@@ -152,6 +160,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                                 public void run() {
                                     mBasketballGames = getBasketballGameListFromJSONArray(newsfeed);
                                     histFrag.updateView(mBasketballGames);
+                                    statFrag.updateStats(mBasketballGames);
                                 }
                             }
                     );

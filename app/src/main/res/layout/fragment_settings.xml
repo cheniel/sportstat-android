@@ -27,6 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:baselineAligned="false" >
 
             <ImageView
@@ -69,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:hint="@string/ui_profile_name_hint"
+
             android:inputType="textCapWords"
             android:singleLine="true" >
         </EditText>
@@ -111,67 +112,67 @@
 
 
         <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:text="@string/ui_profile_gender_title" >-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:text="@string/ui_profile_gender_title" >-->
         <!--</TextView>-->
 
         <!--<RadioGroup-->
-            <!--android:id="@+id/radioGender"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:orientation="horizontal" >-->
+        <!--android:id="@+id/radioGender"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:orientation="horizontal" >-->
 
-            <!--<RadioButton-->
-                <!--android:id="@+id/radioGenderF"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="1"-->
-                <!--android:text="@string/ui_profile_gender_female" />-->
+        <!--<RadioButton-->
+        <!--android:id="@+id/radioGenderF"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="@string/ui_profile_gender_female" />-->
 
-            <!--<RadioButton-->
-                <!--android:id="@+id/radioGenderM"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="1"-->
-                <!--android:text="@string/ui_profile_gender_male" >-->
-            <!--</RadioButton>-->
+        <!--<RadioButton-->
+        <!--android:id="@+id/radioGenderM"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="@string/ui_profile_gender_male" >-->
+        <!--</RadioButton>-->
         <!--</RadioGroup>-->
 
         <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:text="@string/ui_profile_class_title" >-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:text="@string/ui_profile_class_title" >-->
         <!--</TextView>-->
 
         <!--<EditText-->
-            <!--android:id="@+id/editClass"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:hint="@string/ui_profile_class_hint"-->
-            <!--android:inputType="phone"-->
-            <!--android:singleLine="true" >-->
+        <!--android:id="@+id/editClass"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:hint="@string/ui_profile_class_hint"-->
+        <!--android:inputType="phone"-->
+        <!--android:singleLine="true" >-->
         <!--</EditText>-->
 
         <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:text="@string/ui_profile_major_title" >-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:text="@string/ui_profile_major_title" >-->
         <!--</TextView>-->
 
         <!--<EditText-->
-            <!--android:id="@+id/editMajor"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="5dp"-->
-            <!--android:hint="@string/ui_profile_major_hint"-->
-            <!--android:inputType="text"-->
-            <!--android:singleLine="true" >-->
+        <!--android:id="@+id/editMajor"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="5dp"-->
+        <!--android:hint="@string/ui_profile_major_hint"-->
+        <!--android:inputType="text"-->
+        <!--android:singleLine="true" >-->
         <!--</EditText>-->
 
 
