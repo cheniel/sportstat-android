@@ -35,7 +35,7 @@ public class FriendFinderFragment extends ListFragment {
     private int mSectionNumber;
     private ArrayAdapter<String> defAdapter;
     private ArrayList<String> mFriendsArray;
-    private static EditText mUserSearchEditText;
+    public static EditText mUserSearchEditText;
 
 
     /**
@@ -81,6 +81,7 @@ public class FriendFinderFragment extends ListFragment {
         mFriendsArray = new ArrayList<>();
         mFriendsArray.add("Scruffy");
         mFriendsArray.add("Ishmael");
+        mFriendsArray.add("This is filler data");
 
         updateView(mFriendsArray);
 
@@ -97,17 +98,6 @@ public class FriendFinderFragment extends ListFragment {
 
 
     }
-
-    public static void onSearchClicked(View v, MainActivity act){
-
-        attemptLogin(v, act);
-
-
-
-
-    }
-
-
 
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
@@ -134,66 +124,5 @@ public class FriendFinderFragment extends ListFragment {
     }
 
 
-
-    public static void attemptLogin(View view, final MainActivity act) {
-        final String enteredUserName = mUserSearchEditText.getText().toString();
-
-
-        if (enteredUserName.isEmpty()) {
-            Toast.makeText(act, "Please input username.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-        new AsyncTask<String, Void, String>() {
-
-            @Override
-            protected String doInBackground(String... arg0) {
-                String loginResponseString = CloudUtilities.getJSON(
-                        act.getString(R.string.sportstat_url) + "user_id/" +
-                                enteredUserName + ".json");
-
-                Log.d(TAG, loginResponseString);
-
-                try {
-                    JSONObject loginResponse = new JSONObject(loginResponseString);
-
-                    if (loginResponse.has("status")) {
-                        makeToast("Login failed. User may not exist.");
-                        return "failure";
-                    }
-
-                    if (loginResponse.has("id")) {
-                        makeToast("Login successful!");
-//                        saveUsernameAndUserId(
-//                                loginResponse.getString("username"),
-//                                loginResponse.getInt("id")
-                        //  );
-                        //launchApp();
-
-                        return "success";
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                makeToast("Login failed");
-                return "failure";
-            }
-
-            private void makeToast(final String toast) {
-                handler.post(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                //Toast.makeText(th getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                );
-            }
-        }.execute();
-
-    }
 }
 

@@ -44,6 +44,10 @@
         <activity
             android:name=".FriendViewActivity"
             android:label="@string/title_activity_friend_view" >
+            <intent-filter>
+                <action android:name=".activities.FriendViewActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AvatarGalleryActivity"

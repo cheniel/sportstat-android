@@ -31,6 +31,8 @@ import java.util.ArrayList;
 public class FriendViewActivity extends Activity implements StatsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "tag";
+    public static final String USERNAME = "EXTRA USER NAME";
+    public static final String USER_ID = "EXTRA USER ID";
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
@@ -46,6 +48,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private IntentFilter mMessageIntentFilter;
     private ArrayList<BasketballGame> mBasketballGames;
     private int mStatScore;
+    private int mPassedUserId = -1;
 
 
     @Override
@@ -62,6 +65,13 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_view);
 
+        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mPassedUserId = extras.getInt(USER_ID, -1);
+            userName = extras.getString(USERNAME, null);
+        }
 
         // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
 
@@ -75,7 +85,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         String linesep = System.getProperty("line.separator");
 
-        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+
 
 
         textView.setText(userName+linesep+"StatScore: "+mStatScore);
@@ -133,7 +143,14 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     protected void onResume() {
         super.onResume();
 
-        final int userId = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
+        int uid;
+        if (mPassedUserId < 1) {
+            uid = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
+        } else {
+            uid = mPassedUserId;
+        }
+
+        final int userId = uid;
 
         if (userId == -1) {
             Log.e(getLocalClassName(), "preference error");

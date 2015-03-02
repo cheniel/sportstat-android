@@ -85,7 +85,7 @@ public class HistoryFragment extends ListFragment {
 
 
         //Fill the gamesArray with the users friends' saved games in chronological order
-       
+
             updateView(gamesArray);
 
 
