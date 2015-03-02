@@ -127,7 +127,7 @@ public class SportStatDialogFragment extends DialogFragment {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 //Set the user entered date in the ExerciseEntry
-                                ((LogGameFragment) parent).setBasketBallGameDate(false, 0, year, monthOfYear, dayOfMonth);
+//                                ((LogGameFragment) parent).setBasketBallGameDate(false, 0, year, monthOfYear, dayOfMonth);
 
 
 
@@ -155,7 +155,7 @@ public class SportStatDialogFragment extends DialogFragment {
                                 Calendar cal = Calendar.getInstance();
 
                                 //Set the user-entered time in the exercise entry
-                                ((LogGameFragment) parent).setBasketBallGameDate(false, 1, hourOfDay, minute, cal.get(Calendar.SECOND));
+//                                ((LogGameFragment) parent).setBasketBallGameDate(false, 1, hourOfDay, minute, cal.get(Calendar.SECOND));
                             }
                         }, mHour, mMinute, false);
                 return (tpd);
@@ -178,7 +178,7 @@ public class SportStatDialogFragment extends DialogFragment {
                                 Calendar cal = Calendar.getInstance();
 
                                 //Set the user-entered time in the exercise entry
-                                ((LogGameFragment) parent).setBasketBallGameDate(true, 1, hourOfDay, minute, cal.get(Calendar.SECOND));
+//                                ((LogGameFragment) parent).setBasketBallGameDate(true, 1, hourOfDay, minute, cal.get(Calendar.SECOND));
                             }
                         }, mHourEnd, mMinuteEnd, false);
                 return (tpdEnd);

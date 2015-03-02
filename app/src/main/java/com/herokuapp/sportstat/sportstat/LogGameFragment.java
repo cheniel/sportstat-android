@@ -152,8 +152,8 @@ public class LogGameFragment extends ListFragment {
     public static void onSaveClicked(View v) {
 
 
-        Log.d(TAG, "SAVING GAME ENTRY. Start time: " +mGame.getStartTime()+" End time: "+mGame.getEndTime()+" Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
-                " Threes: "+mGame.getThreePoints()+" Comment: "+mGame.getComment());
+//        Log.d(TAG, "SAVING GAME ENTRY. Start time: " +mGame.getStartTime()+" End time: "+mGame.getEndTime()+" Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
+//                " Threes: "+mGame.getThreePoints()+" Comment: "+mGame.getComment());
 
 
 
@@ -189,104 +189,102 @@ public class LogGameFragment extends ListFragment {
     public void setBasketBallGameComment(String comment) {
         mGame.setComment(comment);
     }
-
-    //Date and time setting method
-    public void setBasketBallGameDate(boolean isEnd, int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
-        int i = 0;
-        String minStr;
-        String secStr;
-
-        //Ensuring minutes and seconds are in correct format
-        if (monthOrmin < 10) {
-            minStr = "" + 0 + monthOrmin;
-        } else {
-            minStr = "" + monthOrmin;
-        }
-
-        if (dayOrsec < 10) {
-            secStr = "" + 0 + dayOrsec;
-        } else {
-            secStr = "" + dayOrsec;
-        }
-
-        String dateTimeStr;
-        StringBuilder newDate = new StringBuilder();
-
-
-        if(!isEnd){
-            dateTimeStr = mGame.getStartTime();
-            Log.d(TAG, "Start time: "+dateTimeStr);
-        }else{
-            dateTimeStr = mGame.getEndTime();
-            Log.d(TAG, "End time: "+dateTimeStr);
-        }
-
-
-
-        if (dateorTime == 0) {
-            newDate.append(dateTimeStr, 0, 8);
-            newDate.append(" " + findMonthName(monthOrmin) + " " + dayOrsec + " " + yrOrhr);
-        } else {
-            newDate.append(yrOrhr + ":" + minStr + ":" + secStr+" ");
-            newDate.append(dateTimeStr, 8, dateTimeStr.length());
-            //Log.d(TAG, "formatted time: "+newDate.toString());
-        }
-
-        if(!isEnd) {
-            mGame.setStartTime(newDate.toString());
-        }else{
-            mGame.setEndTime(newDate.toString());
-        }
-    }
-
-
-
-    //Helper method to convert int stored month to its 3 letter name
-    private String findMonthName(int monthOrmin) {
-        String monthName;
-        switch (monthOrmin) {
-            case 0:
-                monthName = "Jan";
-                break;
-            case 1:
-                monthName = "Feb";
-                break;
-            case 2:
-                monthName = "Mar";
-                break;
-            case 3:
-                monthName = "Apr";
-                break;
-            case 4:
-                monthName = "May";
-                break;
-            case 5:
-                monthName = "Jun";
-                break;
-            case 6:
-                monthName = "Jul";
-                break;
-            case 7:
-                monthName = "Aug";
-                break;
-            case 8:
-                monthName = "Sep";
-                break;
-            case 9:
-                monthName = "Oct";
-                break;
-            case 10:
-                monthName = "Nov";
-                break;
-            case 11:
-                monthName = "Dec";
-                break;
-            default:
-                monthName = "";
-        }
-        return monthName;
-    }
-
+//
+//    //Date and time setting method
+//    public void setBasketBallGameDate(boolean isEnd, int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
+//        int i = 0;
+//        String minStr;
+//        String secStr;
+//
+//        //Ensuring minutes and seconds are in correct format
+//        if (monthOrmin < 10) {
+//            minStr = "" + 0 + monthOrmin;
+//        } else {
+//            minStr = "" + monthOrmin;
+//        }
+//
+//        if (dayOrsec < 10) {
+//            secStr = "" + 0 + dayOrsec;
+//        } else {
+//            secStr = "" + dayOrsec;
+//        }
+//
+//        String dateTimeStr;
+//        StringBuilder newDate = new StringBuilder();
+//
+//
+//        if(!isEnd){
+////            dateTimeStr = mGame.getStartTime();
+////            Log.d(TAG, "Start time: "+dateTimeStr);
+//        }else{
+////            dateTimeStr = mGame.getEndTime();
+//            Log.d(TAG, "End time: "+dateTimeStr);
+//        }
+//
+//        if (dateorTime == 0) {
+//            newDate.append(dateTimeStr, 0, 8);
+//            newDate.append(" " + findMonthName(monthOrmin) + " " + dayOrsec + " " + yrOrhr);
+//        } else {
+//            newDate.append(yrOrhr + ":" + minStr + ":" + secStr+" ");
+//            newDate.append(dateTimeStr, 8, dateTimeStr.length());
+//            //Log.d(TAG, "formatted time: "+newDate.toString());
+//        }
+//
+//        if(!isEnd) {
+//            mGame.setStartTime(newDate.toString());
+//        }else{
+//            mGame.setEndTime(newDate.toString());
+//        }
+//    }
+//
+//
+//
+//    //Helper method to convert int stored month to its 3 letter name
+//    private String findMonthName(int monthOrmin) {
+//        String monthName;
+//        switch (monthOrmin) {
+//            case 0:
+//                monthName = "Jan";
+//                break;
+//            case 1:
+//                monthName = "Feb";
+//                break;
+//            case 2:
+//                monthName = "Mar";
+//                break;
+//            case 3:
+//                monthName = "Apr";
+//                break;
+//            case 4:
+//                monthName = "May";
+//                break;
+//            case 5:
+//                monthName = "Jun";
+//                break;
+//            case 6:
+//                monthName = "Jul";
+//                break;
+//            case 7:
+//                monthName = "Aug";
+//                break;
+//            case 8:
+//                monthName = "Sep";
+//                break;
+//            case 9:
+//                monthName = "Oct";
+//                break;
+//            case 10:
+//                monthName = "Nov";
+//                break;
+//            case 11:
+//                monthName = "Dec";
+//                break;
+//            default:
+//                monthName = "";
+//        }
+//        return monthName;
+//    }
+//
 
     
     @Override

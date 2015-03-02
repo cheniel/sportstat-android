@@ -1,11 +1,18 @@
 package com.herokuapp.sportstat.sportstat;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class BasketballGame implements Serializable {
     private String mUsername;
@@ -14,9 +21,9 @@ public class BasketballGame implements Serializable {
     private int mTwoPoints;
     private int mThreePoints;
     private int mShotsAttempted;
-    private String mStartTime, mEndTime;
+    private Calendar mStartTime;
+    private Calendar mEndTime;
     private String mComment;
-
 
     private static final long serialVersionUID = 1L;
 
@@ -28,11 +35,42 @@ public class BasketballGame implements Serializable {
         mAssists = 0;
         mTwoPoints = 0;
         mThreePoints = 0;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("H:mm:ss MMM d yyyy");
-        mStartTime = dateFormat.format(Calendar.getInstance().getTime());
+        mStartTime = Calendar.getInstance(TimeZone.getTimeZone("Z"));
         mEndTime = mStartTime;
         mComment = "";
 
+    }
+
+    public JSONObject getJSONObject() {
+        JSONObject basketballGame = new JSONObject();
+
+        try {
+            basketballGame.put("username", mUsername);
+            basketballGame.put("user_id", mUserId);
+            basketballGame.put("assists", mAssists);
+            basketballGame.put("two_pointers", mTwoPoints);
+            basketballGame.put("three_pointers", mThreePoints);
+            basketballGame.put("start_time", getStartTimeISOString());
+            basketballGame.put("end_time", getEndTimeISOString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return basketballGame;
+    }
+
+    private String getEndTimeISOString() {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        df.setTimeZone(tz);
+        return df.format(mEndTime.getTime());
+    }
+
+    private String getStartTimeISOString() {
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        df.setTimeZone(tz);
+        return df.format(mStartTime.getTime());
     }
 
     public static BasketballGame getBasketballGameFromJSONObject(JSONObject j) {
@@ -63,6 +101,30 @@ public class BasketballGame implements Serializable {
         }
 
         return bg;
+    }
+
+    private void setEndTime(String endTime) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        df.setTimeZone(tz);
+        try {
+            Date date = df.parse(endTime);
+            mEndTime.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setStartTime(String startTime) {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        df.setTimeZone(tz);
+        try {
+            Date date = df.parse(startTime);
+            mStartTime.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {
@@ -105,22 +167,6 @@ public class BasketballGame implements Serializable {
         this.mThreePoints = ThreePoints;
     }
 
-    public String getStartTime() {
-        return mStartTime;
-    }
-
-    public void setStartTime(String mStartTime) {
-        this.mStartTime = mStartTime;
-    }
-
-    public String getEndTime() {
-        return mEndTime;
-    }
-
-    public void setEndTime(String mEndTime) {
-        this.mEndTime = mEndTime;
-    }
-
     public String getComment() {
         return mComment;
     }
@@ -141,9 +187,29 @@ public class BasketballGame implements Serializable {
     public String toString() {
         String linesep = System.getProperty("line.separator");
 
-        return mUsername + " played from " + mStartTime + " to " + mEndTime +
+        return mUsername + " played from " + getStartTimeString() + " to " + getEndTimeString() +
                 linesep + "Assists: " + mAssists + "  2-Points: " + mTwoPoints +
                 "  3-Points: " + mThreePoints;
+    }
+
+    private String getStartTimeString() {
+        return String.format("%02d", mStartTime.get(Calendar.HOUR)) + ":"
+                + String.format("%02d", mStartTime.get(Calendar.MINUTE)) + ":"
+                + String.format("%02d", mStartTime.get(Calendar.SECOND)) + " "
+                + mStartTime.getDisplayName(Calendar.MONTH, Calendar.LONG,
+                new Locale("English")) + " "
+                + mStartTime.get(Calendar.DAY_OF_MONTH) + " "
+                + mStartTime.get(Calendar.YEAR);
+    }
+
+    private String getEndTimeString() {
+        return String.format("%02d", mEndTime.get(Calendar.HOUR)) + ":"
+                + String.format("%02d", mEndTime.get(Calendar.MINUTE)) + ":"
+                + String.format("%02d", mEndTime.get(Calendar.SECOND)) + " "
+                + mEndTime.getDisplayName(Calendar.MONTH, Calendar.LONG,
+                new Locale("English")) + " "
+                + mEndTime.get(Calendar.DAY_OF_MONTH) + " "
+                + mEndTime.get(Calendar.YEAR);
     }
 
 }
