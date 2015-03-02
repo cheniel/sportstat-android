@@ -212,4 +212,12 @@ public class BasketballGame implements Serializable {
                 + mEndTime.get(Calendar.YEAR);
     }
 
+    public String getTimeString(){
+
+        return ""+mEndTime.getDisplayName(Calendar.MONTH, Calendar.LONG,
+                new Locale("English")) + " "
+                + mEndTime.get(Calendar.DAY_OF_MONTH) + " "
+                + mEndTime.get(Calendar.YEAR);
+    }
+
 }
