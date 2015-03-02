@@ -7,7 +7,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 
 public class MainActivity extends Activity
@@ -273,7 +279,64 @@ public class MainActivity extends Activity
 
     //OnSearchClicked methods for FriendFinderFragment
     public void onSearchClicked(View v){
-        FriendFinderFragment.onSearchClicked(v, this);
+        final String enteredUserName = FriendFinderFragment.mUserSearchEditText.getText().toString();
+
+
+        if (enteredUserName.isEmpty()) {
+            Toast.makeText(this, "Please input username.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String userLookupResponseString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "user_id/" +
+                                enteredUserName + ".json");
+
+                Log.d(TAG, userLookupResponseString);
+
+                try {
+                    JSONObject userJSON = new JSONObject(userLookupResponseString);
+
+                    if (userJSON.has("status")) {
+                        makeToast("Friend does not exist");
+                        return "failure";
+                    }
+
+                    if (userJSON.has("id")) {
+                        makeToast("Friend exists!");
+
+                        Intent intent = new Intent(".activities.FriendViewActivity");
+                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
+                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
+                        startActivity(intent);
+
+                        return "success";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                makeToast("Friend does not exist.");
+                return "failure";
+            }
+
+            private void makeToast(final String toast) {
+                handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),
+                                        toast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }.execute();
     }
 
 
