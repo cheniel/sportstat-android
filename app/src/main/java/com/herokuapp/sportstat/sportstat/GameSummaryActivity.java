@@ -7,12 +7,19 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +35,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -246,9 +254,53 @@ public class GameSummaryActivity extends Activity {
     //TODO: implement that when the user clicks Save or cancel, they are brought back to Newsfeed
     public void onSaveClicked(View v){
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mGame.setUsername(prefs.getString(Globals.USERNAME, null));
+        mGame.setUserId(prefs.getInt(Globals.USER_ID, 0));
 
-        finish();
+        final JSONObject post = mGame.getJSONObject();
 
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String postResponseString = CloudUtilities.post(
+                        getString(R.string.sportstat_url) + "basketball_games", post
+                );
+
+                Log.d(getLocalClassName(), postResponseString);
+
+                try {
+                    JSONObject postResponse = new JSONObject(postResponseString);
+
+                    if (postResponse.has("status")) {
+                        makeToast("Registration failed.");
+                        return "failure";
+                    }
+
+                    makeToast("Saved!");
+                    finish();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                makeToast("Save failed.");
+                return "failure";
+            }
+
+            private void makeToast(final String toast) {
+                handler.post(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                );
+            }
+        }.execute();
 
     }
 
