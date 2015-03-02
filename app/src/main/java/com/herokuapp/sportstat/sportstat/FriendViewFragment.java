@@ -145,6 +145,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         histFrag = new HistoryFragment();
         statFrag = new StatsFragment();
 
+
         // create a fragment list in order.
         fragments = new ArrayList<Fragment>();
         fragments.add(statFrag);
@@ -208,8 +209,8 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
                                 public void run() {
                                     mBasketballGames = getBasketballGameListFromJSONArray(newsfeed);
 
-                                    histFrag.updateView(mBasketballGames);
-                                    statFrag.updateStats(mBasketballGames);
+                                    histFrag.updateView(mBasketballGames, getActivity());
+                                    statFrag.updateStats(mBasketballGames, getActivity());
                                 }
                             }
                     );

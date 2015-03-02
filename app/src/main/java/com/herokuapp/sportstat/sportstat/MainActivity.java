@@ -253,7 +253,7 @@ public class MainActivity extends Activity
 
     //On save and on cancel clicked methods for LogGameFragment
     public void onSaveClicked(View v){
-        LogGameFragment.onSaveClicked(v);
+        LogGameFragment.onSaveClicked(v, this);
 
         getFragmentManager().beginTransaction().remove(mFragmentLogGame).commit();
 

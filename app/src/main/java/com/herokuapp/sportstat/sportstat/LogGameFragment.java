@@ -3,9 +3,14 @@ package com.herokuapp.sportstat.sportstat;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +21,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -147,29 +154,61 @@ public class LogGameFragment extends ListFragment {
 
     //onClick methods for the save and cancel buttons; they return the user to the Start fragment.
     //onSaveClicked saves the entry to the database
+    public static void onSaveClicked(View v, final MainActivity act){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(act);
+        mGame.setUsername(prefs.getString(Globals.USERNAME, null));
+        mGame.setUserId(prefs.getInt(Globals.USER_ID, 0));
+
+        final JSONObject post = mGame.getJSONObject();
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String postResponseString = CloudUtilities.post(
+                        act.getString(R.string.sportstat_url) + "basketball_games", post
+                );
 
 
-    public static void onSaveClicked(View v) {
 
+                try {
+                    JSONObject postResponse = new JSONObject(postResponseString);
 
-//        Log.d(TAG, "SAVING GAME ENTRY. Start time: " +mGame.getStartTime()+" End time: "+mGame.getEndTime()+" Assists: "+mGame.getAssists()+" Twos: "+mGame.getTwoPoints()+
-//                " Threes: "+mGame.getThreePoints()+" Comment: "+mGame.getComment());
+                    if (postResponse.has("status")) {
+                        makeToast("Registration failed.");
+                        return "failure";
+                    }
 
+                    makeToast("Saved!");
+                    //finish();
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+                makeToast("Save failed.");
+                return "failure";
+            }
 
-        //String saveToast = "Game Saved!";
+            private void makeToast(final String toast) {
+                handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(act.getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }.execute();
 
-        //Tell the user that the entry was saved, indicating the number entry
-        //Toast.makeText(this, saveToast, Toast.LENGTH_SHORT).show();
-        //finish();
     }
 
-    public static void onCancelClicked(View v) {
-        //Tell the user any changes they made have not been saved
-        //Toast.makeText(this.getApplicationContext(), R.string.discard_entry_text, Toast.LENGTH_SHORT).show();
+    public static void onCancelClicked(View v){
 
-        //finish();
+
     }
 
     //Methods to set fields on a potential ExerciseEntry--------------------------------------
@@ -189,102 +228,7 @@ public class LogGameFragment extends ListFragment {
     public void setBasketBallGameComment(String comment) {
         mGame.setComment(comment);
     }
-//
-//    //Date and time setting method
-//    public void setBasketBallGameDate(boolean isEnd, int dateorTime, int yrOrhr, int monthOrmin, int dayOrsec) {
-//        int i = 0;
-//        String minStr;
-//        String secStr;
-//
-//        //Ensuring minutes and seconds are in correct format
-//        if (monthOrmin < 10) {
-//            minStr = "" + 0 + monthOrmin;
-//        } else {
-//            minStr = "" + monthOrmin;
-//        }
-//
-//        if (dayOrsec < 10) {
-//            secStr = "" + 0 + dayOrsec;
-//        } else {
-//            secStr = "" + dayOrsec;
-//        }
-//
-//        String dateTimeStr;
-//        StringBuilder newDate = new StringBuilder();
-//
-//
-//        if(!isEnd){
-////            dateTimeStr = mGame.getStartTime();
-////            Log.d(TAG, "Start time: "+dateTimeStr);
-//        }else{
-////            dateTimeStr = mGame.getEndTime();
-//            Log.d(TAG, "End time: "+dateTimeStr);
-//        }
-//
-//        if (dateorTime == 0) {
-//            newDate.append(dateTimeStr, 0, 8);
-//            newDate.append(" " + findMonthName(monthOrmin) + " " + dayOrsec + " " + yrOrhr);
-//        } else {
-//            newDate.append(yrOrhr + ":" + minStr + ":" + secStr+" ");
-//            newDate.append(dateTimeStr, 8, dateTimeStr.length());
-//            //Log.d(TAG, "formatted time: "+newDate.toString());
-//        }
-//
-//        if(!isEnd) {
-//            mGame.setStartTime(newDate.toString());
-//        }else{
-//            mGame.setEndTime(newDate.toString());
-//        }
-//    }
-//
-//
-//
-//    //Helper method to convert int stored month to its 3 letter name
-//    private String findMonthName(int monthOrmin) {
-//        String monthName;
-//        switch (monthOrmin) {
-//            case 0:
-//                monthName = "Jan";
-//                break;
-//            case 1:
-//                monthName = "Feb";
-//                break;
-//            case 2:
-//                monthName = "Mar";
-//                break;
-//            case 3:
-//                monthName = "Apr";
-//                break;
-//            case 4:
-//                monthName = "May";
-//                break;
-//            case 5:
-//                monthName = "Jun";
-//                break;
-//            case 6:
-//                monthName = "Jul";
-//                break;
-//            case 7:
-//                monthName = "Aug";
-//                break;
-//            case 8:
-//                monthName = "Sep";
-//                break;
-//            case 9:
-//                monthName = "Oct";
-//                break;
-//            case 10:
-//                monthName = "Nov";
-//                break;
-//            case 11:
-//                monthName = "Dec";
-//                break;
-//            default:
-//                monthName = "";
-//        }
-//        return monthName;
-//    }
-//
+
 
     
     @Override

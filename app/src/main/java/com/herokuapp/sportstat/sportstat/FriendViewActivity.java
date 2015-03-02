@@ -177,8 +177,8 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                                 public void run() {
                                     mBasketballGames = getBasketballGameListFromJSONArray(newsfeed);
 
-                                    histFrag.updateView(mBasketballGames);
-                                    statFrag.updateStats(mBasketballGames);
+                                    histFrag.updateView(mBasketballGames, getApplicationContext());
+                                    statFrag.updateStats(mBasketballGames, getApplicationContext());
                                 }
                             }
                     );

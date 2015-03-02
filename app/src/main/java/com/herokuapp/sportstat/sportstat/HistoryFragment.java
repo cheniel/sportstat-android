@@ -2,6 +2,7 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -79,16 +80,6 @@ public class HistoryFragment extends ListFragment {
 
 
 
-        ArrayList<BasketballGame> gamesArray = new ArrayList<>();
-        BasketballGame one = new BasketballGame();
-        gamesArray.add(one);
-
-
-        //Fill the gamesArray with the users friends' saved games in chronological order
-
-            updateView(gamesArray);
-
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_history, container, false);
@@ -96,8 +87,9 @@ public class HistoryFragment extends ListFragment {
 
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    public void updateView(ArrayList<BasketballGame> gamesArray) {
-        defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
+    public void updateView(ArrayList<BasketballGame> gamesArray, Context context) {
+
+        defAdapter = new ArrayAdapter<BasketballGame>(context, R.layout.plain_textview, gamesArray);
         setListAdapter(defAdapter);
     }
 

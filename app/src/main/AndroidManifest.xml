@@ -43,6 +43,7 @@
         </activity>
         <activity
             android:name=".FriendViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/title_activity_friend_view" >
             <intent-filter>
                 <action android:name=".activities.FriendViewActivity" />
