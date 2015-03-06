@@ -76,5 +76,7 @@
     <string name="current_friend_search_text">Friends you follow:</string>
     <string name="stats_chart_title">Performance Over Time</string>
     <string name="stats_chart_x_label">Entries Since Inception</string>
+    <string name="service_label">Tracking Service</string>
+    <string name="service_started">Started</string>
 
 </resources>

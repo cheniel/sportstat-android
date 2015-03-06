@@ -2,10 +2,16 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +22,15 @@ import android.widget.Toast;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class SportLoggingActivity extends Activity {
+public class SportLoggingActivity extends Activity implements ServiceConnection {
+
+    private static final String TAG = "SPORT LOGGING ACTIVITY";
 
     public static final String ASSISTS = "assists";
     public static final String TWO_POINTS = "two_points";
@@ -41,6 +51,17 @@ public class SportLoggingActivity extends Activity {
     private BroadcastReceiver mPebbleDataReceiver;
     private BroadcastReceiver mPebbleNackReceiver;
 
+    // location management variables
+    private Messenger mServiceMessenger = null;
+    private Intent locIntent;
+    boolean mIsBound;
+    ArrayList<LatLng> mLocList;
+
+    private static final String LOGTAG = "MainActivity";
+    private final Messenger mMessenger = new Messenger(new IncomingMessageHandler());
+
+    private ServiceConnection mConnection = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +69,7 @@ public class SportLoggingActivity extends Activity {
         setContentView(R.layout.activity_sport_logging);
 
         mGame = new BasketballGame();
+        mLocList = new ArrayList<>();
 
         // TODO: set userId and username in BasketballGame.
 
@@ -60,6 +82,22 @@ public class SportLoggingActivity extends Activity {
         mAssistButton = (Button) findViewById(R.id.new_basketball_game_assist_button);
         mTwoPointButton = (Button) findViewById(R.id.new_basketball_game_two_point_button);
         mThreePointButton = (Button) findViewById(R.id.new_basketball_game_three_point_button);
+
+        locIntent = new Intent(this, TrackingService.class);
+
+        startService(locIntent);
+        automaticBind();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            doUnbindService();
+        } catch (Throwable t) {
+            Log.e(TAG, "Failed to unbind from the service", t);
+        }
+        stopService(locIntent);
     }
 
     @Override
@@ -303,4 +341,109 @@ public class SportLoggingActivity extends Activity {
         finish();
     }
 
+    /**
+     * All of this stuff is for receiving updates from the tracking service
+     *
+     */
+
+    /**
+     * Check if the service is running. If the service is running
+     * when the activity starts, we want to automatically bind to it.
+     */
+    private void automaticBind() {
+        if (!TrackingService.isRunning()) {
+            doBindService();
+        }
+    }
+
+    /**
+     * Send data to the service
+     * @param intvaluetosend The data to send
+     */
+    private void sendMessageToService(int intvaluetosend) {
+        if (mIsBound) {
+            if (mServiceMessenger != null) {
+                try {
+                    Message msg = Message.obtain(null, TrackingService.MSG_SET_LATLNG_VALUE,
+                            intvaluetosend, 0);
+                    msg.replyTo = mMessenger;
+                    mServiceMessenger.send(msg);
+                } catch (RemoteException e) {
+                }
+            }
+        }
+    }
+
+    /**
+     * Bind this Activity to TimerService
+     */
+    private void doBindService() {
+        bindService(new Intent(this, TrackingService.class), mConnection, Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+    }
+
+    /**
+     * Un-bind this Activity to TimerService
+     */
+    private void doUnbindService() {
+        if (mIsBound) {
+            // If we have received the service, and hence registered with it, then now is the time to unregister.
+            if (mServiceMessenger != null) {
+                try {
+                    Message msg = Message.obtain(null, TrackingService.MSG_UNREGISTER_CLIENT);
+                    msg.replyTo = mMessenger;
+                    mServiceMessenger.send(msg);
+                } catch (RemoteException e) {
+                    // There is nothing special we need to do if the service has crashed.
+                }
+            }
+            // Detach our existing connection.
+            unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName name, IBinder service) {
+        mServiceMessenger = new Messenger(service);
+        try {
+            Message msg = Message.obtain(null, TrackingService.MSG_REGISTER_CLIENT);
+            msg.replyTo = mMessenger;
+            mServiceMessenger.send(msg);
+        }
+        catch (RemoteException e) {
+            // In this case the service has crashed before we could even do anything with it
+        }
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName name) {
+        // This is called when the connection with the service has been unexpectedly disconnected - process crashed.
+        mServiceMessenger = null;
+    }
+
+    /**
+     * Handle incoming messages from TimerService
+     */
+    private class IncomingMessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            // Log.d(LOGTAG,"IncomingHandler:handleMessage");
+            switch (msg.what) {
+                case TrackingService.MSG_SET_LATLNG_VALUE:
+                    double lat = msg.getData().getDouble("lat");
+                    double lon = msg.getData().getDouble("lon");
+                    LatLng loc = new LatLng(lat, lon);
+
+                    mLocList.add(loc);
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+        }
+    }
+
+    /**
+     * tracking service stuff ends here
+     */
 }
