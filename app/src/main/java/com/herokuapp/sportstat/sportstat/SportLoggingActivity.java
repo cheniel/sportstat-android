@@ -55,7 +55,11 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private Messenger mServiceMessenger = null;
     private Intent locIntent;
     boolean mIsBound;
-    ArrayList<LatLng> mLocList;
+    private ArrayList<LatLng> mLocList; // the list of locations for tracking purpose
+    private LatLng mLastLocation;       // the most recent location for comparison purposes
+
+    private double mDistanceTraveled;   // the total distance traveled in meters
+    private float mTimeInMillis;        // the time the game has taken thus far
 
     private static final String LOGTAG = "MainActivity";
     private final Messenger mMessenger = new Messenger(new IncomingMessageHandler());
