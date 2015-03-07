@@ -37,6 +37,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -55,6 +56,9 @@ public class GameSummaryActivity extends Activity {
     private int mAssists;
     private int mTwoPoints;
     private int mThreePoints;
+    private int mPossessions;
+    private double mDistanceRan;
+    private long mDuration;
     private int mShotsMade;
     private int mShotsAttempted;
     private String mTime;
@@ -80,6 +84,10 @@ public class GameSummaryActivity extends Activity {
         mAssists = mGame.getAssists();
         mTwoPoints = mGame.getTwoPoints();
         mThreePoints = mGame.getThreePoints();
+        mPossessions = mGame.getPossessions();
+        mDistanceRan = mGame.getDistance();
+        mDuration = mGame.getDuration();
+
         //mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
 
         int shotsMade = mTwoPoints+mThreePoints;
@@ -95,9 +103,8 @@ public class GameSummaryActivity extends Activity {
         TextView statsText = (TextView) findViewById(R.id.stats_text_view);
         String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
         statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
-        +lineSep+"Shots Made %age: "+shotsMadePctStr);
-
-
+        +lineSep+"Shots Made %age: "+shotsMadePctStr+lineSep+"Possessions: "+mPossessions
+        +lineSep+"Distance Ran (m): "+mDistanceRan+lineSep+"Duration of Game: "+formatDuration(mDuration));
 
         //Display bargraph
         openChart();
@@ -312,5 +319,12 @@ public class GameSummaryActivity extends Activity {
 
     }
 
+    private String formatDuration(long duration){
+        SimpleDateFormat format = new SimpleDateFormat("k:mm:ss.SSS");
+        Date date = new Date();
+        date.setTime(duration);
+
+        return format.format(date);
+    }
 
 }

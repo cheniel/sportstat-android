@@ -33,7 +33,8 @@ public class BasketballGame implements Serializable {
     private String mComment;
 
     private ArrayList<LatLng> mLocList;
-    private float mDuration;
+    private double mDistance;
+    private long mDuration;
 
     private static final long serialVersionUID = 1L;
 
@@ -201,11 +202,11 @@ public class BasketballGame implements Serializable {
         this.mLocList = LocList;
     }
 
-    public float getDuration() {
+    public long getDuration() {
         return mDuration;
     }
 
-    public void setDuration(float Duration) {
+    public void setDuration(long Duration) {
         this.mDuration = Duration;
     }
 
@@ -301,5 +302,13 @@ public class BasketballGame implements Serializable {
 
     public void setPossessions(int Possessions) {
         this.mPossessions = Possessions;
+    }
+
+    public double getDistance() {
+        return mDistance;
+    }
+
+    public void setDistance(double Distance) {
+        this.mDistance = Distance;
     }
 }
