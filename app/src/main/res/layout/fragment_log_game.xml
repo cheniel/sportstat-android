@@ -29,14 +29,7 @@
             android:text="@string/ui_button_save_title" >
         </Button>
 
-        <Button
-            android:id="@+id/logGameBtnCancel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="onCancelClicked"
-            android:text="@string/ui_button_cancel_title" >
-        </Button>
+
     </LinearLayout>
 
 
