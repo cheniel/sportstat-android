@@ -1,5 +1,7 @@
 package com.herokuapp.sportstat.sportstat;
 
+import android.content.res.Resources;
+import android.text.Html;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -188,9 +190,16 @@ public class BasketballGame implements Serializable {
         String linesep = System.getProperty("line.separator");
 
         return mUsername + " played from " + getStartTimeString() + " to " + getEndTimeString() +
-                linesep + "Assists: " + mAssists + "  2-Points: " + mTwoPoints +
+                linesep + Html.fromHtml("<b>" + "Assists: " + "</b>") + mAssists + "  2-Points: " + mTwoPoints +
                 "  3-Points: " + mThreePoints;
     }
+
+    public String toStringForNewsFeed() {
+        String linesep = System.getProperty("line.separator");
+
+        return mUsername + " played from " + getStartTimeString() + " to " + getEndTimeString();
+    }
+
 
     private String getStartTimeString() {
         return String.format("%02d", mStartTime.get(Calendar.HOUR)) + ":"
