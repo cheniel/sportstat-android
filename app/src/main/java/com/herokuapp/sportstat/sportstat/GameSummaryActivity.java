@@ -145,6 +145,8 @@ public class GameSummaryActivity extends Activity {
         incomeRenderer.setFillPoints(true);
         incomeRenderer.setLineWidth(2);
         incomeRenderer.setDisplayChartValues(true);
+        incomeRenderer.setChartValuesTextSize(60);
+        incomeRenderer.setChartValuesTextAlign(Align.RIGHT);
         incomeRenderer.setDisplayChartValuesDistance(10); //setting chart value distance
 
         //Creating XYSeriesRenderer to customize expenseSeries
@@ -158,9 +160,13 @@ public class GameSummaryActivity extends Activity {
         XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
         multiRenderer.setOrientation(XYMultipleSeriesRenderer.Orientation.HORIZONTAL);
         multiRenderer.setXLabels(0);
+
         multiRenderer.setChartTitle("");
         multiRenderer.setXTitle("");
         multiRenderer.setYTitle("");
+        //multiRenderer.setXAxisColor(Color.TRANSPARENT);
+        multiRenderer.setYAxisColor(Color.TRANSPARENT);
+        multiRenderer.setYLabelsColor(Color.TRANSPARENT, Color.TRANSPARENT);
 
         /***
          * Customizing graphs
@@ -170,7 +176,6 @@ public class GameSummaryActivity extends Activity {
         //setting text size of the axis title
         multiRenderer.setAxisTitleTextSize(24);
         multiRenderer.setShowLegend(false);
-        //TODO: Get rid of tiny numbers above columns
 
         multiRenderer.setShowTickMarks(false);
 
@@ -222,9 +227,9 @@ public class GameSummaryActivity extends Activity {
         //setting no of values to display in y axis
         multiRenderer.setYLabels(maxBar);
         //setting used to move the graph on xaxiz to .5 to the right
-        multiRenderer.setXAxisMin(-1);
+        multiRenderer.setXAxisMin(-.7);
 //setting max values to be display in x axis
-        multiRenderer.setXAxisMax(3);
+        multiRenderer.setXAxisMax(2.7);
         //setting bar size or space between two bars
         multiRenderer.setBarSpacing(0.5);
         //Setting background color of the graph to transparent
@@ -234,7 +239,7 @@ public class GameSummaryActivity extends Activity {
         multiRenderer.setApplyBackgroundColor(true);
 
         //setting the margin size for the graph in the order top, left, bottom, right
-        multiRenderer.setMargins(new int[]{30, 30, 30, 30});
+        multiRenderer.setMargins(new int[]{50, 30, 30, 30});
 
         for(int i=0; i< x.length;i++){
             multiRenderer.addXTextLabel(i, mLabels[i]);
