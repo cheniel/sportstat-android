@@ -6,12 +6,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +57,13 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private Messenger mServiceMessenger = null;
     private Intent locIntent;
     boolean mIsBound;
-    ArrayList<LatLng> mLocList;
+    private ArrayList<LatLng> mLocList;     // the list of locations for tracking purpose
+    private ArrayList<LatLng> mShotLocList; // the list of locations that the user took shots from
+    private LatLng mLastLocation;           // the most recent location for comparison purposes
+
+    private double mDistanceTraveled;   // the total distance traveled in meters
+    private float mTimeInMillis;        // the time the game has taken thus far
+    private mTimingTask mAsyncTimingTask;
 
     private static final String LOGTAG = "MainActivity";
     private final Messenger mMessenger = new Messenger(new IncomingMessageHandler());
@@ -70,6 +78,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
         mGame = new BasketballGame();
         mLocList = new ArrayList<>();
+        mShotLocList = new ArrayList<>();
 
         // TODO: set userId and username in BasketballGame.
 
@@ -84,6 +93,9 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         mThreePointButton = (Button) findViewById(R.id.new_basketball_game_three_point_button);
 
         locIntent = new Intent(this, TrackingService.class);
+
+        mAsyncTimingTask = new mTimingTask();
+        mAsyncTimingTask.execute();
 
         startService(locIntent);
         automaticBind();
@@ -127,6 +139,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                 if (mGame.getAssists() > 0) {
                     mGame.setAssists(mGame.getAssists() - 1);
                     mAssistsView.setText(String.valueOf(mGame.getAssists()));
+                    logShotLocation();
                     sendPointInfoToPebble(null, false);
                     return true;
                 }
@@ -140,6 +153,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                 if (mGame.getTwoPoints() > 0) {
                     mGame.setTwoPoints(mGame.getTwoPoints() - 1);
                     mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
+                    logShotLocation();
                     sendPointInfoToPebble(null, false);
                     return true;
                 }
@@ -153,6 +167,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                 if (mGame.getThreePoints() > 0) {
                     mGame.setThreePoints(mGame.getThreePoints() - 1);
                     mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
+                    logShotLocation();
                     sendPointInfoToPebble(null, false);
                     return true;
                 }
@@ -213,6 +228,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                 Long two_pts = data.getUnsignedIntegerAsLong(PebbleApp.MSG_TWO_POINT_COUNT);
                 if (two_pts != null) {
                     mGame.setTwoPoints(two_pts.intValue());
+                    logShotLocation();  // only do it here since all three are sent every time
                     receivedPointData = true;
                 }
 
@@ -323,6 +339,11 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     public void onDoneButtonPressed(View view) {
         sendGameEndToPebble();
 
+        // pass the time and location list to the game object
+        mGame.setLocList(mLocList);
+        mGame.setDuration(mTimeInMillis);
+        mGame.setPossessions(inferNumPossessionsFromLocList());
+
         Intent intent = new Intent(this, GameSummaryActivity.class);
 
         intent.putExtra(BASKETBALL_GAME, mGame);
@@ -342,6 +363,109 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     }
 
     /**
+     * use a ton of really hard math to infer the number of times that you crossed the
+     * half way mark of the court, then calculate the average side that you incremented
+     * your shot counter from to determine which side is your teams and which side is
+     * the other teams.  Use all of this information to calculate the number of
+     * possessions for each team, and the number of attempted / completed shots compared
+     * to the number of possessions.
+     *
+     * @return the number of possessions for each team
+     */
+    private int inferNumPossessionsFromLocList() {
+
+        double averageLat = 0.0, averageLon = 0.0;
+        int numLeftPossessions = 0, numRightPossessions = 0;
+
+        LatLng averagePoint;
+        LatLng leftPoint = mLocList.get(0), rightPoint = mLocList.get(0);
+        double largestDistance = 0.0;
+        int side;
+
+        // estimate center court location
+        for (LatLng loc : mLocList){
+            averageLat += loc.latitude;
+            averageLon += loc.longitude;
+        }
+        averageLat /= mLocList.size();
+        averageLon /= mLocList.size();
+        averagePoint = new LatLng(averageLat, averageLon);
+
+        // find the two farthest points from each other
+        // uses a very basic algorithm, could definitely be improved with more time
+        for (LatLng one : mLocList){
+            for (LatLng two : mLocList){
+                double temp = distanceFormula(one, two);
+                if (temp > largestDistance){
+                    leftPoint = one;
+                    rightPoint = two;
+                    largestDistance = temp;
+                }
+            }
+        }
+
+        // compute a list of points every time you cross center court
+        boolean isOnRightSide = false;  // initialization is for the compiler, it will be set
+        for (LatLng loc : mLocList) {
+            double distanceToLeft = distanceFormula(loc, leftPoint);
+            double distanceToRight = distanceFormula(loc, rightPoint);
+            if (loc == mLocList.get(0)){    // initialize what side we start on
+                if (distanceToLeft > distanceToRight){
+                    isOnRightSide = true;
+                } else {
+                    isOnRightSide = false;
+                }
+            }else {
+                if (distanceToLeft > distanceToRight) {
+                    if (!isOnRightSide){    // if we just crossed over to the right side
+                        numRightPossessions++;
+                        isOnRightSide = true;
+                    }
+                } else {
+                    if (isOnRightSide){     // if we just crossed over to the left side
+                        numLeftPossessions++;
+                        isOnRightSide = false;
+                    }
+                }
+            }
+        }
+
+        // compute the side that belongs to each team using the location that shots were taken from
+        int left = 0, right = 0;
+        for (LatLng shotLoc : mShotLocList){
+            double distanceToLeft = distanceFormula(shotLoc, leftPoint);
+            double distanceToRight = distanceFormula(shotLoc, rightPoint);
+            if (distanceToLeft > distanceToRight){
+                right++;
+            } else {
+                left++;
+            }
+        }
+
+        // if the greater number of shots were taken from the left side, then return
+        // the number of possessions on the left side, else return the number of
+        // possessions from the right side
+        if (left > right){
+            return numLeftPossessions;
+        } else {
+            return numRightPossessions;
+        }
+    }
+
+    /**
+     * log the location that the shot was taken from
+     */
+    private void logShotLocation(){
+        mShotLocList.add(mLocList.get(mLocList.size() - 1));
+    }
+
+    private double distanceFormula(LatLng onePt, LatLng twoPt){
+        return (Math.sqrt(
+                Math.pow(onePt.latitude - twoPt.latitude, 2) +
+                Math.pow(onePt.longitude - twoPt.longitude, 2)));
+    }
+
+    /**
      * All of this stuff is for receiving updates from the tracking service
      *
      */
@@ -351,7 +475,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
      * when the activity starts, we want to automatically bind to it.
      */
     private void automaticBind() {
-        if (!TrackingService.isRunning()) {
+        if (TrackingService.isRunning()) {
             doBindService();
         }
     }
@@ -435,7 +559,12 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                     double lon = msg.getData().getDouble("lon");
                     LatLng loc = new LatLng(lat, lon);
 
+                    if (mLastLocation != null){
+                        mDistanceTraveled+=(distanceFormula(loc, mLastLocation));
+                    }
+
                     mLocList.add(loc);
+                    mLastLocation = loc;
                     break;
                 default:
                     super.handleMessage(msg);
@@ -446,4 +575,14 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     /**
      * tracking service stuff ends here
      */
+
+    private class mTimingTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            mTimeInMillis = SystemClock.currentThreadTimeMillis();
+
+            return null;
+        }
+    }
 }

@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.text.Html;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -11,6 +13,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -24,9 +27,13 @@ public class BasketballGame implements Serializable {
     private int mTwoPoints;
     private int mThreePoints;
     private int mShotsAttempted;
+    private int mPossessions;
     private Calendar mStartTime;
     private Calendar mEndTime;
     private String mComment;
+
+    private ArrayList<LatLng> mLocList;
+    private float mDuration;
 
     private static final long serialVersionUID = 1L;
 
@@ -186,6 +193,22 @@ public class BasketballGame implements Serializable {
         this.mShotsAttempted = mShotsAttempted;
     }
 
+    public ArrayList<LatLng> getLocList() {
+        return mLocList;
+    }
+
+    public void setLocList(ArrayList<LatLng> LocList) {
+        this.mLocList = LocList;
+    }
+
+    public float getDuration() {
+        return mDuration;
+    }
+
+    public void setDuration(float Duration) {
+        this.mDuration = Duration;
+    }
+
     @Override
     public String toString() {
         String linesep = System.getProperty("line.separator");
@@ -246,4 +269,11 @@ public class BasketballGame implements Serializable {
                 + mEndTime.get(Calendar.YEAR);
     }
 
+    public int getPossessions() {
+        return mPossessions;
+    }
+
+    public void setPossessions(int Possessions) {
+        this.mPossessions = Possessions;
+    }
 }
