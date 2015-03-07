@@ -14,13 +14,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -31,10 +35,25 @@ import java.util.ArrayList;
  */
 public class NewsfeedFragment extends ListFragment {
 
+    public static final String KEY_SONG = "song"; // parent node
+    public static final String KEY_ID = "id";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_USERNAME = "un";
+    public static final String KEY_ASSISTS = "assists";
+    public static final String KEY_TWOS = "twos";
+    public static final String KEY_THREES = "threes";
+    public static final String KEY_ARTIST = "artist";
+    public static final String KEY_DURATION = "duration";
+    public static final String KEY_THUMB_URL = "thumb_url";
+
+    ListView list;
+    LazyAdapter mAdapter;
+
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private int mSectionNumber;
     private ArrayAdapter<BasketballGame> defAdapter;
+    private ArrayList<HashMap<String, String>> mGamesArray;
 
 
     /**
@@ -69,6 +88,9 @@ public class NewsfeedFragment extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+        mGamesArray = new ArrayList<HashMap<String, String>>();
 
 
         // Display the fragment as the main content. I found the getChildFragmentManager() method on StackOverflow
@@ -149,8 +171,32 @@ public class NewsfeedFragment extends ListFragment {
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
     private void updateView(ArrayList<BasketballGame> gamesArray) {
-        defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
-        setListAdapter(defAdapter);
+       ArrayList<HashMap<String, String>> games = new ArrayList<>();
+
+        for(BasketballGame game : gamesArray){
+
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put(KEY_ID, ""+game.getUserId()); //Stores user ID as string...
+            map.put(KEY_USERNAME, game.getUsername());
+            map.put(KEY_TITLE, game.toStringForNewsFeed());
+            map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
+            map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
+            map.put(KEY_THREES, " "+game.getThreePoints()+" ");
+            //map.put(KEY_ARTIST, game.getLocation());
+            //map.put(KEY_DURATION, game.get)
+           // map.put(KEY_THUMB_URL, (user profile link))
+
+            mGamesArray.add(map);
+
+        }
+
+
+
+        mAdapter = new LazyAdapter(this.getActivity(), mGamesArray);
+
+
+        //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
+        setListAdapter(mAdapter);
     }
 
     @Override

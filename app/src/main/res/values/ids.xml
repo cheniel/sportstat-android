@@ -6,4 +6,5 @@
     <item name="shots_attempted_edit_text" type="id">shots_attempted_edit_text</item>
     <item name="comment_edit_text" type="id">comment_edit_text</item>
     <item name="newsfeed_fragment" type="id">newsfeed_fragment</item>
+    <item name="assistString" type="id">Assists:</item>
 </resources>

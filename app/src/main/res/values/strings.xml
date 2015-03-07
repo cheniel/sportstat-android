@@ -78,5 +78,9 @@
     <string name="stats_chart_x_label">Entries Since Inception</string>
     <string name="service_label">Tracking Service</string>
     <string name="service_started">Started</string>
+    <string name="assistString">ASSISTS: </string>
+    <string name="twosName">2-POINTS:</string>
+    <string name="sample_num">20</string>
+    <string name="threesName">3-POINTS:</string>
 
 </resources>
