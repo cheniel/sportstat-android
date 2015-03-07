@@ -11,7 +11,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
 
-        tools:ignore="Orientation" >
+        tools:ignore="Orientation">
 
     </LinearLayout>
 

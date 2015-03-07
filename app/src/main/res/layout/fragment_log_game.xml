@@ -1,16 +1,17 @@
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--Some parts of this layout were based on ideas from StackOverflow-->
+<!--<?xml version="1.0" encoding="utf-8"?>--><!--Some parts of this layout were based on ideas from StackOverflow-->
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/log_game_fragment_id"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:id="@+id/log_game_fragment_id"
-    >
+    android:orientation="vertical">
 
-    <ListView android:layout_width="match_parent"
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight = "1"
-        android:id="@android:id/list">
+        android:layout_weight="1">
 
     </ListView>
 
@@ -20,19 +21,17 @@
         android:layout_margin="5dp"
 
         >
+
         <Button
             android:id="@+id/logGameBtnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onSaveClicked"
-            android:text="@string/ui_button_save_title" >
-        </Button>
+            android:text="@string/ui_button_save_title"></Button>
 
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>
