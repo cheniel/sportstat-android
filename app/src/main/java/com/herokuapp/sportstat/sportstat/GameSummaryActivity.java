@@ -325,7 +325,7 @@ public class GameSummaryActivity extends Activity {
     }
 
     private String formatDuration(long duration){
-        SimpleDateFormat format = new SimpleDateFormat("k:mm:ss.SSS");
+        SimpleDateFormat format = new SimpleDateFormat("mm:ss.SSS");
         Date date = new Date();
         date.setTime(duration);
 

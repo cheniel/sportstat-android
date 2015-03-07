@@ -62,9 +62,9 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private ArrayList<LatLng> mShotLocList; // the list of locations that the user took shots from
     private LatLng mLastLocation;           // the most recent location for comparison purposes
 
-    private double mDistanceTraveled;   // the total distance traveled in meters
-    private long mTimeInMillis;        // the time the game has taken thus far
-    private mTimingTask mAsyncTimingTask;
+    private double mDistanceTraveled;       // the total distance traveled in meters
+    private long mStartTimeInMillis;        // the start time of the game
+    private long mEndTimeInMillis;          // the end time of the game
 
     private static final String LOGTAG = "MainActivity";
     private final Messenger mMessenger = new Messenger(new IncomingMessageHandler());
@@ -95,8 +95,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
         locIntent = new Intent(this, TrackingService.class);
 
-        mAsyncTimingTask = new mTimingTask();
-        mAsyncTimingTask.execute();
+        mStartTimeInMillis = System.currentTimeMillis();
 
         startService(locIntent);
         automaticBind();
@@ -130,6 +129,10 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
         // open up SportStat Pebble app
         PebbleKit.startAppOnPebble(this, PebbleApp.APP_UUID);
+
+        // bind the location service if it is not bound yet
+        if (!mIsBound)
+            doBindService();
     }
 
     private void setOnLongClickListeners() {
@@ -338,13 +341,19 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     //When the user clicks done, launch the GameSummaryActivity,
     //and pass the mGame (w all saved stats) to that
     public void onDoneButtonPressed(View view) {
+        mEndTimeInMillis = System.currentTimeMillis();
+
         sendGameEndToPebble();
 
         // pass the time and location list to the game object
-        mGame.setLocList(mLocList);
         mGame.setDistance(mDistanceTraveled);
-        mGame.setDuration(mTimeInMillis);
-        mGame.setPossessions(inferNumPossessionsFromLocList());
+        mGame.setDuration(mEndTimeInMillis - mStartTimeInMillis);
+        try {
+            mGame.setPossessions(inferNumPossessionsFromLocList());
+        }catch (Exception e){
+            Log.d(TAG, "no locations were loaded, failed to calculate anything off them");
+            e.printStackTrace();
+        }
 
         Intent intent = new Intent(this, GameSummaryActivity.class);
 
@@ -555,12 +564,12 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     }
 
     /**
-     * Handle incoming messages from TimerService
+     * Handle incoming messages from TrackingService
      */
     private class IncomingMessageHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            // Log.d(LOGTAG,"IncomingHandler:handleMessage");
+            Log.d(LOGTAG,"IncomingHandler:handleMessage");
             switch (msg.what) {
                 case TrackingService.MSG_SET_LATLNG_VALUE:
                     double lat = msg.getData().getDouble("lat");
@@ -568,7 +577,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                     LatLng loc = new LatLng(lat, lon);
 
                     if (mLastLocation != null){
-                        mDistanceTraveled+=(distanceFormula(loc, mLastLocation));
+                        mDistanceTraveled += distanceFormula(loc, mLastLocation);
                     }
 
                     mLocList.add(loc);
@@ -583,14 +592,4 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     /**
      * tracking service stuff ends here
      */
-
-    private class mTimingTask extends AsyncTask<Void, Void, Void>{
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            mTimeInMillis = SystemClock.currentThreadTimeMillis();
-
-            return null;
-        }
-    }
 }
