@@ -226,8 +226,12 @@ public class BasketballGame implements Serializable {
     }
 
     public String toStringForNewsFeed() {
-        return "played from " + getPrettyTime();
+        return " played " + getPrettyTime();
 
+    }
+
+    public String toStringForHistory(){
+        return getPrettyTimeForHistory();
     }
 
 
@@ -242,14 +246,36 @@ public class BasketballGame implements Serializable {
     }
 
     public String getPrettyTime(){
-        return String.format("%02d", mStartTime.get(Calendar.HOUR)) + ":"
+        String dateStr;
+        Calendar cur = Calendar.getInstance();
+        if((mStartTime.get(Calendar.MONTH) == cur.get(Calendar.MONTH))&&
+                (mStartTime.get(Calendar.DAY_OF_MONTH)==cur.get(Calendar.DAY_OF_MONTH))&&
+                (mStartTime.get(Calendar.YEAR)==cur.get(Calendar.YEAR)) ){
+            dateStr = "today";
+        }else{
+            dateStr = "on "+ String.format(mStartTime.getDisplayName(Calendar.MONTH, Calendar.LONG,
+                    new Locale("English")) + " "
+                    + mStartTime.get(Calendar.DAY_OF_MONTH) + " "
+                    + mStartTime.get(Calendar.YEAR));
+        }
+
+        return dateStr;
+
+
+    }
+
+    public String getPrettyTimeForHistory(){
+                return "Game played "+String.format(mStartTime.getDisplayName(Calendar.MONTH, Calendar.LONG,
+                        new Locale("English")) + " "
+                        + mStartTime.get(Calendar.DAY_OF_MONTH) + " "
+                        + mStartTime.get(Calendar.YEAR))+", from "+String.format("%02d", mStartTime.get(Calendar.HOUR)) + ":"
                 + String.format("%02d", mStartTime.get(Calendar.MINUTE))
                 + " to "+ String.format("%02d", mEndTime.get(Calendar.HOUR)) + ":"
-                + String.format("%02d", mEndTime.get(Calendar.MINUTE))+" on "+String.format(mStartTime.getDisplayName(Calendar.MONTH, Calendar.LONG,
-                new Locale("English")) + " "
-                + mStartTime.get(Calendar.DAY_OF_MONTH) + " "
-                + mStartTime.get(Calendar.YEAR));
+                + String.format("%02d", mEndTime.get(Calendar.MINUTE));
     }
+
+
+
 
     private String getEndTimeString() {
         return String.format("%02d", mEndTime.get(Calendar.HOUR)) + ":"

@@ -270,7 +270,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         for (int i = 0; i < newsfeed.length(); i++) {
             try {
                 JSONObject basketballObject = newsfeed.getJSONObject(i);
-                feed.add(
+                feed.add(feed.size()-i,
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
             } catch (JSONException e) {

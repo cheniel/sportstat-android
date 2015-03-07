@@ -2,6 +2,7 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class NewsfeedFragment extends ListFragment {
     public static final String KEY_ARTIST = "artist";
     public static final String KEY_DURATION = "duration";
     public static final String KEY_THUMB_URL = "thumb_url";
+    private static final String TAG = "dis tag";
 
     ListView list;
     LazyAdapter mAdapter;
@@ -158,7 +160,7 @@ public class NewsfeedFragment extends ListFragment {
         for (int i = 0; i < newsfeed.length(); i++) {
             try {
                 JSONObject basketballObject = newsfeed.getJSONObject(i);
-                feed.add(
+                feed.add (feed.size()-i,
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
             } catch (JSONException e) {
@@ -177,7 +179,11 @@ public class NewsfeedFragment extends ListFragment {
 
             HashMap<String, String> map = new HashMap<String, String>();
             map.put(KEY_ID, ""+game.getUserId()); //Stores user ID as string...
-            map.put(KEY_USERNAME, game.getUsername());
+
+            String capUserName = game.getUsername().substring(0,1).toUpperCase()
+                    + game.getUsername().substring(1, game.getUsername().length());
+
+            map.put(KEY_USERNAME, capUserName);
             map.put(KEY_TITLE, game.toStringForNewsFeed());
             map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
             map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
@@ -192,7 +198,7 @@ public class NewsfeedFragment extends ListFragment {
 
 
 
-        mAdapter = new LazyAdapter(this.getActivity(), mGamesArray);
+        mAdapter = new LazyAdapter(this.getActivity(), mGamesArray, true);
 
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
@@ -204,6 +210,70 @@ public class NewsfeedFragment extends ListFragment {
         super.onAttach(activity);
 
         ((MainActivity) activity).onSectionAttached(mSectionNumber);
+    }
+
+    @Override
+    //When user clicks someone's newsfeed entry, bring them to that users' page
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+
+        Intent i = new Intent(this.getActivity(), FriendViewActivity.class);
+        final String enteredUserName = mGamesArray.get(position).get(KEY_USERNAME);
+        final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String userLookupResponseString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "user_id/" +
+                                correctUserName + ".json");
+
+                Log.d(TAG, userLookupResponseString);
+
+                try {
+                    JSONObject userJSON = new JSONObject(userLookupResponseString);
+
+                    if (userJSON.has("status")) {
+                        makeToast("Friend does not exist");
+                        return "failure";
+                    }
+
+                    if (userJSON.has("id")) {
+                        makeToast("Friend exists!");
+
+                        Intent intent = new Intent(".activities.FriendViewActivity");
+                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
+                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
+                        startActivity(intent);
+
+                        return "success";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                makeToast("Friend does not exist.");
+                return "failure";
+            }
+
+            private void makeToast(final String toast) {
+                handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity().getApplicationContext(),
+                                        toast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }.execute();
+
+
     }
 
     @Override
