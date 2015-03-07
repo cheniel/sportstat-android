@@ -217,62 +217,76 @@ public class NewsfeedFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+        Intent intent = new Intent(this.getActivity(), GameSummaryActivity.class);
+        HashMap<String, String> selectedItem = mGamesArray.get(position);
+        BasketballGame selectedGame = new BasketballGame();
+        selectedGame.setUsername(selectedItem.get(KEY_USERNAME));
+        selectedGame.setUserId(Long.parseLong(selectedItem.get(KEY_ID)));
+        selectedGame.setAssists(Integer.parseInt(selectedItem.get(KEY_ASSISTS).substring(1,2)));
+        selectedGame.setTwoPoints(Integer.parseInt(selectedItem.get(KEY_TWOS).substring(1,2)));
+        selectedGame.setThreePoints(Integer.parseInt(selectedItem.get(KEY_THREES).substring(1,2)));
 
-        Intent i = new Intent(this.getActivity(), FriendViewActivity.class);
-        final String enteredUserName = mGamesArray.get(position).get(KEY_USERNAME);
-        final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
 
-        final Handler handler = new Handler(Looper.getMainLooper());
-        new AsyncTask<String, Void, String>() {
+        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, selectedGame);
+        intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "history_fragment");
 
-            @Override
-            protected String doInBackground(String... arg0) {
-                String userLookupResponseString = CloudUtilities.getJSON(
-                        getString(R.string.sportstat_url) + "user_id/" +
-                                correctUserName + ".json");
+        startActivity(intent);
 
-                Log.d(TAG, userLookupResponseString);
-
-                try {
-                    JSONObject userJSON = new JSONObject(userLookupResponseString);
-
-                    if (userJSON.has("status")) {
-                        makeToast("Friend does not exist");
-                        return "failure";
-                    }
-
-                    if (userJSON.has("id")) {
-                        makeToast("Friend exists!");
-
-                        Intent intent = new Intent(".activities.FriendViewActivity");
-                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
-                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
-                        startActivity(intent);
-
-                        return "success";
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                makeToast("Friend does not exist.");
-                return "failure";
-            }
-
-            private void makeToast(final String toast) {
-                handler.post(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity().getApplicationContext(),
-                                        toast, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                );
-            }
-        }.execute();
-
+//        Intent i = new Intent(this.getActivity(), FriendViewActivity.class);
+//        final String enteredUserName = mGamesArray.get(position).get(KEY_USERNAME);
+//        final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
+//
+//        final Handler handler = new Handler(Looper.getMainLooper());
+//        new AsyncTask<String, Void, String>() {
+//
+//            @Override
+//            protected String doInBackground(String... arg0) {
+//                String userLookupResponseString = CloudUtilities.getJSON(
+//                        getString(R.string.sportstat_url) + "user_id/" +
+//                                correctUserName + ".json");
+//
+//                Log.d(TAG, userLookupResponseString);
+//
+//                try {
+//                    JSONObject userJSON = new JSONObject(userLookupResponseString);
+//
+//                    if (userJSON.has("status")) {
+//                        makeToast("Friend does not exist");
+//                        return "failure";
+//                    }
+//
+//                    if (userJSON.has("id")) {
+//                        makeToast("Friend exists!");
+//
+//                        Intent intent = new Intent(".activities.FriendViewActivity");
+//                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
+//                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
+//                        startActivity(intent);
+//
+//                        return "success";
+//                    }
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//
+//                makeToast("Friend does not exist.");
+//                return "failure";
+//            }
+//
+//            private void makeToast(final String toast) {
+//                handler.post(
+//                        new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Toast.makeText(getActivity().getApplicationContext(),
+//                                        toast, Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                );
+//            }
+//        }.execute();
+//
 
     }
 
