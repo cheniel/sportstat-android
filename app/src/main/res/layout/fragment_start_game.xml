@@ -1,19 +1,43 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="400"
     android:layout_height="match_parent"
+    android:background="@drawable/basketball"
+    android:onClick="startSportLoggingActivity"
+
     android:orientation="vertical"
+
+
     tools:context="com.herokuapp.sportstat.sportstat.MainActivity">
 
-    <Button
-        android:id="@+id/start_new_basketball_game_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/basketball_button_image"
-        android:onClick="startSportLoggingActivity"
-        android:text="@string/basketball_new_game_button"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+    <RelativeLayout
 
-</LinearLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_background"
+        >
+
+
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="7dp"
+            android:layout_centerInParent="true"
+
+            android:src="@drawable/basketball_button"
+
+            >
+
+            </ImageView>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+
+
 
