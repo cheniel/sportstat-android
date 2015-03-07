@@ -476,7 +476,6 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
     /**
      * All of this stuff is for receiving updates from the tracking service
-     *
      */
 
     /**
