@@ -141,7 +141,8 @@ public class TrackingService extends Service implements
     public void onDestroy() {
         super.onDestroy();
         stopLocationUpdates();
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
         mNotificationManager.cancelAll(); // Cancel the persistent notification.
         Log.i(TAG, "Service Stopped.");
         isRunning = false;

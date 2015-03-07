@@ -41,6 +41,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     public static final String GAME_TIME = "time_of_game";
     public static final String SHOTS_ATTEMPTED ="shots_attempted";
     public static final String BASKETBALL_GAME = "basketball_game";
+    public static final String CALLING_ACTIVITY = "";
     private BasketballGame mGame;
     private String mTime;
     private TextView mAssistsView;
@@ -66,7 +67,6 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private long mStartTimeInMillis;        // the start time of the game
     private long mEndTimeInMillis;          // the end time of the game
 
-    private static final String LOGTAG = "MainActivity";
     private final Messenger mMessenger = new Messenger(new IncomingMessageHandler());
 
     private ServiceConnection mConnection = this;
@@ -569,7 +569,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private class IncomingMessageHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Log.d(LOGTAG,"IncomingHandler:handleMessage");
+            Log.d(TAG,"IncomingHandler:handleMessage");
             switch (msg.what) {
                 case TrackingService.MSG_SET_LATLNG_VALUE:
                     double lat = msg.getData().getDouble("lat");
