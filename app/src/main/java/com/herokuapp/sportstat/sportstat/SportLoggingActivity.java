@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -62,7 +63,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private LatLng mLastLocation;           // the most recent location for comparison purposes
 
     private double mDistanceTraveled;   // the total distance traveled in meters
-    private float mTimeInMillis;        // the time the game has taken thus far
+    private long mTimeInMillis;        // the time the game has taken thus far
     private mTimingTask mAsyncTimingTask;
 
     private static final String LOGTAG = "MainActivity";
@@ -341,6 +342,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
         // pass the time and location list to the game object
         mGame.setLocList(mLocList);
+        mGame.setDistance(mDistanceTraveled);
         mGame.setDuration(mTimeInMillis);
         mGame.setPossessions(inferNumPossessionsFromLocList());
 
@@ -460,9 +462,16 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     }
 
     private double distanceFormula(LatLng onePt, LatLng twoPt){
-        return (Math.sqrt(
-                Math.pow(onePt.latitude - twoPt.latitude, 2) +
-                Math.pow(onePt.longitude - twoPt.longitude, 2)));
+        Location one = new Location("SportLoggingActivity");
+        Location two = new Location("SportLoggingActivity");
+
+        one.setLatitude(onePt.latitude);
+        one.setLongitude(onePt.longitude);
+
+        two.setLatitude(twoPt.latitude);
+        two.setLongitude(twoPt.longitude);
+
+        return one.distanceTo(two);
     }
 
     /**
