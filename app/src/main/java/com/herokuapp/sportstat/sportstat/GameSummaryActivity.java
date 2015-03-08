@@ -333,11 +333,7 @@ public class GameSummaryActivity extends Activity {
 
     //Launch the user's profile
     public void onViewUserProfClicked(View v){
-
         launchUserProfile();
-
-
-
     }
 
     private void launchUserProfile() {

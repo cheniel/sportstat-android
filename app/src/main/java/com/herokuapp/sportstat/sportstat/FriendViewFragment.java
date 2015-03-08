@@ -71,9 +71,6 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
 
     }
 
-
-
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -125,18 +122,11 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         ImageView imageView = (ImageView) getView().findViewById(R.id.profile_image_view);
         imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(Globals.USER_PROFILE_IMG_ID, 99));
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
-
-        imageView.setLayoutParams(params);
         TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);
         String linesep = System.getProperty("line.separator");
         String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
         textView.setText(userName+linesep+"StatScore: "+mStatScore);
-
-
-
-
 
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.

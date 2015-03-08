@@ -41,11 +41,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     public static final String GAME_TIME = "time_of_game";
     public static final String SHOTS_ATTEMPTED ="shots_attempted";
     public static final String BASKETBALL_GAME = "basketball_game";
-<<<<<<< HEAD
     public static final String CALLING_ACTIVITY = "calling_activity";
-=======
-    public static final String CALLING_ACTIVITY = "";
->>>>>>> 60da73c578ecad1d4e67666fb8ccf55c01e26660
     private BasketballGame mGame;
     private String mTime;
     private TextView mAssistsView;

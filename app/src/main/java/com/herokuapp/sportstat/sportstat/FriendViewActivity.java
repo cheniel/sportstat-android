@@ -79,15 +79,9 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
         imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_PROFILE_IMG_ID, 99));
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
-
-        imageView.setLayoutParams(params);
         TextView textView = (TextView) findViewById(R.id.profile_text_edit);
 
         String linesep = System.getProperty("line.separator");
-
-
-
 
         textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
