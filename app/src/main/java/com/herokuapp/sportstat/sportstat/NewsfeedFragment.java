@@ -198,7 +198,7 @@ public class NewsfeedFragment extends ListFragment {
 
 
 
-        mAdapter = new LazyAdapter(this.getActivity(), mGamesArray, true);
+        mAdapter = new LazyAdapter(this.getActivity(), mGamesArray, true, false, getActivity());
 
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
@@ -228,7 +228,7 @@ public class NewsfeedFragment extends ListFragment {
 
 
         intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, selectedGame);
-        intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "history_fragment");
+        intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "newsfeed_fragment");
 
         startActivity(intent);
 
