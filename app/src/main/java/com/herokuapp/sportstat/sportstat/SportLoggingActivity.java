@@ -41,6 +41,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     public static final String GAME_TIME = "time_of_game";
     public static final String SHOTS_ATTEMPTED ="shots_attempted";
     public static final String BASKETBALL_GAME = "basketball_game";
+    public static final String CALLING_ACTIVITY = "calling_activity";
     private BasketballGame mGame;
     private String mTime;
     private TextView mAssistsView;
@@ -349,6 +350,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         Intent intent = new Intent(this, GameSummaryActivity.class);
 
         intent.putExtra(BASKETBALL_GAME, mGame);
+        intent.putExtra(CALLING_ACTIVITY, "sport_logging");
 //
 //        intent.putExtra(ASSISTS, mGame.getAssists());
 //        intent.putExtra(TWO_POINTS, mGame.getTwoPoints());

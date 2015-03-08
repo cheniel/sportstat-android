@@ -4,6 +4,7 @@ package com.herokuapp.sportstat.sportstat;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.support.annotation.DrawableRes;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,6 +24,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.herokuapp.sportstat.sportstat.CustomListResources.CustomDrawerAdapter;
+import com.herokuapp.sportstat.sportstat.CustomListResources.DrawerItem;
+import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
@@ -37,6 +46,10 @@ public class NavigationDrawerFragment extends Fragment {
     public static final String ACTIVITY_LEADERBOARD = "Leaderboard";
     public static final String ACTIVITY_FRIEND_FINDER = "Friends";
     public static final String ACTIVITY_SETTINGS = "Settings";
+
+
+
+
 
     public static final int START_TAB_ID = 0;
     public static final int LOG_TAB_ID = 1;
@@ -129,11 +142,41 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                allDrawers));
+//        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+//                getActionBar().getThemedContext(),
+//                android.R.layout.simple_list_item_activated_1,
+//                android.R.id.text1,
+//                allDrawers));
+
+//        ArrayList<HashMap<String, String>> drawers = new ArrayList<HashMap<String, String>>();
+//
+//        for(int i = 0; i < allDrawers.length; i++){
+//
+//            HashMap<String, String> map = new HashMap<>();
+//
+//            map.put(NewsfeedFragment.KEY_TITLE, allDrawers[i]);
+//
+//            drawers.add(map);
+//        }
+//
+//        mDrawerListView.setAdapter(new LazyAdapter(this.getActivity(), drawers, false));
+
+        List<DrawerItem> list = new ArrayList<>();
+        list.add(new DrawerItem(allDrawers[0], R.drawable.basketball_icon4));
+        list.add(new DrawerItem(allDrawers[1], R.drawable.pencil_icon4));
+        list.add(new DrawerItem(allDrawers[2], R.drawable.profile_icon4));
+        list.add(new DrawerItem(allDrawers[3], R.drawable.newspaper_icon4));
+        list.add(new DrawerItem(allDrawers[4], R.drawable.trophy_icon4));
+        list.add(new DrawerItem(allDrawers[5], R.drawable.ic_action_group));
+        list.add(new DrawerItem(allDrawers[6], R.drawable.ic_action_settings));
+
+
+
+
+        mDrawerListView.setAdapter(new CustomDrawerAdapter(this.getActivity(), R.layout.custom_drawer_item, list));
+
+
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mDrawerListView;

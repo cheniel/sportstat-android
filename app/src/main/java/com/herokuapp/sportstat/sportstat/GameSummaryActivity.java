@@ -74,9 +74,15 @@ public class GameSummaryActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_summary);
-
         Intent i = getIntent();
+        if(i.getStringExtra(SportLoggingActivity.CALLING_ACTIVITY).equals("sport_logging")) {
+
+            setContentView(R.layout.activity_game_summary);
+        }else{
+            setContentView(R.layout.activity_game_summary_external);
+        }
+
+
 
         mGame = (BasketballGame)i.getSerializableExtra(SportLoggingActivity.BASKETBALL_GAME);
 
@@ -145,9 +151,10 @@ public class GameSummaryActivity extends Activity {
         incomeRenderer.setFillPoints(true);
         incomeRenderer.setLineWidth(2);
         incomeRenderer.setDisplayChartValues(true);
-        incomeRenderer.setChartValuesTextSize(60);
-        incomeRenderer.setChartValuesTextAlign(Align.RIGHT);
-        incomeRenderer.setDisplayChartValuesDistance(10); //setting chart value distance
+        incomeRenderer.setChartValuesTextAlign(Align.CENTER);
+        incomeRenderer.setChartValuesTextSize(50);
+        incomeRenderer.setChartValuesSpacing(10);
+
 
         //Creating XYSeriesRenderer to customize expenseSeries
 //        XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
@@ -239,7 +246,7 @@ public class GameSummaryActivity extends Activity {
         multiRenderer.setApplyBackgroundColor(true);
 
         //setting the margin size for the graph in the order top, left, bottom, right
-        multiRenderer.setMargins(new int[]{50, 30, 30, 30});
+        multiRenderer.setMargins(new int[]{60, 30, 30, 30});
 
         for(int i=0; i< x.length;i++){
             multiRenderer.addXTextLabel(i, mLabels[i]);
@@ -321,6 +328,75 @@ public class GameSummaryActivity extends Activity {
 
 
         finish();
+
+    }
+
+    //Launch the user's profile
+    public void onViewUserProfClicked(View v){
+
+        launchUserProfile();
+
+
+
+    }
+
+    private void launchUserProfile() {
+
+
+        Intent i = new Intent(this, FriendViewActivity.class);
+        final String enteredUserName = mGame.getUsername();
+        final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String userLookupResponseString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "user_id/" +
+                                correctUserName + ".json");
+
+                Log.d(TAG, userLookupResponseString);
+
+                try {
+                    JSONObject userJSON = new JSONObject(userLookupResponseString);
+
+                    if (userJSON.has("status")) {
+                        makeToast("Friend does not exist");
+                        return "failure";
+                    }
+
+                    if (userJSON.has("id")) {
+                        makeToast("Friend exists!");
+
+                        Intent intent = new Intent(".activities.FriendViewActivity");
+                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
+                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
+                        startActivity(intent);
+
+                        return "success";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                makeToast("Friend does not exist.");
+                return "failure";
+            }
+
+            private void makeToast(final String toast) {
+                handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+//                                Toast.makeText(MainActivity,
+//                                        toast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }.execute();
 
     }
 

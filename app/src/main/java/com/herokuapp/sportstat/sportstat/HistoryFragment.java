@@ -3,6 +3,7 @@ package com.herokuapp.sportstat.sportstat;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
 
@@ -35,6 +37,8 @@ import java.util.HashMap;
 public class HistoryFragment extends ListFragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String BASKETBALL_GAME = "game";
+    private ArrayList<BasketballGame> mGamesArray;
 
     private int mSectionNumber;
     private ArrayAdapter<BasketballGame> defAdapter;
@@ -104,6 +108,7 @@ public class HistoryFragment extends ListFragment {
     //Takes an ArrayList of BasketBallGame objects and updates the listview
     public void updateView(ArrayList<BasketballGame> gamesArray, Context context) {
         ArrayList<HashMap<String, String>> games = new ArrayList<>();
+        mGamesArray = gamesArray;
 
         for(BasketballGame game : gamesArray){
 
@@ -133,6 +138,20 @@ public class HistoryFragment extends ListFragment {
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
         setListAdapter(adapter);
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+
+        Intent intent = new Intent(this.getActivity(), GameSummaryActivity.class);
+
+        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, mGamesArray.get(position));
+        intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "history_fragment");
+
+        startActivity(intent);
+//
     }
 
     @Override

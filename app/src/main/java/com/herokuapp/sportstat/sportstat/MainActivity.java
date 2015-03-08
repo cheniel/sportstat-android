@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,9 +22,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.herokuapp.sportstat.sportstat.CustomListResources.CustomDrawerAdapter;
+import com.herokuapp.sportstat.sportstat.CustomListResources.DrawerItem;
+
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity
@@ -42,6 +51,16 @@ public class MainActivity extends Activity
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
     private FriendFinderFragment mFragmentFriendFinder;
+
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+
+    private CharSequence mDrawerTitle;
+
+    CustomDrawerAdapter adapter;
+
+    List<DrawerItem> dataList;
 
 
     /**
@@ -68,13 +87,42 @@ public class MainActivity extends Activity
 
         setContentView(R.layout.activity_main);
 
+//        dataList = new ArrayList<DrawerItem>();
+//        mTitle = mDrawerTitle = getTitle();
+//        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        mDrawerList = (ListView) findViewById(R.id.drawer_list_view);
+//
+//        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
+//                GravityCompat.START);
+//
+//
+//        dataList.add(new DrawerItem("Message", R.drawable.ic_action_email));
+//        dataList.add(new DrawerItem("Likes", R.drawable.ic_action_good));
+//        dataList.add(new DrawerItem("Games", R.drawable.ic_action_gamepad));
+//        dataList.add(new DrawerItem("Lables", R.drawable.ic_action_labels));
+//        dataList.add(new DrawerItem("Search", R.drawable.ic_action_search));
+//        dataList.add(new DrawerItem("Cloud", R.drawable.ic_action_cloud));
+//        dataList.add(new DrawerItem("Camara", R.drawable.ic_action_camera));
+//        dataList.add(new DrawerItem("Video", R.drawable.ic_action_video));
+//        dataList.add(new DrawerItem("Groups", R.drawable.ic_action_group));
+//        dataList.add(new DrawerItem("Import & Export",
+//                R.drawable.ic_action_import_export));
+//        dataList.add(new DrawerItem("About", R.drawable.ic_action_about));
+//        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_settings));
+//        dataList.add(new DrawerItem("Help", R.drawable.ic_action_help));
+
+//
+//        adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
+//                dataList);
+//
+//        mDrawerList.setAdapter(adapter);
 
 
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        // Set up the drawer.
+//        // Set up the drawer.
 
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
@@ -85,6 +133,7 @@ public class MainActivity extends Activity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+
 
         itemSelected = true;
 
