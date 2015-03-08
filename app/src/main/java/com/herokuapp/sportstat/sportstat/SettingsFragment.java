@@ -7,8 +7,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -231,7 +236,54 @@ public class SettingsFragment extends Fragment {
         editor.putString(Globals.USER_EMAIL, mEmailEditText.getText().toString());
        // editor.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
 
+
+
         editor.apply();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+       
+
+        final JSONObject post = new JSONObject();
+        try {
+            post.put("avatar", mImageId);
+        }catch(Exception e){
+            Log.d(TAG, "JSON exception");
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String postResponseString = CloudUtilities.post(
+                        getString(R.string.sportstat_url) + "basketball_games", post
+                );
+
+                Log.d(getLocalClassName(), postResponseString);
+
+                try {
+                    JSONObject postResponse = new JSONObject(postResponseString);
+
+                    if (postResponse.has("status")) {
+                        makeToast("Registration failed.");
+                        return "failure";
+                    }
+
+                    makeToast("Saved!");
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                makeToast("Save failed.");
+                return "failure";
+            }
+
+
+        }.execute();
+
+
 
     }
 
