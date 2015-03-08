@@ -1,16 +1,19 @@
 <!--Initial linear layout was copied from the course notes -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
 
 
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="wrap_content"
+
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+
     tools:context=".SettingsFragment">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -18,23 +21,26 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/profile_photo_text"
             android:layout_margin="5dp"
             android:text="@string/ui_profile_photo_title"></TextView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_below="@id/profile_photo_text"
+            android:id="@+id/inner_lin_layout"
             android:baselineAligned="false">
 
             <ImageView
                 android:id="@+id/imageProfile"
                 android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
+                android:layout_height="140dp"
+                android:layout_margin="0dp"
                 android:layout_marginStart="0dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/ui_profile_photo_content_description"
+                android:src="@drawable/blank_profile"
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
@@ -52,14 +58,24 @@
         </LinearLayout>
 
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/inner_lin_layout"
+            android:id="@+id/inner_rel_layout"
+
+            android:layout_alignParentEnd="false">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:id ="@+id/nameFieldTitle"
             android:text="@string/ui_profile_name_title"></TextView>
 
         <EditText
             android:id="@+id/editName"
+            android:layout_below="@id/nameFieldTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -70,123 +86,70 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="@string/ui_profile_handle_title"></TextView>
-
-        <EditText
-            android:id="@+id/editHandle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/ui_profile_handle_hint"
-            android:inputType="textCapWords"
-            android:singleLine="true"></EditText>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_below="@id/editName"
+            android:id = "@+id/editEmailText"
             android:layout_margin="5dp"
             android:text="@string/ui_profile_email_title"></TextView>
+
+
 
         <EditText
             android:id="@+id/editEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/editEmailText"
             android:layout_margin="5dp"
             android:hint="@string/ui_profile_email_hint"
             android:inputType="textEmailAddress"
             android:singleLine="true"></EditText>
 
-
-        <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:text="@string/ui_profile_gender_title" >-->
-        <!--</TextView>-->
-
-        <!--<RadioGroup-->
-        <!--android:id="@+id/radioGender"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:orientation="horizontal" >-->
-
-        <!--<RadioButton-->
-        <!--android:id="@+id/radioGenderF"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="@string/ui_profile_gender_female" />-->
-
-        <!--<RadioButton-->
-        <!--android:id="@+id/radioGenderM"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="1"-->
-        <!--android:text="@string/ui_profile_gender_male" >-->
-        <!--</RadioButton>-->
-        <!--</RadioGroup>-->
-
-        <!--<TextView-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:text="@string/ui_profile_class_title" >-->
-        <!--</TextView>-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/editClass"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:hint="@string/ui_profile_class_hint"-->
-        <!--android:inputType="phone"-->
-        <!--android:singleLine="true" >-->
-        <!--</EditText>-->
-
-        <!--<TextView-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:text="@string/ui_profile_major_title" >-->
-        <!--</TextView>-->
-
-        <!--<EditText-->
-        <!--android:id="@+id/editMajor"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="5dp"-->
-        <!--android:hint="@string/ui_profile_major_hint"-->
-        <!--android:inputType="text"-->
-        <!--android:singleLine="true" >-->
-        <!--</EditText>-->
+        </RelativeLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="40dp">
+            android:layout_below="@id/inner_rel_layout"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
 
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
-                android:onClick="onSettingsSaveClicked"
-                android:text="@string/ui_button_save_title"></Button>
+            >
 
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:onClick="onSettingsCancelClicked"
-                android:text="@string/ui_button_cancel_title"></Button>
-        </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:gravity="center"
 
-</ScrollView>
+                >
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onSettingsSaveClicked"
+                    android:text="@string/ui_button_save_title"
+
+
+                    />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnCancel"
+                    android:onClick="onSettingsCancelClicked"
+                    android:text="@string/ui_button_cancel_title"
+
+
+                    />
+            </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
+    </RelativeLayout>

@@ -48,8 +48,9 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private String regid;
     private IntentFilter mMessageIntentFilter;
     private ArrayList<BasketballGame> mBasketballGames;
-    private int mStatScore;
+    private String mStatScore;
     private int mPassedUserId = -1;
+    private String mUserName;
 
 
     @Override
@@ -66,12 +67,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_view);
 
-        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+        mUserName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mPassedUserId = extras.getInt(USER_ID, -1);
-            userName = extras.getString(USERNAME, null);
+            mUserName = extras.getString(USERNAME, null);
         }
 
         // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
@@ -82,14 +83,6 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
 
         imageView.setLayoutParams(params);
-        TextView textView = (TextView) findViewById(R.id.profile_text_edit);
-
-        String linesep = System.getProperty("line.separator");
-
-
-
-
-        textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.
@@ -180,6 +173,13 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
                                     displayAverages(mBasketballGames);
 
+                                    TextView textView = (TextView) findViewById(R.id.profile_text_edit);
+
+                                    String linesep = System.getProperty("line.separator");
+
+
+                                    textView.setText(mUserName+linesep+"StatScore: "+mStatScore);
+
                                     histFrag.updateView(mBasketballGames, getApplicationContext());
                                     statFrag.updateStats(mBasketballGames, getApplicationContext());
                                 }
@@ -237,6 +237,9 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         avgThrees = threesSum/((double)count);
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+
+        mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
 
 
         String linesep = System.getProperty("line.separator");

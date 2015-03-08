@@ -196,7 +196,7 @@ public class SettingsFragment extends Fragment {
 
         mNameEditText = (EditText) getView().findViewById(R.id.editName);
         mNameEditText.setKeyListener(null);
-        mHandleEditText = (EditText) getView().findViewById(R.id.editHandle);
+        //mHandleEditText = (EditText) getView().findViewById(R.id.editHandle);
         mEmailEditText = (EditText) getView().findViewById(R.id.editEmail);
 
         loadProfile();
@@ -229,7 +229,7 @@ public class SettingsFragment extends Fragment {
         editor.putInt(Globals.USER_PROFILE_IMG_ID, mImageId);
         editor.putString(Globals.USERNAME, mNameEditText.getText().toString());
         editor.putString(Globals.USER_EMAIL, mEmailEditText.getText().toString());
-        editor.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
+       // editor.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
 
         editor.apply();
 
@@ -251,9 +251,9 @@ public class SettingsFragment extends Fragment {
         if (sharedPref.contains(Globals.USER_EMAIL)) {
             mEmailEditText.setText(sharedPref.getString(Globals.USER_EMAIL, ""));
         }
-        if (sharedPref.contains(Globals.USER_HANDLE)) {
-            mHandleEditText.setText(sharedPref.getString(Globals.USER_HANDLE, ""));
-        }
+//        if (sharedPref.contains(Globals.USER_HANDLE)) {
+//            mHandleEditText.setText(sharedPref.getString(Globals.USER_HANDLE, ""));
+//        }
 
     }
 
@@ -270,7 +270,7 @@ public class SettingsFragment extends Fragment {
         outState.putInt(Globals.USER_PROFILE_IMG_ID, mImageId);
         outState.putString(Globals.USERNAME, mNameEditText.getText().toString());
         outState.putString(Globals.USER_EMAIL, mEmailEditText.getText().toString());
-        outState.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
+        //outState.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
 
     }
 

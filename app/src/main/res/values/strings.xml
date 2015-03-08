@@ -83,5 +83,6 @@
     <string name="sample_num">20</string>
     <string name="threesName">3-POINTS:</string>
     <string name="ui_button_view_title">View User Profile</string>
+    <string name="stat_score_text">StatScore:</string>
 
 </resources>

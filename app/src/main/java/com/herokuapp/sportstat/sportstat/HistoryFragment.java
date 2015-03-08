@@ -133,7 +133,7 @@ public class HistoryFragment extends ListFragment {
 
 
 
-        LazyAdapter adapter = new LazyAdapter(this.getActivity(), games, false);
+        LazyAdapter adapter = new LazyAdapter(this.getActivity(), games, false, false, getActivity());
 
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);

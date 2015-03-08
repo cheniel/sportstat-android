@@ -51,6 +51,7 @@ public class MainActivity extends Activity
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
     private FriendFinderFragment mFragmentFriendFinder;
+    private LeaderBoardFragment mFragmentLeaderBoard;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -84,6 +85,7 @@ public class MainActivity extends Activity
         mFragmentNewsfeed = NewsfeedFragment.newInstance(NavigationDrawerFragment.NEWSFEED_TAB_ID);
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
         mFragmentFriendFinder = FriendFinderFragment.newInstance(NavigationDrawerFragment.FRIEND_TAB_ID);
+        mFragmentLeaderBoard = LeaderBoardFragment.newInstance(NavigationDrawerFragment.LEADERBOARD_TAB_ID);
 
         setContentView(R.layout.activity_main);
 
@@ -185,6 +187,13 @@ public class MainActivity extends Activity
                         .replace(R.id.container, mFragmentFriendFinder)
                         .commit();
                 onSectionAttached(NavigationDrawerFragment.FRIEND_TAB_ID);
+                break;
+
+            case (NavigationDrawerFragment.LEADERBOARD_TAB_ID):
+                mFragmentManager.beginTransaction()
+                        .replace(R.id.container, mFragmentLeaderBoard)
+                        .commit();
+                onSectionAttached(NavigationDrawerFragment.LEADERBOARD_TAB_ID);
                 break;
 
             default:

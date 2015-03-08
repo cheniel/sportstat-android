@@ -54,7 +54,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
     private String regid;
     private IntentFilter mMessageIntentFilter;
     private ArrayList<BasketballGame> mBasketballGames;
-    private int mStatScore;
+    private String mStatScore;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -128,11 +128,6 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
 
         imageView.setLayoutParams(params);
-        TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);
-        String linesep = System.getProperty("line.separator");
-        String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
-
-        textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
 
 
@@ -213,6 +208,13 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
 
                                     displayAverages(mBasketballGames);
 
+                                    TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);
+                                    String linesep = System.getProperty("line.separator");
+                                    String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
+
+                                    textView.setText(userName+linesep+"StatScore: "+mStatScore);
+
+
                                     histFrag.updateView(mBasketballGames, getActivity());
                                     statFrag.updateStats(mBasketballGames, getActivity());
                                 }
@@ -244,6 +246,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         int count = 0;
         TextView avgTextView = (TextView) getView().findViewById(R.id.avg_stats_text_view);
 
+
         for(BasketballGame game : mBasketballGames){
             count++;
             assistsSum+=game.getAssists();
@@ -251,11 +254,15 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
             threesSum+=game.getThreePoints();
         }
 
+
+
         avgAssists = assistsSum/((double)count);
         avgTwos = twosSum/((double)count);
         avgThrees = threesSum/((double)count);
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+        mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
 
 
         String linesep = System.getProperty("line.separator");
