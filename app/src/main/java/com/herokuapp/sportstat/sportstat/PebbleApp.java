@@ -12,4 +12,5 @@ public class PebbleApp {
     public final static int MSG_GAME_CANCELLED = 5;
     public final static int MSG_REQUEST_RESPONSE = 6;
     public final static int MSG_INITIAL_POINT_LOAD = 7;
+    public final static int MSG_ATTEMPTED_SHOTS = 8;
 }

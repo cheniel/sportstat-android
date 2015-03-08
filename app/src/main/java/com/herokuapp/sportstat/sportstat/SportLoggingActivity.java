@@ -247,6 +247,13 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                     receivedPointData = true;
                 }
 
+                Long attempted_shots = data.getUnsignedIntegerAsLong(PebbleApp.MSG_ATTEMPTED_SHOTS);
+                if (attempted_shots != null) {
+                    mGame.setShotsAttempted(attempted_shots.intValue());
+                    Log.d(getLocalClassName(), "received attempted shots: " + attempted_shots);
+                    // TODO: deal with this data
+                }
+
                 if (data.contains(PebbleApp.MSG_REQUEST_RESPONSE)) {
                     sendPointInfoToPebble("responding", false);
                 }
@@ -334,6 +341,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         data.addUint8(PebbleApp.MSG_ASSIST_COUNT, (byte) mGame.getAssists());
         data.addUint8(PebbleApp.MSG_TWO_POINT_COUNT, (byte) mGame.getTwoPoints());
         data.addUint8(PebbleApp.MSG_THREE_POINT_COUNT, (byte) mGame.getThreePoints());
+        data.addUint8(PebbleApp.MSG_ATTEMPTED_SHOTS, (byte) mGame.getShotsAttempted());
         PebbleKit.sendDataToPebble(this, PebbleApp.APP_UUID, data);
     }
 
@@ -575,7 +583,6 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     private class IncomingMessageHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Log.d(TAG,"IncomingHandler:handleMessage");
             switch (msg.what) {
                 case TrackingService.MSG_SET_LATLNG_VALUE:
                     double lat = msg.getData().getDouble("lat");
