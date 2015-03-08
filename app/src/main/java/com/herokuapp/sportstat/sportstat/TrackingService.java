@@ -4,12 +4,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,16 +13,27 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimerTask;
 
 /**
  * Created by DavidHarmon on 3/6/15.
  */
-public class TrackingService extends Service {
+public class TrackingService extends Service implements
+        ConnectionCallbacks, OnConnectionFailedListener {
+
+    private static final String TAG = "TrackingService";
 
     private NotificationManager mNotificationManager;
     private static boolean isRunning = false;
@@ -36,25 +43,24 @@ public class TrackingService extends Service {
     public static final int MSG_REGISTER_CLIENT = 1;
     public static final int MSG_UNREGISTER_CLIENT = 2;
     public static final int MSG_SET_LATLNG_VALUE = 3;
-    public static final int MSG_SET_STRING_VALUE = 4;
 
     // Target we publish for clients to send messages to IncomingHandler.
     private final Messenger mMessenger = new Messenger(new IncomingMessageHandler());
 
-    LocationManager mLocationManager;
+    GoogleApiClient mGoogleApiClient;
+    LocationRequest mLocationRequest;
+    boolean mRequestingLocationUpdates;
 
     private final LocationListener locationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             sendMessageToUI(location);
         }
-
-        public void onProviderDisabled(String provider) {}
+        public void onProviderDisabled(String provider) {
+            Log.d(TAG, "Provider Disabled");
+        }
         public void onProviderEnabled(String provider) {}
-        public void onStatusChanged(String provider, int status,
-                                    Bundle extras) {}
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
     };
-
-    private static final String TAG = "TrackingService";
 
     @Override
     public void onCreate() {
@@ -63,26 +69,12 @@ public class TrackingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "Received start id " + startId + ": " + intent);
-
         Log.i(TAG, "Service Started.");
+
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
         showNotification();
         isRunning = true;
-
-        String svcName = Context.LOCATION_SERVICE;
-        mLocationManager = (LocationManager)getSystemService(svcName);
-
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setSpeedRequired(false);
-        criteria.setCostAllowed(true);
-        String provider = mLocationManager.getBestProvider(criteria, true);
-
-        mLocationManager.requestLocationUpdates(provider, 1000, 1,
-                locationListener);
 
         return START_STICKY; // Run until explicitly stopped.
     }
@@ -126,7 +118,6 @@ public class TrackingService extends Service {
                 double lat = loc.getLatitude();
                 double lon = loc.getLongitude();
 
-                // Send data as a String
                 Bundle bundle = new Bundle();
                 bundle.putDouble("lat", lat);
                 bundle.putDouble("lon", lon);
@@ -149,9 +140,42 @@ public class TrackingService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopLocationUpdates();
+        if (mGoogleApiClient.isConnected())
+            mGoogleApiClient.disconnect();
         mNotificationManager.cancelAll(); // Cancel the persistent notification.
         Log.i(TAG, "Service Stopped.");
         isRunning = false;
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+            startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.d(TAG, "connection to google services failed");
+        Toast.makeText(this, "Google Connection Failed", Toast.LENGTH_SHORT);
+    }
+
+    private void startLocationUpdates() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(200);
+        mLocationRequest.setFastestInterval(100);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.FusedLocationApi.
+                requestLocationUpdates(mGoogleApiClient, mLocationRequest, locationListener);
+    }
+
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, locationListener);
     }
 
     /**
@@ -172,5 +196,13 @@ public class TrackingService extends Service {
                     super.handleMessage(msg);
             }
         }
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 }

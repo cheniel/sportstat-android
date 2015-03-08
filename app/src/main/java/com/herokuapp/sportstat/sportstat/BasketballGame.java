@@ -32,7 +32,6 @@ public class BasketballGame implements Serializable {
     private Calendar mEndTime;
     private String mComment;
 
-    private ArrayList<LatLng> mLocList;
     private double mDistance;
     private long mDuration;
 
@@ -192,14 +191,6 @@ public class BasketballGame implements Serializable {
 
     public void setShotsAttempted(int mShotsAttempted) {
         this.mShotsAttempted = mShotsAttempted;
-    }
-
-    public ArrayList<LatLng> getLocList() {
-        return mLocList;
-    }
-
-    public void setLocList(ArrayList<LatLng> LocList) {
-        this.mLocList = LocList;
     }
 
     public long getDuration() {
