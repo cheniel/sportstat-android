@@ -57,6 +57,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
     private int mStatScore;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_DISPLAYED_USER_ID = "displayed_user_id";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -95,6 +96,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }

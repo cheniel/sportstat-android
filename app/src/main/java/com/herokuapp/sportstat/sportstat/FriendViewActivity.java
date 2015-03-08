@@ -13,6 +13,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -38,6 +40,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
     private ActionTabsViewPagerAdapter myViewPageAdapter;
+    private Button mFollowButton;
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -50,7 +53,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private ArrayList<BasketballGame> mBasketballGames;
     private int mStatScore;
     private int mPassedUserId = -1;
-
+    private int mCurrentUserId;
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -67,6 +70,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         setContentView(R.layout.activity_friend_view);
 
         String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+        mCurrentUserId = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -80,6 +84,23 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_PROFILE_IMG_ID, 99));
 
         TextView textView = (TextView) findViewById(R.id.profile_text_edit);
+        mFollowButton = (Button) findViewById(R.id.button_follow_user);
+
+        if (mCurrentUserId != mPassedUserId){
+            mFollowButton.setVisibility(View.VISIBLE);
+            mFollowButton.setEnabled(true);
+
+            boolean isAlreadyFollowing = false;
+
+            mFollowButton.setText("Follow");
+
+            mFollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
 
         String linesep = System.getProperty("line.separator");
 
@@ -128,9 +149,6 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
         });
-
-
-
 
     }
 

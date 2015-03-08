@@ -33,6 +33,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+            <Button
+                android:id="@id/button_follow_user"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:enabled="false"/>
+
         </LinearLayout>
     </LinearLayout>
 
