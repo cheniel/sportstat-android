@@ -7,8 +7,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -66,6 +71,7 @@ public class SettingsFragment extends Fragment {
     private static SharedPreferences sharedPref;
     private boolean copyExceptionThrown = false;
     public static boolean getFromSharedPrefs;
+    private static int mUserId;
 
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -96,10 +102,6 @@ public class SettingsFragment extends Fragment {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
 
-        if(getFromSharedPrefs){
-            Log.d(TAG, "fuck me 1");
-        }
-
 
 
         if (savedInstanceState != null) {
@@ -108,6 +110,8 @@ public class SettingsFragment extends Fragment {
                     savedInstanceState.getBoolean(GET_FROM_PREFS, false);
 
         }
+
+
 
 
     }
@@ -180,6 +184,8 @@ public class SettingsFragment extends Fragment {
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
+        mUserId = sharedPref.getInt(Globals.USER_ID, 0);
+
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false);
@@ -220,7 +226,7 @@ public class SettingsFragment extends Fragment {
 
 
     //This method was based on the example sharedpreferences app found at http://www.tutorialspoint.com/android/android_shared_preferences.htm
-    private static void saveProfile(MainActivity act) {
+    private static void saveProfile(final MainActivity act) {
         //When the user clicks Save, save entered information to the SharedPreferences file
 
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -231,7 +237,50 @@ public class SettingsFragment extends Fragment {
         editor.putString(Globals.USER_EMAIL, mEmailEditText.getText().toString());
        // editor.putString(Globals.USER_HANDLE, mHandleEditText.getText().toString());
 
+
+
         editor.apply();
+
+
+        final JSONObject post = new JSONObject();
+        try {
+            post.put("avatar", mImageId);
+        }catch(Exception e){
+            Log.d(TAG, "JSON exception");
+        }
+
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String postResponseString = CloudUtilities.post(
+                        act.getString(R.string.sportstat_url) + "user/"+mUserId+".json", post
+                );
+
+
+
+                try {
+                    JSONObject postResponse = new JSONObject(postResponseString);
+
+                    if (postResponse.has("status")) {
+                        Log.d(TAG, "Registration failed.");
+                        return "failure";
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "failure";
+            }
+
+
+        }.execute();
+
+
 
     }
 
