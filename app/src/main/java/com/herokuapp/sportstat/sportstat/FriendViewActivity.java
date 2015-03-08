@@ -13,6 +13,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -38,6 +40,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
     private ActionTabsViewPagerAdapter myViewPageAdapter;
+    private Button mFollowButton;
 
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -51,6 +54,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private String mStatScore;
     private int mPassedUserId = -1;
     private String mUserName;
+    private int mCurrentUserId;
 
 
     @Override
@@ -67,7 +71,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_view);
 
+
         mUserName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+
+        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+        mCurrentUserId = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -80,9 +89,30 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
         imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_PROFILE_IMG_ID, 99));
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
 
-        imageView.setLayoutParams(params);
+        TextView textView = (TextView) findViewById(R.id.profile_text_edit);
+        mFollowButton = (Button) findViewById(R.id.button_follow_user);
+
+        if (mCurrentUserId != mPassedUserId){
+            mFollowButton.setVisibility(View.VISIBLE);
+            mFollowButton.setEnabled(true);
+
+            boolean isAlreadyFollowing = false;
+
+            mFollowButton.setText("Follow");
+
+            mFollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+        String linesep = System.getProperty("line.separator");
+
+        textView.setText(mUserName+linesep+"StatScore: "+mStatScore);
+
 
         // Define SlidingTabLayout (shown at top)
         // and ViewPager (shown at bottom) in the layout.
@@ -127,9 +157,6 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
         });
-
-
-
 
     }
 

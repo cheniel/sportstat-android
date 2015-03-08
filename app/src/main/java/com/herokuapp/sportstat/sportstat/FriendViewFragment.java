@@ -57,6 +57,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
     private String mStatScore;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_DISPLAYED_USER_ID = "displayed_user_id";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,9 +71,6 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-
-
 
     /**
      * Use this factory method to create a new instance of
@@ -98,6 +96,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
@@ -125,12 +124,12 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         ImageView imageView = (ImageView) getView().findViewById(R.id.profile_image_view);
         imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(Globals.USER_PROFILE_IMG_ID, 99));
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(300, 300);
 
-        imageView.setLayoutParams(params);
+        TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);
+        String linesep = System.getProperty("line.separator");
+        String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
-
-
+        textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
 
         // Define SlidingTabLayout (shown at top)
