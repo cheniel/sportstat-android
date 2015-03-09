@@ -3,7 +3,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 
 
-
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
 
@@ -19,17 +18,17 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/profile_photo_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/profile_photo_text"
             android:layout_margin="5dp"
             android:text="@string/ui_profile_photo_title"></TextView>
 
         <LinearLayout
+            android:id="@+id/inner_lin_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_photo_text"
-            android:id="@+id/inner_lin_layout"
             android:baselineAligned="false">
 
             <ImageView
@@ -40,9 +39,9 @@
                 android:layout_marginStart="0dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/ui_profile_photo_content_description"
-                android:src="@drawable/blank_profile"
                 android:focusable="true"
-                android:focusableInTouchMode="true">
+                android:focusableInTouchMode="true"
+                android:src="@drawable/blank_profile">
 
                 <requestFocus />
             </ImageView>
@@ -59,70 +58,67 @@
 
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/inner_lin_layout"
             android:id="@+id/inner_rel_layout"
-
-            android:layout_alignParentEnd="false">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:id ="@+id/nameFieldTitle"
-            android:text="@string/ui_profile_name_title"></TextView>
-
-        <EditText
-            android:id="@+id/editName"
-            android:layout_below="@id/nameFieldTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_alignParentEnd="false"
 
-            android:inputType="textCapWords"
-            android:singleLine="true"></EditText>
+            android:layout_below="@id/inner_lin_layout">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/editName"
-            android:id = "@+id/editEmailText"
-            android:layout_margin="5dp"
-            android:text="@string/ui_profile_email_title"></TextView>
+            <TextView
+                android:id="@+id/nameFieldTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="@string/ui_profile_name_title"></TextView>
+
+            <EditText
+                android:id="@+id/editName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameFieldTitle"
+                android:layout_margin="5dp"
+
+                android:inputType="textCapWords"
+                android:singleLine="true"></EditText>
+
+            <TextView
+                android:id="@+id/editEmailText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editName"
+                android:layout_margin="5dp"
+                android:text="@string/ui_profile_email_title"></TextView>
 
 
-
-        <EditText
-            android:id="@+id/editEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/editEmailText"
-            android:layout_margin="5dp"
-            android:hint="@string/ui_profile_email_hint"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"></EditText>
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editEmailText"
+                android:layout_margin="5dp"
+                android:hint="@string/ui_profile_email_hint"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"></EditText>
 
         </RelativeLayout>
-
-
 
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/inner_rel_layout"
             android:layout_alignParentBottom="true"
+            android:layout_below="@id/inner_rel_layout"
             android:layout_centerHorizontal="true"
 
             >
 
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_height="fill_parent"
                 android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:gravity="center"
+                android:orientation="vertical"
 
                 >
 
@@ -137,9 +133,9 @@
                     />
 
                 <Button
+                    android:id="@+id/btnCancel"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/btnCancel"
                     android:onClick="onSettingsCancelClicked"
                     android:text="@string/ui_button_cancel_title"
 
@@ -148,8 +144,7 @@
             </LinearLayout>
 
 
+        </RelativeLayout>
 
     </RelativeLayout>
-
-</RelativeLayout>
-    </ScrollView>
+</ScrollView>

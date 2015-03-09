@@ -27,8 +27,12 @@ import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.util.PebbleDictionary;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 
 public class SportLoggingActivity extends Activity implements ServiceConnection {
@@ -84,6 +88,8 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         mShotLocList = new ArrayList<>();
 
         //Save the time when the user started playing
+
+
         mTime = Calendar.getInstance().getTime().toString();
 
         mAssistsView = (TextView) findViewById(R.id.new_basketball_game_assist_text_view);
@@ -599,7 +605,12 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         }
     }
 
+
+
+
     /**
      * tracking service stuff ends here
      */
+
+
 }

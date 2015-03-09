@@ -57,6 +57,7 @@ public class HistoryFragment extends ListFragment {
     private static final String TAG = "dis tag";
 
     private boolean mIsEntries;
+    private ArrayList<BasketballGame> mInvertedArray;
 
 
     /**
@@ -118,9 +119,12 @@ public class HistoryFragment extends ListFragment {
 
 
             ArrayList<HashMap<String, String>> games = new ArrayList<>();
+            mInvertedArray = new ArrayList<>();
             mGamesArray = gamesArray;
 
             for (int i = gamesArray.size()-1; i >=0; i--) {
+
+                mInvertedArray.add(gamesArray.get(i));
 
                 BasketballGame game = gamesArray.get(i);
 
@@ -162,7 +166,9 @@ public class HistoryFragment extends ListFragment {
 
         Intent intent = new Intent(this.getActivity(), GameSummaryActivity.class);
 
-        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, mGamesArray.get(position));
+
+
+        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, mInvertedArray.get(position));
         intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "history_fragment");
 
         startActivity(intent);

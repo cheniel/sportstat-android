@@ -9,15 +9,13 @@
     android:orientation="vertical"
 
 
-
-
     tools:context="com.herokuapp.sportstat.sportstat.MainActivity">
 
 
     <ImageView
+        android:id="@+id/background_image_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/background_image_view"
         android:scaleType="centerCrop"
         android:src="@drawable/basketball3"
 
@@ -27,9 +25,7 @@
 
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent_background"
-        >
-
+        android:background="@color/transparent_background">
 
 
         <ImageView
@@ -42,8 +38,7 @@
 
             >
 
-            </ImageView>
-
+        </ImageView>
 
 
     </RelativeLayout>

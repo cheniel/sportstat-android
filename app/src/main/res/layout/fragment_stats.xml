@@ -7,22 +7,21 @@
     <LinearLayout
         android:id="@+id/profile_stats_chart"
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
 
         tools:ignore="Orientation">
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/remind_to_log_text_id"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textSize="25sp"
-        android:id = "@+id/remind_to_log_text_id"
-        />
+        android:textSize="25sp" />
 
 </RelativeLayout>

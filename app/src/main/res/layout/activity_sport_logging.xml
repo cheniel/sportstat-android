@@ -6,12 +6,11 @@
     tools:context="com.herokuapp.sportstat.sportstat.SportLoggingActivity">
 
     <LinearLayout
+        android:id="@+id/logger_layer_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight=".1"
-        android:id="@+id/logger_layer_top"
         android:orientation="horizontal">
-
 
 
         <Button
@@ -19,27 +18,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".1"
-            android:textSize="26sp"
             android:onClick="increaseAssists"
-            android:text="@string/Assist_Button" />
+            android:text="@string/Assist_Button"
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/new_basketball_game_assist_text_view"
             android:layout_width="match_parent"
-            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textSize="44sp"
+            android:layout_gravity="center_vertical"
             android:layout_weight=".6"
-            android:text="0" />
+            android:text="0"
+            android:textSize="44sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/logger_layer_middle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".1"
         android:layout_below="@id/logger_layer_top"
-        android:id="@+id/logger_layer_middle"
+        android:layout_weight=".1"
         android:orientation="horizontal">
 
         <Button
@@ -47,27 +46,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".1"
-            android:textSize="26sp"
             android:onClick="increaseTwoPoints"
-            android:text="@string/Two_Point_Button" />
+            android:text="@string/Two_Point_Button"
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/new_basketball_game_two_point_text_view"
             android:layout_width="match_parent"
-            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textSize="44sp"
+            android:layout_gravity="center_vertical"
             android:layout_weight=".6"
-            android:text="0" />
+            android:text="0"
+            android:textSize="44sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/logger_layer_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight=".1"
         android:layout_below="@+id/logger_layer_middle"
-        android:id="@+id/logger_layer_bottom"
+        android:layout_weight=".1"
         android:orientation="horizontal">
 
         <Button
@@ -75,26 +74,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight=".1"
-            android:textSize="26sp"
             android:onClick="increaseThreePoints"
-            android:text="@string/Three_Point_Button" />
+            android:text="@string/Three_Point_Button"
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/new_basketball_game_three_point_text_view"
             android:layout_width="match_parent"
-            android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textSize="44sp"
+            android:layout_gravity="center_vertical"
             android:layout_weight=".6"
-            android:text="0" />
+            android:text="0"
+            android:textSize="44sp" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/new_basketball_game_done_button"
-        android:layout_below="@id/logger_layer_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/logger_layer_bottom"
         android:onClick="onDoneButtonPressed"
         android:text="@string/Done_Button" />
 

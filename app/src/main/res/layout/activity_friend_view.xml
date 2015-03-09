@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/profile_image_view"
             android:layout_width="150dp"
-            android:layout_height="150dp"/>
+            android:layout_height="150dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,19 +26,19 @@
                 android:id="@+id/profile_text_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"/>
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/avg_stats_text_view"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <Button
                 android:id="@id/button_follow_user"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:visibility="invisible" />
 
         </LinearLayout>
     </LinearLayout>
@@ -47,12 +47,12 @@
     <com.herokuapp.sportstat.sportstat.view.SlidingTabLayout
         android:id="@+id/tab"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/tab"/>
+        android:layout_below="@+id/tab" />
 
 </LinearLayout>
