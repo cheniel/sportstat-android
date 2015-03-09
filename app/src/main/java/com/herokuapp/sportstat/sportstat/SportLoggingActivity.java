@@ -83,8 +83,6 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         mLocList = new ArrayList<>();
         mShotLocList = new ArrayList<>();
 
-        // TODO: set userId and username in BasketballGame.
-
         //Save the time when the user started playing
         mTime = Calendar.getInstance().getTime().toString();
 
@@ -234,7 +232,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                 Long two_pts = data.getUnsignedIntegerAsLong(PebbleApp.MSG_TWO_POINT_COUNT);
                 if (two_pts != null) {
                     mGame.setTwoPoints(two_pts.intValue());
-                    logShotLocation();  // only do it here since all three are sent every time
+                    logShotLocation();
                     receivedPointData = true;
                 }
 
@@ -247,8 +245,6 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
                 Long attempted_shots = data.getUnsignedIntegerAsLong(PebbleApp.MSG_ATTEMPTED_SHOTS);
                 if (attempted_shots != null) {
                     mGame.setShotsAttempted(attempted_shots.intValue());
-                    Log.d(getLocalClassName(), "received attempted shots: " + attempted_shots);
-                    // TODO: deal with this data
                 }
 
                 if (data.contains(PebbleApp.MSG_REQUEST_RESPONSE)) {
@@ -310,12 +306,14 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
     public void increaseTwoPoints(View view) {
         mGame.setTwoPoints(mGame.getTwoPoints() + 1);
         mTwoPointsView.setText(String.valueOf(mGame.getTwoPoints()));
+        logShotLocation();
         sendPointInfoToPebble(null, false);
     }
 
     public void increaseThreePoints(View view) {
         mGame.setThreePoints(mGame.getThreePoints() + 1);
         mThreePointsView.setText(String.valueOf(mGame.getThreePoints()));
+        logShotLocation();
         sendPointInfoToPebble(null, false);
     }
 
@@ -356,6 +354,7 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         sendGameEndToPebble();
 
         // pass the time and location list to the game object
+        mGame.setEndTimeToNow();
         mGame.setDistance(mDistanceTraveled);
         mGame.setDuration(mEndTimeInMillis - mStartTimeInMillis);
         try {
@@ -369,15 +368,6 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
         intent.putExtra(BASKETBALL_GAME, mGame);
         intent.putExtra(CALLING_ACTIVITY, "sport_logging");
-//
-//        intent.putExtra(ASSISTS, mGame.getAssists());
-//        intent.putExtra(TWO_POINTS, mGame.getTwoPoints());
-//        intent.putExtra(THREE_POINTS, mGame.getThreePoints());
-
-
-        //TODO: infer how many shots attempted
-
-        //Put the automatically recorded stats here too
 
         startActivity(intent);
 
@@ -478,7 +468,9 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
      * log the location that the shot was taken from
      */
     private void logShotLocation(){
-        mShotLocList.add(mLocList.get(mLocList.size() - 1));
+        try {
+            mShotLocList.add(mLocList.get(mLocList.size() - 1));
+        } catch (Exception ignored) {}
     }
 
     private double distanceFormula(LatLng onePt, LatLng twoPt){

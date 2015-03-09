@@ -154,6 +154,11 @@ public class BasketballGame implements Serializable {
             bg.setFirstLat(lat);
         }
 
+        long duration = j.optLong("duration", -1L);
+        if (duration >= 0) {
+            bg.setDuration(duration);
+        }
+
         return bg;
     }
 
@@ -319,6 +324,9 @@ public class BasketballGame implements Serializable {
     }
 
 
+    public void setEndTimeToNow() {
+        mEndTime = Calendar.getInstance(TimeZone.getTimeZone("Z"));
+    }
 
 
     private String getEndTimeString() {

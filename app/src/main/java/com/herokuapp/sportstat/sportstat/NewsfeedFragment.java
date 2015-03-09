@@ -56,6 +56,7 @@ public class NewsfeedFragment extends ListFragment {
     private int mSectionNumber;
     private ArrayAdapter<BasketballGame> defAdapter;
     private ArrayList<HashMap<String, String>> mGamesArray;
+    private ArrayList<BasketballGame> feed;
 
 
     /**
@@ -157,8 +158,7 @@ public class NewsfeedFragment extends ListFragment {
     }
 
     private void updateViewUsingJSONArray(JSONArray newsfeed) {
-        ArrayList<BasketballGame> feed = new ArrayList<>();
-
+        feed = new ArrayList<>();
 
         for (int i = 0; i < newsfeed.length(); i++) {
             try {
@@ -166,8 +166,6 @@ public class NewsfeedFragment extends ListFragment {
                 feed.add (feed.size()-i,
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
-
-                //Log.d(TAG, "CCC: nF: "+feed.get(feed.size()-i).getmImageIdentifier());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -224,16 +222,8 @@ public class NewsfeedFragment extends ListFragment {
 
         Intent intent = new Intent(this.getActivity(), GameSummaryActivity.class);
         HashMap<String, String> selectedItem = mGamesArray.get(position);
-        BasketballGame selectedGame = new BasketballGame();
-        selectedGame.setUsername(selectedItem.get(KEY_USERNAME));
-        selectedGame.setUserId(Integer.parseInt(selectedItem.get(KEY_ID)));
-        Log.d(TAG, "DIS USER ID: "+Integer.parseInt(selectedItem.get(KEY_ID)));
-        selectedGame.setAssists(Integer.parseInt(selectedItem.get(KEY_ASSISTS).substring(1,2)));
-        selectedGame.setTwoPoints(Integer.parseInt(selectedItem.get(KEY_TWOS).substring(1,2)));
-        selectedGame.setThreePoints(Integer.parseInt(selectedItem.get(KEY_THREES).substring(1,2)));
 
-
-        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, selectedGame);
+        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, feed.get(position));
         intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "newsfeed_fragment");
 
         startActivity(intent);
