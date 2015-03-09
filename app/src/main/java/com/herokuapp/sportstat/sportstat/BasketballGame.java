@@ -37,6 +37,7 @@ public class BasketballGame implements Serializable {
 
     private double mFirstLat;
     private double mFirstLon;
+    private String mGeocodedString;
 
     private static final long serialVersionUID = 1L;
 
@@ -324,5 +325,13 @@ public class BasketballGame implements Serializable {
 
     public void setFirstLon(double mFirstLon) {
         this.mFirstLon = mFirstLon;
+    }
+
+    public String getGeocodedString() {
+        return mGeocodedString;
+    }
+
+    public void setGeocodedString(String mGeocodedString) {
+        this.mGeocodedString = mGeocodedString;
     }
 }

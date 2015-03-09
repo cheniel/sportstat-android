@@ -115,11 +115,8 @@ public class GameSummaryActivity extends Activity {
                 for (int j = 0; j < address.getMaxAddressLineIndex(); j++)
                     sb.append(address.getAddressLine(j)).append("\n");
 
-                sb.append(address.getLocality()).append("\n");
-                sb.append(address.getPostalCode()).append("\n");
-                sb.append(address.getCountryName());
-
                 mFirstLocationGeocodeString = sb.toString();
+                mGame.setGeocodedString(mFirstLocationGeocodeString);
             }
         } catch (Exception e){
             Log.d(TAG, "couldn't get geocoded location");
