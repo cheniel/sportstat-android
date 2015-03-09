@@ -110,7 +110,7 @@ public class LazyAdapter extends BaseAdapter {
 
             TextView duration = (TextView) vi.findViewById(R.id.duration); // duration
             if ((ImageView) vi.findViewById(R.id.list_image) != null) {
-                Log.d(TAG, "WHY COMP WHY: " + song.get(NewsfeedFragment.KEY_THUMB_URL));
+                //Log.d(TAG, "WHY COMP WHY: " + song.get(NewsfeedFragment.KEY_THUMB_URL));
                 ImageView thumb_image = (ImageView) vi.findViewById(R.id.list_image);
 
                 try {
@@ -135,15 +135,22 @@ public class LazyAdapter extends BaseAdapter {
 
             TextView scoreNum = (TextView) vi.findViewById(R.id.stat_score_num);
             TextView userNameText = (TextView) vi.findViewById(R.id.nameText);
+            ImageView userProf = (ImageView) vi.findViewById(R.id.list_image);
 
 
             String userName = song.get(LeaderBoardFragment.KEY_USERNAME);
             String statScore = song.get(LeaderBoardFragment.KEY_STATSCORE);
+            String imgId = song.get(LeaderBoardFragment.KEY_THUMB_URL);
+            if(imgId == null) imgId = "9";
 
+            try {
+                setImage(Integer.parseInt(song.get(NewsfeedFragment.KEY_THUMB_URL)), userProf);
+            } catch (Exception e) {
+                setImage(9, userProf);
+            }
 
             scoreNum.setText(statScore);
-            userNameText.setText(userName + "  |");
-
+            userNameText.setText(userName);
 
         }
 
