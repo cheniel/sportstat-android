@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,31 +7,42 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight=".1"
+
+        android:id="@+id/logger_layer_top"
         android:orientation="horizontal">
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+
+    >
+
+        <TextView
+            android:id="@+id/new_basketball_game_assist_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".9"
+            android:text="0" />
+
+</RelativeLayout>
 
         <Button
             android:id="@+id/new_basketball_game_assist_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight=".1"
             android:onClick="increaseAssists"
             android:text="@string/Assist_Button" />
 
-        <TextView
-            android:id="@+id/new_basketball_game_assist_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".9"
-            android:text="0" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight=".1"
+        android:layout_below="@id/logger_layer_top"
+        android:id="@+id/logger_layer_middle"
         android:orientation="horizontal">
 
         <Button
@@ -53,8 +64,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight=".1"
+        android:layout_below="@+id/logger_layer_middle"
+        android:id="@+id/logger_layer_bottom"
         android:orientation="horizontal">
 
         <Button
@@ -76,10 +89,11 @@
 
     <Button
         android:id="@+id/new_basketball_game_done_button"
+        android:layout_below="@id/logger_layer_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onDoneButtonPressed"
         android:text="@string/Done_Button" />
 
-</LinearLayout>
+</RelativeLayout>
 

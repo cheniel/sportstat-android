@@ -297,7 +297,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         if((""+avgAssists).equals("NaN")){
             avgAssists = 0;
+        }
+        if((""+avgTwos).equals("NaN")){
             avgTwos = 0;
+        }
+
+        if((""+avgThrees).equals("NaN")){
             avgThrees = 0;
         }
 

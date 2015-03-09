@@ -132,13 +132,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         String linesep = System.getProperty("line.separator");
         String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
-        try{
-            Integer.parseInt(mStatScore);
-        }catch (Exception e){
 
-            mStatScore = "0";
-        }
-        textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
 
         // Define SlidingTabLayout (shown at top)
@@ -220,6 +214,13 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
                                     String linesep = System.getProperty("line.separator");
                                     String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
+                                    try{
+                                        Integer.parseInt(mStatScore);
+                                    }catch (Exception e){
+
+                                        mStatScore = "0";
+                                    }
+                                    textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
                                     if(mBasketballGames.size()==0){
                                         histFrag.updateView(mBasketballGames, getActivity(), false);
@@ -270,24 +271,26 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         }
 
 
-
-
-
         avgAssists = assistsSum/((double)count);
         avgTwos = twosSum/((double)count);
         avgThrees = threesSum/((double)count);
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-        mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
-
 
         if((""+avgAssists).equals("NaN")){
             avgAssists = 0;
+        }
+        if((""+avgTwos).equals("NaN")){
             avgTwos = 0;
+        }
+
+        if((""+avgThrees).equals("NaN")){
             avgThrees = 0;
         }
 
+
+        mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
 
         String linesep = System.getProperty("line.separator");
         avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
