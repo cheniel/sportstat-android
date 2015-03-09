@@ -61,6 +61,7 @@ public class LeaderBoardFragment extends ListFragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private int mSectionNumber;
+
     private ArrayAdapter<BasketballGame> defAdapter;
     private ArrayList<HashMap<String, String>> mGamesArray;
     private ArrayList<BasketballGame> mBasketballGames;
@@ -68,7 +69,7 @@ public class LeaderBoardFragment extends ListFragment {
     private Switch mySwitch;
     private String mUrl;
     private AsyncTask<String, Void, String> mRefreshView;
-    private ArrayList<HashMap<String, String>> mFriendsArray;
+    private ArrayList<HashMap<String, String>> mFriendsArray, mSortedFriendsArray;
 
 
     /**
@@ -174,8 +175,9 @@ public class LeaderBoardFragment extends ListFragment {
 
 
     private void updateViewUsingJSONArray(JSONArray friends) {
-        ArrayList<BasketballGame> feed = new ArrayList<>();
+
         mFriendsArray = new ArrayList<>();
+        mSortedFriendsArray = new ArrayList<>();
 
         for (int i = 0; i < friends.length(); i++) {
             try {
@@ -185,6 +187,7 @@ public class LeaderBoardFragment extends ListFragment {
                 map.put(KEY_ID, ""+friend.getInt("id"));
 
 
+                ArrayList<BasketballGame> feed = new ArrayList<>();
 
                 JSONArray usersGames = friend.getJSONArray("games");
                 for(int k = 0; k<usersGames.length(); k++){
@@ -192,7 +195,8 @@ public class LeaderBoardFragment extends ListFragment {
                             BasketballGame.getBasketballGameFromJSONObject(
                                     usersGames.getJSONObject(k)));
 
-                    //Log.d(TAG, "CCC: lb: "+feed.get(k).getmImageIdentifier());
+                    Log.d(TAG, "CCC: lb id's: "+usersGames.getJSONObject(k).get("id"));
+
                 }
 
                 map.put(KEY_THUMB_URL,friend.getString("avatar"));
@@ -232,14 +236,14 @@ public class LeaderBoardFragment extends ListFragment {
     //Takes an ArrayList of BasketBallGame objects and updates the listview
     private void updateViewLeaderBoard(ArrayList<HashMap<String, String>> friends) {
 
-        ArrayList<HashMap<String, String>> sortedFeed = new ArrayList<>();
-        sortedFeed.addAll(friends);
-        Collections.sort(sortedFeed, new CustomComparator());
+
+        mSortedFriendsArray.addAll(friends);
+        Collections.sort(mSortedFriendsArray, new CustomComparator());
 
 
 
 
-        mAdapter = new LazyAdapter(this.getActivity(),sortedFeed, false, true, getActivity());
+        mAdapter = new LazyAdapter(this.getActivity(),mSortedFriendsArray, false, true, getActivity());
 
 
 
@@ -260,7 +264,7 @@ public class LeaderBoardFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
 
         Intent intent = new Intent(this.getActivity(), FriendViewActivity.class);
-        HashMap<String, String> selectedItem = mFriendsArray.get(position);
+        HashMap<String, String> selectedItem = mSortedFriendsArray.get(position);
 
         intent.putExtra(FriendViewActivity.USERNAME, selectedItem.get(KEY_USERNAME));
         Log.d(TAG, selectedItem.get(KEY_ID));
@@ -289,13 +293,13 @@ public class LeaderBoardFragment extends ListFragment {
             threesSum+=game.getThreePoints();
         }
 
-        //Log.d(TAG, "AAA: LeaderBoard NUMBERS: "+assistsSum+" two's" +twosSum+" threes: "+threesSum);
+        Log.d(TAG, "AAA: LeaderBoard NUMBERS: "+assistsSum+" two's" +twosSum+" threes: "+threesSum);
 
         avgAssists = assistsSum/((double)count);
         avgTwos = twosSum/((double)count);
         avgThrees = threesSum/((double)count);
 
-        //Log.d(TAG, "AAA: AVG LeaderBoard NUMBERS: "+avgAssists+" two's" +avgTwos+" threes: "+avgThrees);
+        Log.d(TAG, "AAA: AVG LeaderBoard NUMBERS: "+avgAssists+" two's" +avgTwos+" threes: "+avgThrees);
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 

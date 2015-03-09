@@ -124,7 +124,7 @@ public class GameSummaryActivity extends Activity {
         }
 
         TextView titleText = (TextView) findViewById(R.id.game_loc_time_text);
-        //titleText.setText(mGame.get);
+        titleText.setText(mGame.getTimeString());
         TextView statsText = (TextView) findViewById(R.id.stats_text_view);
         String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
 

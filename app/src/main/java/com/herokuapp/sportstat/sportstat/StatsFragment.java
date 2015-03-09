@@ -159,6 +159,9 @@ public class StatsFragment extends Fragment {
           multiRenderer.setXTitle("Entries from " + mGamesArray.get(0).getTimeString()
                   + " to " + mGamesArray.get(mGamesArray.size() - 1).getTimeString());
 
+       // multiRenderer.setXLabelsColor(Color.GRAY);
+        multiRenderer.setLabelsColor(Color.GRAY);
+
 
         /***
          * Customizing graphs
@@ -223,6 +226,7 @@ public class StatsFragment extends Fragment {
         multiRenderer.setScale(2f);
         //setting x axis point size
         multiRenderer.setPointSize(4f);
+
         //setting the margin size for the graph in the order top, left, bottom, right
         multiRenderer.setMargins(new int[]{70, 30, 70, 70});
 

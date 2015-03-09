@@ -158,7 +158,7 @@ public class LazyAdapter extends BaseAdapter {
     }
 
 
-    private void setImage(int pos, ImageView imageView) {
+    public static void setImage(int pos, ImageView imageView) {
 
         int imageId;
         switch (pos) {

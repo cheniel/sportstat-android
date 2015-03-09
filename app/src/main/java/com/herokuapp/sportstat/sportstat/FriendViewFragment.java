@@ -125,7 +125,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         ImageView imageView = (ImageView) getView().findViewById(R.id.profile_image_view);
         int profilePicId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(Globals.USER_PROFILE_IMG_ID, 99);
         LazyAdapter.setImage(profilePicId, imageView);
-       
+
 
 
         TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);

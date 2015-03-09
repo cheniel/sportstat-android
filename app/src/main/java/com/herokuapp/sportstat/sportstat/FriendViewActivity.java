@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 
 import org.json.JSONArray;
@@ -32,6 +33,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private static final String TAG = "tag";
     public static final String USERNAME = "EXTRA USER NAME";
     public static final String USER_ID = "EXTRA USER ID";
+    public static final String IMG_ID = "img";
     private SlidingTabLayout slidingTabLayout;
     private ViewPager viewPager;
     private ArrayList<Fragment> fragments;
@@ -53,6 +55,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private int mCurrentUserId;
     private boolean isAlreadyFollowing = false;
     private int mRelationShipId;
+    private String mImageID;
 
 
     @Override
@@ -75,6 +78,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mPassedUserId = extras.getInt(USER_ID, -1);
+            mImageID = extras.getString(IMG_ID, "9");
             if (mPassedUserId == -1) {
                 Log.d(TAG, "failed to get user id from intent");
                 Toast.makeText(this, "User Not Found", Toast.LENGTH_SHORT);
@@ -88,7 +92,11 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
 
         ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
-        imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_PROFILE_IMG_ID, 99));
+        if(mImageID!=null){
+            LazyAdapter.setImage(Integer.parseInt(mImageID), imageView);
+        }else {
+            imageView.setImageResource(R.drawable.blank_profile);
+        }
 
         TextView textView = (TextView) findViewById(R.id.profile_text_edit);
         mFollowButton = (Button) findViewById(R.id.button_follow_user);
