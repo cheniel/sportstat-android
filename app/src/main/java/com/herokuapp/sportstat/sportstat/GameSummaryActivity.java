@@ -115,18 +115,22 @@ public class GameSummaryActivity extends Activity {
 
                 mFirstLocationGeocodeString = sb.toString();
                 mGame.setGeocodedString(mFirstLocationGeocodeString);
+
+                Log.d(TAG, "Geocode: "+mFirstLocationGeocodeString);
             }
         } catch (Exception e){
             Log.d(TAG, "couldn't get geocoded location");
             e.printStackTrace();
         }
 
+        TextView titleText = (TextView) findViewById(R.id.game_loc_time_text);
+        //titleText.setText(mGame.get);
         TextView statsText = (TextView) findViewById(R.id.stats_text_view);
         String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
 
         int shotsMade = mTwoPoints+mThreePoints;
         String shotsMadePctStr = "";
-        if(mShotsAttempted < 0){
+        if(mShotsAttempted > 0){
             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100+"%";
 
             statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
@@ -369,7 +373,7 @@ public class GameSummaryActivity extends Activity {
     private void launchUserProfile() {
         Intent i = new Intent(this, FriendViewActivity.class);
         final String enteredUserName = mGame.getUsername();
-        Log.d(TAG, "FUCKING USERNAME: "+enteredUserName);
+
         final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
 
         final Handler handler = new Handler(Looper.getMainLooper());
@@ -397,6 +401,7 @@ public class GameSummaryActivity extends Activity {
                         Intent intent = new Intent(".activities.FriendViewActivity");
                         intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
                         intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
+                        intent.putExtra(FriendViewActivity.IMG_ID, userJSON.getString("avatar"));
                         startActivity(intent);
 
                         return "success";
