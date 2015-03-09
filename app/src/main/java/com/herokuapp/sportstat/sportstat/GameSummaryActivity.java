@@ -40,6 +40,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,7 +112,7 @@ public class GameSummaryActivity extends Activity {
                 StringBuilder sb = new StringBuilder();
 
                 for (int j = 0; j < address.getMaxAddressLineIndex(); j++)
-                    sb.append(address.getAddressLine(j)).append("\n");
+                    sb.append(address.getAddressLine(j)).append(" ");
 
                 mFirstLocationGeocodeString = sb.toString();
                 mGame.setGeocodedString(mFirstLocationGeocodeString);
@@ -126,8 +127,15 @@ public class GameSummaryActivity extends Activity {
         String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
 
         TextView titleText = (TextView) findViewById(R.id.game_summary_title_text);
-        titleText.setText(mGame.getPrettyTimeForHistory()+lineSep+"@"+mFirstLocationGeocodeString);
+
+        if(mFirstLocationGeocodeString!=null) {
+            titleText.setText(mGame.getPrettyTimeForHistory() + lineSep + "@" + mFirstLocationGeocodeString);
+        }else{
+            titleText.setText(mGame.getPrettyTimeForHistory());
+        }
         TextView statsText = (TextView) findViewById(R.id.stats_text_view);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
 
         int shotsMade = mTwoPoints+mThreePoints;
@@ -137,10 +145,10 @@ public class GameSummaryActivity extends Activity {
 
             statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
                     +lineSep+"Shots Made %age: "+shotsMadePctStr+lineSep+"Possessions: "+mPossessions
-                    +lineSep+"Distance Ran (m): "+mDistanceRan+lineSep+"Duration of Game: "+formatDuration(mDuration));
+                    +lineSep+"Distance Ran (m): "+decimalFormat.format(mDistanceRan)+lineSep+"Duration of Game: "+formatDuration(mDuration));
         } else {
             statsText.setText("Shots made: "+shotsMade+lineSep+"Possessions: "+mPossessions
-                    +lineSep+"Distance Ran (m): "+mDistanceRan+lineSep+"Duration of Game: "
+                    +lineSep+"Distance Ran (m): "+decimalFormat.format(mDistanceRan)+lineSep+"Duration of Game: "
                     +formatDuration(mDuration));
         }
 
@@ -208,6 +216,7 @@ public class GameSummaryActivity extends Activity {
         //multiRenderer.setXAxisColor(Color.TRANSPARENT);
         multiRenderer.setYAxisColor(Color.TRANSPARENT);
         multiRenderer.setYLabelsColor(Color.TRANSPARENT, Color.TRANSPARENT);
+        multiRenderer.setXLabelsColor(Color.parseColor("#616161"));
 
         /***
          * Customizing graphs

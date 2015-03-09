@@ -13,7 +13,7 @@
         android:id="@+id/chart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/game_summary_title_text"
+        android:layout_above="@+id/stats_text_view"
         android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
         android:layout_alignParentTop="true"
@@ -23,7 +23,8 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/stats_text_view"
+        android:layout_above="@+id/linLayout"
+        android:textColor="#616161"
         android:id="@+id/game_summary_title_text"
         />
 
@@ -31,10 +32,12 @@
         android:id="@+id/stats_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linLayout"
+        android:layout_above="@+id/game_summary_title_text"
         android:layout_marginStart="0dp"
         android:text="@string/stats_text"
+        android:textColor="#616161"
         android:textSize="20sp" />
+
 
     <LinearLayout
         android:id="@+id/linLayout"
