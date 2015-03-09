@@ -2,23 +2,18 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +22,6 @@ import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -176,9 +170,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         int uid;
         if (mPassedUserId == mCurrentUserId) {
             uid = mCurrentUserId;
+            Log.d(TAG, "PASS ID: " + mPassedUserId);
         } else {
             uid = mPassedUserId;
-            Log.d(TAG, "ID: " + mPassedUserId);
+            Log.d(TAG, "PASS ID: " + mPassedUserId);
         }
 
         final int userId = uid;
@@ -250,6 +245,8 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                 feed.add(
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
+
+                Log.d(TAG, "BBB: FV ID: "+basketballObject.getInt("id"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -277,9 +274,14 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             attempts += game.getShotsAttempted();
         }
 
+        Log.d(TAG, "AAA: FriendView sums:"+assistsSum+" "+twosSum+" "+threesSum );
+
         avgAssists = assistsSum / ((double) count);
         avgTwos = twosSum / ((double) count);
         avgThrees = threesSum / ((double) count);
+
+       Log.d(TAG, "AAA: FriendView averages:"+avgAssists+" "+avgTwos+" "+avgThrees);
+
         if (attempts != 0) {
             avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
         }

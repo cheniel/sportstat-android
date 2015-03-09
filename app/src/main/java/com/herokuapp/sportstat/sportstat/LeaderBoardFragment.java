@@ -29,6 +29,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 
@@ -185,7 +187,7 @@ public class LeaderBoardFragment extends ListFragment {
 
                 JSONArray usersGames = friend.getJSONArray("games");
                 for(int k = 0; k<usersGames.length(); k++){
-                    feed.add (feed.size()-k,
+                    feed.add (
                             BasketballGame.getBasketballGameFromJSONObject(
                                     usersGames.getJSONObject(k)));
                 }
@@ -202,12 +204,35 @@ public class LeaderBoardFragment extends ListFragment {
         updateViewLeaderBoard(mFriendsArray);
     }
 
+    public class CustomComparator implements Comparator<HashMap<String, String>> {
+        @Override
+        public int compare(HashMap m1, HashMap m2) {
+            return comparison((String)m1.get(KEY_STATSCORE), (String)(m2.get(KEY_STATSCORE)));
+        }
+    }
+
+    private int comparison(String stat1, String stat2) {
+        double stat1int = Double.parseDouble(stat1);
+        double stat2int = Double.parseDouble(stat2);
+        int retInt = 0;
+        if(stat1int>stat2int) retInt=-1;
+        else if(stat2int>stat1int) retInt= 1;
+        else if(stat1int==stat2int) retInt= 0;
+
+        return retInt;
+    }
+
     //Takes an ArrayList of BasketBallGame objects and updates the listview
     private void updateViewLeaderBoard(ArrayList<HashMap<String, String>> friends) {
 
+        ArrayList<HashMap<String, String>> sortedFeed = new ArrayList<>();
+        sortedFeed.addAll(friends);
+        Collections.sort(sortedFeed, new CustomComparator());
 
 
-        mAdapter = new LazyAdapter(this.getActivity(),friends, false, true, getActivity());
+
+
+        mAdapter = new LazyAdapter(this.getActivity(),sortedFeed, false, true, getActivity());
 
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
@@ -230,6 +255,7 @@ public class LeaderBoardFragment extends ListFragment {
         HashMap<String, String> selectedItem = mFriendsArray.get(position);
 
         intent.putExtra(FriendViewActivity.USERNAME,selectedItem.get(KEY_USERNAME));
+        Log.d(TAG, selectedItem.get(KEY_ID));
         intent.putExtra(FriendViewActivity.USER_ID, selectedItem.get(KEY_ID));
 
         startActivity(intent);
@@ -238,7 +264,7 @@ public class LeaderBoardFragment extends ListFragment {
 
 
     //Take the array of basketball games stored in the user's history and calculate StatScore
-    private String findStatScore(ArrayList<BasketballGame> mBasketballGames) {
+    public static String findStatScore(ArrayList<BasketballGame> mBasketballGames) {
 
         double avgAssists, avgTwos, avgThrees;
 
@@ -255,24 +281,20 @@ public class LeaderBoardFragment extends ListFragment {
             threesSum+=game.getThreePoints();
         }
 
+        //Log.d(TAG, "AAA: LeaderBoard NUMBERS: "+assistsSum+" two's" +twosSum+" threes: "+threesSum);
+
         avgAssists = assistsSum/((double)count);
         avgTwos = twosSum/((double)count);
         avgThrees = threesSum/((double)count);
 
-        Log.d(TAG, "AVG NUMBERS: "+avgAssists+" two's" +avgTwos+" threes: "+avgThrees);
+        //Log.d(TAG, "AAA: AVG LeaderBoard NUMBERS: "+avgAssists+" two's" +avgTwos+" threes: "+avgThrees);
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
 
         String statScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
 
-
-        String linesep = System.getProperty("line.separator");
-        //avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
-        //+decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees));
-
         return statScore;
-
     }
 
 

@@ -53,6 +53,7 @@ public class BasketballGame implements Serializable {
         mStartTime = Calendar.getInstance(TimeZone.getTimeZone("Z"));
         mEndTime = mStartTime;
         mComment = "";
+        mShotsAttempted = -1;
 
 
     }

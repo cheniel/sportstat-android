@@ -367,8 +367,6 @@ public class GameSummaryActivity extends Activity {
     }
 
     private void launchUserProfile() {
-
-
         Intent i = new Intent(this, FriendViewActivity.class);
         final String enteredUserName = mGame.getUsername();
         Log.d(TAG, "FUCKING USERNAME: "+enteredUserName);
