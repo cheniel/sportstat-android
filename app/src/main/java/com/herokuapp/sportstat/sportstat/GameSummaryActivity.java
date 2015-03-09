@@ -123,10 +123,12 @@ public class GameSummaryActivity extends Activity {
             e.printStackTrace();
         }
 
-        TextView titleText = (TextView) findViewById(R.id.game_loc_time_text);
-        titleText.setText(mGame.getTimeString());
-        TextView statsText = (TextView) findViewById(R.id.stats_text_view);
         String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
+
+        TextView titleText = (TextView) findViewById(R.id.game_summary_title_text);
+        titleText.setText(mGame.getPrettyTimeForHistory()+lineSep+"@"+mFirstLocationGeocodeString);
+        TextView statsText = (TextView) findViewById(R.id.stats_text_view);
+
 
         int shotsMade = mTwoPoints+mThreePoints;
         String shotsMadePctStr = "";
