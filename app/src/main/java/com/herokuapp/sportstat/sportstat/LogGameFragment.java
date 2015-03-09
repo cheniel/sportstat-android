@@ -54,10 +54,6 @@ public class LogGameFragment extends ListFragment {
 
     private static BasketballGame mGame;
 
-
-
-
-
     public static LogGameFragment newInstance(int sectionNumber) {
         LogGameFragment fragment = new LogGameFragment();
         Bundle args = new Bundle();
@@ -76,12 +72,9 @@ public class LogGameFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         if (getArguments() != null) {
             mSectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
         }
-
 
         //Create a default date string (current time and date)
         Date defTime = Calendar.getInstance().getTime();
@@ -123,18 +116,12 @@ public class LogGameFragment extends ListFragment {
             }
         };
 
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-
-
         return inflater.inflate(R.layout.fragment_log_game, container, false);
-
     }
 
     @Override

@@ -144,8 +144,6 @@ public class GameSummaryActivity extends Activity {
                     +formatDuration(mDuration));
         }
 
-
-
         //Display bargraph
         openChart();
 
