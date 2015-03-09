@@ -97,10 +97,13 @@ public class GameSummaryActivity extends Activity {
 
         //mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
 
+        //mShotsAttempted = mGame.getShotsAttempted();
+
+
         int shotsMade = mTwoPoints+mThreePoints;
         String shotsMadePctStr = "";
 //         if(mShotsAttempted!=0){
-//             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100;
+//             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100+"%";
 //         }
 
 

@@ -55,6 +55,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private int mPassedUserId = -1;
     private String mUserName;
     private int mCurrentUserId;
+    private boolean isAlreadyFollowing = false;
 
 
     @Override
@@ -97,14 +98,18 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             mFollowButton.setVisibility(View.VISIBLE);
             mFollowButton.setEnabled(true);
 
-            boolean isAlreadyFollowing = false;
-
             mFollowButton.setText("Follow");
 
             mFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if (!isAlreadyFollowing){
+                        mFollowButton.setText("Unfollow");
+                        isAlreadyFollowing = true;
+                    } else {
+                        mFollowButton.setText("Follow");
+                        isAlreadyFollowing = false;
+                    }
                 }
             });
 
@@ -253,11 +258,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
     private void displayAverages(ArrayList<BasketballGame> mBasketballGames) {
 
-        double avgAssists, avgTwos, avgThrees;
+        double avgAssists, avgTwos, avgThrees, avgShotsMade = 0;
 
         int assistsSum = 0;
         int twosSum = 0;
         int threesSum = 0;
+        int attempts = 0;
         int count = 0;
         TextView avgTextView = (TextView) findViewById(R.id.avg_stats_text_view);
 
@@ -266,21 +272,24 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             assistsSum+=game.getAssists();
             twosSum+=game.getTwoPoints();
             threesSum+=game.getThreePoints();
+            attempts+=game.getShotsAttempted();
         }
 
         avgAssists = assistsSum/((double)count);
         avgTwos = twosSum/((double)count);
         avgThrees = threesSum/((double)count);
+        if (attempts != 0){
+            avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
+        }
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-
         mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
-
 
         String linesep = System.getProperty("line.separator");
         avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
-                +decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees));
+                +decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees)
+                +linesep+"Average Shots Made: "+decimalFormat.format(avgShotsMade) + "%");
 
     }
 }

@@ -62,6 +62,10 @@ public class BasketballGame implements Serializable {
             basketballGame.put("three_pointers", mThreePoints);
             basketballGame.put("start_time", getStartTimeISOString());
             basketballGame.put("end_time", getEndTimeISOString());
+            basketballGame.put("possessions", mPossessions);
+            basketballGame.put("distance", mDistance);
+            basketballGame.put("duration", mDuration);
+            basketballGame.put("shots_attempted", mShotsAttempted);
         } catch (JSONException e) {
             e.printStackTrace();
         }
