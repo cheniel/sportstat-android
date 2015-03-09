@@ -298,11 +298,6 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         return feed;
     }
 
-
-
-
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

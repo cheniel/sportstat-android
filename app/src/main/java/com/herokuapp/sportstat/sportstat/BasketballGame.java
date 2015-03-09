@@ -55,7 +55,6 @@ public class BasketballGame implements Serializable {
         mComment = "";
         mShotsAttempted = -1;
 
-
     }
 
     public JSONObject getJSONObject() {
@@ -72,6 +71,8 @@ public class BasketballGame implements Serializable {
             basketballGame.put("possessions", mPossessions);
             basketballGame.put("distance", mDistance);
             basketballGame.put("duration", mDuration);
+            basketballGame.put("lat", mFirstLat);
+            basketballGame.put("long", mFirstLon);
             basketballGame.put("shots_attempted", mShotsAttempted);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -118,7 +119,6 @@ public class BasketballGame implements Serializable {
 
         String avatarId = j.optString("user_avatar");
         if(avatarId!=null&&(!avatarId.equals("null") )){
-
             bg.setmImageIdentifier(Integer.parseInt(avatarId));
         }else{
             bg.setmImageIdentifier(9);
@@ -127,6 +127,31 @@ public class BasketballGame implements Serializable {
         String endTime = j.optString("end_time");
         if (endTime != null) {
             bg.setEndTime(endTime);
+        }
+
+        int shotsAttempted = j.optInt("shots_attempted", -1);
+        if (shotsAttempted != -1) {
+            bg.setShotsAttempted(shotsAttempted);
+        }
+
+        int possessions = j.optInt("possessions",-1);
+        if (possessions != -1) {
+            bg.setPossessions(possessions);
+        }
+
+        double distance = j.optDouble("distance");
+        if (!Double.isNaN(distance)) {
+            bg.setDistance(distance);
+        }
+
+        double lon = j.optDouble("long");
+        if (!Double.isNaN(lon)) {
+            bg.setFirstLon(lon);
+        }
+
+        double lat = j.optDouble("lat");
+        if (!Double.isNaN(lat)) {
+            bg.setFirstLat(lat);
         }
 
         return bg;
