@@ -142,7 +142,7 @@ public class GameSummaryActivity extends Activity {
         int shotsMade = mTwoPoints+mThreePoints;
         String shotsMadePctStr = "";
         if(mShotsAttempted > 0){
-            shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100+"%";
+            shotsMadePctStr = ""+(shotsMade/(double)mShotsAttempted)*100+"%";
 
             statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
                     +lineSep+"Shots Made %age: "+shotsMadePctStr+lineSep+"Possessions: "+mPossessions

@@ -214,7 +214,7 @@ public class MyProfileFragment extends Fragment implements StatsFragment.OnFragm
                                     String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
                                     try{
-                                        Integer.parseInt(mStatScore);
+                                        Double.parseDouble(mStatScore);
                                     }catch (Exception e){
 
                                         mStatScore = "0";
@@ -253,28 +253,36 @@ public class MyProfileFragment extends Fragment implements StatsFragment.OnFragm
 
     private void displayAverages(ArrayList<BasketballGame> mBasketballGames) {
 
-        double avgAssists, avgTwos, avgThrees;
+        double avgAssists, avgTwos, avgThrees, avgShotsMade = 0;
 
         int assistsSum = 0;
         int twosSum = 0;
         int threesSum = 0;
+        int attempts = 0;
         int count = 0;
+
+        int twosSumShotsPct = 0;
+        int threeSumShotsPct = 0;
+
         TextView avgTextView = (TextView) getView().findViewById(R.id.avg_stats_text_view);
 
-
-        for(BasketballGame game : mBasketballGames){
+        for (BasketballGame game : mBasketballGames) {
             count++;
-            assistsSum+=game.getAssists();
-            twosSum+=game.getTwoPoints();
-            threesSum+=game.getThreePoints();
+            assistsSum += game.getAssists();
+            twosSum += game.getTwoPoints();
+            threesSum += game.getThreePoints();
+            attempts += game.getShotsAttempted();
+            if(game.getShotsAttempted()>0){
+                twosSumShotsPct+=game.getTwoPoints();
+                threeSumShotsPct+=game.getThreePoints();
+            }
         }
 
+        Log.d(TAG, "AAA: FriendView sums:"+assistsSum+" "+twosSum+" "+threesSum );
 
-        avgAssists = assistsSum/((double)count);
-        avgTwos = twosSum/((double)count);
-        avgThrees = threesSum/((double)count);
-
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        avgAssists = assistsSum / ((double) count);
+        avgTwos = twosSum / ((double) count);
+        avgThrees = threesSum / ((double) count);
 
 
         if((""+avgAssists).equals("NaN")){
@@ -288,13 +296,19 @@ public class MyProfileFragment extends Fragment implements StatsFragment.OnFragm
             avgThrees = 0;
         }
 
-
-        mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
-
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String linesep = System.getProperty("line.separator");
-        avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
-                +decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees));
 
+        mStatScore = decimalFormat.format(avgAssists + avgTwos + avgThrees);
+        if (attempts > 0) {
+            avgShotsMade = ((twosSumShotsPct+threeSumShotsPct) / (double)attempts) * 100;
+            avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
+                    + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees)
+                    + linesep + "Average Shots Made: " + decimalFormat.format(avgShotsMade) + "%");
+        } else {
+            avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
+                    + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees));
+        }
     }
 
     private ArrayList<BasketballGame> getBasketballGameListFromJSONArray(JSONArray newsfeed) {

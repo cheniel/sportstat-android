@@ -28,8 +28,8 @@
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textSize="50sp"
-            android:layout_weight=".9"
+            android:textSize="44sp"
+            android:layout_weight=".6"
             android:text="0" />
 
     </LinearLayout>
@@ -56,8 +56,8 @@
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textSize="50sp"
-            android:layout_weight=".9"
+            android:textSize="44sp"
+            android:layout_weight=".6"
             android:text="0" />
 
     </LinearLayout>
@@ -84,8 +84,8 @@
             android:layout_width="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_height="wrap_content"
-            android:textSize="50sp"
-            android:layout_weight=".9"
+            android:textSize="44sp"
+            android:layout_weight=".6"
             android:text="0" />
 
     </LinearLayout>

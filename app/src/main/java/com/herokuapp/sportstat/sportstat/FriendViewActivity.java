@@ -268,7 +268,6 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         return feed;
     }
-
     private void displayAverages(ArrayList<BasketballGame> mBasketballGames) {
 
         double avgAssists, avgTwos, avgThrees, avgShotsMade = 0;
@@ -278,6 +277,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         int threesSum = 0;
         int attempts = 0;
         int count = 0;
+
+        int twosSumShotsPct = 0;
+        int threeSumShotsPct = 0;
+
         TextView avgTextView = (TextView) findViewById(R.id.avg_stats_text_view);
 
         for (BasketballGame game : mBasketballGames) {
@@ -286,6 +289,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             twosSum += game.getTwoPoints();
             threesSum += game.getThreePoints();
             attempts += game.getShotsAttempted();
+            if(game.getShotsAttempted()>0){
+                twosSumShotsPct+=game.getTwoPoints();
+                threeSumShotsPct+=game.getThreePoints();
+            }
         }
 
         Log.d(TAG, "AAA: FriendView sums:"+assistsSum+" "+twosSum+" "+threesSum );
@@ -311,7 +318,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         mStatScore = decimalFormat.format(avgAssists + avgTwos + avgThrees);
         if (attempts > 0) {
-            avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
+            avgShotsMade = ((twosSumShotsPct+threeSumShotsPct) / (double)attempts) * 100;
             avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
                     + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees)
                     + linesep + "Average Shots Made: " + decimalFormat.format(avgShotsMade) + "%");
@@ -320,6 +327,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                     + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees));
         }
     }
+
 
     private void addFriendToFriendList(int addUserId, final int toUserId) {
         // create post object
