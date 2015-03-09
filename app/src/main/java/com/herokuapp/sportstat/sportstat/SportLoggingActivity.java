@@ -588,6 +588,9 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
 
                     if (mLastLocation != null){
                         mDistanceTraveled += distanceFormula(loc, mLastLocation);
+                    } else {
+                        mGame.setFirstLat(lat);
+                        mGame.setFirstLon(lon);
                     }
 
                     mLocList.add(loc);

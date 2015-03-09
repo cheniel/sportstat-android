@@ -35,6 +35,9 @@ public class BasketballGame implements Serializable {
     private double mDistance;
     private long mDuration;
 
+    private double mFirstLat;
+    private double mFirstLon;
+
     private static final long serialVersionUID = 1L;
 
     public BasketballGame() {
@@ -305,5 +308,21 @@ public class BasketballGame implements Serializable {
 
     public void setDistance(double Distance) {
         this.mDistance = Distance;
+    }
+
+    public double getFirstLat() {
+        return mFirstLat;
+    }
+
+    public void setFirstLat(double mFirstLat) {
+        this.mFirstLat = mFirstLat;
+    }
+
+    public double getFirstLon() {
+        return mFirstLon;
+    }
+
+    public void setFirstLon(double mFirstLon) {
+        this.mFirstLon = mFirstLon;
     }
 }

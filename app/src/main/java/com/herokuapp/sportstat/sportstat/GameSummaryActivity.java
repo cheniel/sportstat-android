@@ -15,6 +15,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.herokuapp.sportstat.sportstat.R;
 
 
@@ -40,6 +43,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /*
  * Created by John Rigby on 2/26/15
@@ -62,6 +67,9 @@ public class GameSummaryActivity extends Activity {
     private int mShotsMade;
     private int mShotsAttempted;
     private String mTime;
+    private LatLng mFirstLocation;
+    private String mFirstLocationGeocodeString;
+    private Geocoder mGeocoder;
 
     BasketballGame mGame;
 
@@ -93,6 +101,30 @@ public class GameSummaryActivity extends Activity {
         mPossessions = mGame.getPossessions();
         mDistanceRan = mGame.getDistance();
         mDuration = mGame.getDuration();
+
+        mFirstLocation = new LatLng(mGame.getFirstLat(), mGame.getFirstLon());
+        mGeocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            List<Address> addresses =
+                    mGeocoder.getFromLocation(mFirstLocation.latitude, mFirstLocation.longitude, 1);
+            if (addresses.size() > 0) {
+                Address address = addresses.get(0);
+                StringBuilder sb = new StringBuilder();
+
+                for (int j = 0; j < address.getMaxAddressLineIndex(); j++)
+                    sb.append(address.getAddressLine(j)).append("\n");
+
+                sb.append(address.getLocality()).append("\n");
+                sb.append(address.getPostalCode()).append("\n");
+                sb.append(address.getCountryName());
+
+                mFirstLocationGeocodeString = sb.toString();
+            }
+        } catch (Exception e){
+            Log.d(TAG, "couldn't get geocoded location");
+            e.printStackTrace();
+        }
 
         //mShotsAttempted = mGame.getShotsAttempted();
 
