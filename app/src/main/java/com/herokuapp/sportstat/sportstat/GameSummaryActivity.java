@@ -344,6 +344,7 @@ public class GameSummaryActivity extends Activity {
 
                     makeToast("Saved!");
                     finish();
+                    return "success";
 
                 } catch (Exception e) {
                     e.printStackTrace();
