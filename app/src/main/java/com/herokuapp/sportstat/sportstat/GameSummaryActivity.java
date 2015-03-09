@@ -102,7 +102,6 @@ public class GameSummaryActivity extends Activity {
         mDistanceRan = mGame.getDistance();
         mDuration = mGame.getDuration();
 
-<<<<<<< HEAD
         mFirstLocation = new LatLng(mGame.getFirstLat(), mGame.getFirstLon());
         mGeocoder = new Geocoder(this, Locale.getDefault());
 
@@ -126,10 +125,8 @@ public class GameSummaryActivity extends Activity {
             Log.d(TAG, "couldn't get geocoded location");
             e.printStackTrace();
         }
-=======
 
         //mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
->>>>>>> f68bf42e60992504f84797fb69aed362b2218178
 
         //mShotsAttempted = mGame.getShotsAttempted();
 
