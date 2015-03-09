@@ -120,7 +120,9 @@ public class HistoryFragment extends ListFragment {
             ArrayList<HashMap<String, String>> games = new ArrayList<>();
             mGamesArray = gamesArray;
 
-            for (BasketballGame game : gamesArray) {
+            for (int i = gamesArray.size()-1; i >=0; i--) {
+
+                BasketballGame game = gamesArray.get(i);
 
                 HashMap<String, String> map = new HashMap<String, String>();
                 map.put(KEY_ID, "" + game.getUserId()); //Stores user ID as string...
