@@ -53,7 +53,7 @@ public class LeaderBoardFragment extends ListFragment {
     public static final String KEY_ARTIST = "artist";
     public static final String KEY_DURATION = "duration";
     public static final String KEY_THUMB_URL = "thumb_url";
-    private static final String TAG = "dis tag";
+    private static final String TAG = "LeaderboardFragment: ";
 
     ListView list;
     LazyAdapter mAdapter;
@@ -247,16 +247,16 @@ public class LeaderBoardFragment extends ListFragment {
     }
 
     @Override
-    //When user clicks someone's newsfeed entry, bring them to that users' page
+    //When user clicks someone's leaderboard entry, bring them to that users' page
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
         Intent intent = new Intent(this.getActivity(), FriendViewActivity.class);
         HashMap<String, String> selectedItem = mFriendsArray.get(position);
 
-        intent.putExtra(FriendViewActivity.USERNAME,selectedItem.get(KEY_USERNAME));
+        intent.putExtra(FriendViewActivity.USERNAME, selectedItem.get(KEY_USERNAME));
         Log.d(TAG, selectedItem.get(KEY_ID));
-        intent.putExtra(FriendViewActivity.USER_ID, selectedItem.get(KEY_ID));
+        intent.putExtra(FriendViewActivity.USER_ID, Integer.parseInt(selectedItem.get(KEY_ID)));
 
         startActivity(intent);
 
