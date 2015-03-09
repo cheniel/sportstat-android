@@ -203,15 +203,10 @@ public class NewsfeedFragment extends ListFragment {
 
             Log.d(TAG, "CCC: nFFinal: "+game.getmImageIdentifier());
 
-
             mGamesArray.add(map);
-
         }
 
-
-
         mAdapter = new LazyAdapter(this.getActivity(), mGamesArray, true, false, getActivity());
-
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
         setListAdapter(mAdapter);
@@ -244,7 +239,6 @@ public class NewsfeedFragment extends ListFragment {
         intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "newsfeed_fragment");
 
         startActivity(intent);
-
 
 
     }

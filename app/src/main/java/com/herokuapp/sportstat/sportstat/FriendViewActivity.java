@@ -92,7 +92,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         // int id = getResources().getIdentifier("res:drawable/blank_profile.gif", null, null);
 
         ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
-        if(mImageID!=null){
+        if(mImageID!=null && !mImageID.equals("null")){
             LazyAdapter.setImage(Integer.parseInt(mImageID), imageView);
         }else {
             imageView.setImageResource(R.drawable.blank_profile);
