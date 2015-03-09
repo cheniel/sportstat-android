@@ -269,6 +269,7 @@ public class LeaderBoardFragment extends ListFragment {
         intent.putExtra(FriendViewActivity.USERNAME, selectedItem.get(KEY_USERNAME));
         Log.d(TAG, selectedItem.get(KEY_ID));
         intent.putExtra(FriendViewActivity.USER_ID, Integer.parseInt(selectedItem.get(KEY_ID)));
+        intent.putExtra(FriendViewActivity.IMG_ID, selectedItem.get(KEY_THUMB_URL));
 
         startActivity(intent);
 
