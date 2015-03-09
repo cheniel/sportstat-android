@@ -132,6 +132,12 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         String linesep = System.getProperty("line.separator");
         String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
+        try{
+            Integer.parseInt(mStatScore);
+        }catch (Exception e){
+
+            mStatScore = "0";
+        }
         textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
 
@@ -214,7 +220,6 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
                                     String linesep = System.getProperty("line.separator");
                                     String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Globals.USERNAME, "");
 
-                                    textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
                                     if(mBasketballGames.size()==0){
                                         histFrag.updateView(mBasketballGames, getActivity(), false);
@@ -266,6 +271,8 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
 
 
 
+
+
         avgAssists = assistsSum/((double)count);
         avgTwos = twosSum/((double)count);
         avgThrees = threesSum/((double)count);
@@ -273,6 +280,13 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
+
+
+        if((""+avgAssists).equals("NaN")){
+            avgAssists = 0;
+            avgTwos = 0;
+            avgThrees = 0;
+        }
 
 
         String linesep = System.getProperty("line.separator");

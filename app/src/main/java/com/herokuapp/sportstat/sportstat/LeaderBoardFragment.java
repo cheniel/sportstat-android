@@ -202,8 +202,13 @@ public class LeaderBoardFragment extends ListFragment {
                 map.put(KEY_THUMB_URL,friend.getString("avatar"));
 
                
-
-                map.put(KEY_STATSCORE, findStatScore(feed));
+                String statScore = findStatScore(feed);
+                Log.d(TAG, "dis score: "+statScore);
+                if(statScore.equals("NaN")){
+                    statScore = "0";
+                }
+                map.put(KEY_STATSCORE, statScore);
+                map.put(KEY_STATSCORE, statScore);
 
                 mFriendsArray.add(map);
 
@@ -223,8 +228,18 @@ public class LeaderBoardFragment extends ListFragment {
     }
 
     private int comparison(String stat1, String stat2) {
-        double stat1int = Double.parseDouble(stat1);
-        double stat2int = Double.parseDouble(stat2);
+        double stat1int, stat2int;
+        //Correcting for cases where the user has no statscore yet (when they haven't logged any games)
+        try {
+            stat1int = Double.parseDouble(stat1);
+        }catch(Exception e){
+            stat1int = -(Integer.MAX_VALUE);
+        }
+        try {
+            stat2int = Double.parseDouble(stat2);
+        }catch(Exception e){
+            stat2int = stat1int++;
+        }
         int retInt = 0;
         if(stat1int>stat2int) retInt=-1;
         else if(stat2int>stat1int) retInt= 1;

@@ -122,7 +122,13 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         String linesep = System.getProperty("line.separator");
 
-        textView.setText(mUserName + linesep + "StatScore: " + mStatScore);
+        try{
+            Integer.parseInt(mStatScore);
+        }catch (Exception e){
+
+            mStatScore = "0";
+        }
+        textView.setText(mUserName+linesep+"StatScore: "+mStatScore);
 
 
         // Define SlidingTabLayout (shown at top)
@@ -288,7 +294,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         avgTwos = twosSum / ((double) count);
         avgThrees = threesSum / ((double) count);
 
-       Log.d(TAG, "AAA: FriendView averages:"+avgAssists+" "+avgTwos+" "+avgThrees);
+
+        if((""+avgAssists).equals("NaN")){
+            avgAssists = 0;
+            avgTwos = 0;
+            avgThrees = 0;
+        }
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String linesep = System.getProperty("line.separator");

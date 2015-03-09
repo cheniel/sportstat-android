@@ -178,8 +178,6 @@ public class NewsfeedFragment extends ListFragment {
     }
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-
-
     private void updateView(ArrayList<BasketballGame> gamesArray) {
         mGamesArray.clear();
 
@@ -191,10 +189,10 @@ public class NewsfeedFragment extends ListFragment {
             HashMap<String, String> map = new HashMap<String, String>();
             map.put(KEY_ID, ""+game.getUserId()); //Stores user ID as string...
 
-            String capUserName = game.getUsername().substring(0,1).toUpperCase()
-                    + game.getUsername().substring(1, game.getUsername().length());
+//            String capUserName = game.getUsername().substring(0,1).toUpperCase()
+//                    + game.getUsername().substring(1, game.getUsername().length());
 
-            map.put(KEY_USERNAME, capUserName);
+            map.put(KEY_USERNAME, game.getUsername());
             map.put(KEY_TITLE, game.toStringForNewsFeed());
             map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
             map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
