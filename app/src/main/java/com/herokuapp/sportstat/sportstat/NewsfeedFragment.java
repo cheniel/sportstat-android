@@ -180,7 +180,7 @@ public class NewsfeedFragment extends ListFragment {
 
     private void updateView(ArrayList<BasketballGame> gamesArray) {
         mGamesArray.clear();
-        
+
         ArrayList<HashMap<String, String>> games = new ArrayList<>();
 
 

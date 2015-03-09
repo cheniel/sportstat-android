@@ -69,16 +69,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_view);
 
-
         mUserName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
 
-
         mCurrentUserId = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
-
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -86,6 +82,9 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             if (mPassedUserId == -1){
                 Log.d(TAG, "failed to get user id from intent");
                 Toast.makeText(this, "User Not Found", Toast.LENGTH_SHORT);
+                mPassedUserId = mCurrentUserId;
+            }else {
+                isAlreadyFollowing = amAlreadyFollowing(mPassedUserId);
             }
             mUserName = extras.getString(USERNAME, null);
         }
@@ -102,9 +101,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         if (mCurrentUserId != mPassedUserId) {
             mFollowButton.setVisibility(View.VISIBLE);
             mFollowButton.setEnabled(true);
-
             mFollowButton.setText("Follow");
-
             mFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,9 +109,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                         mFollowButton.setText("Unfollow");
                         isAlreadyFollowing = true;
                         addFriendToFriendList(mPassedUserId, mCurrentUserId);
+                        mFollowButton.setEnabled(false);
                     } else {
-                        mFollowButton.setText("Follow");
-                        isAlreadyFollowing = false;
+                        //mFollowButton.setText("Follow");
+                        //isAlreadyFollowing = false;
                     }
                 }
             });
@@ -171,7 +169,53 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
     }
 
-    private void addFriendToFriendList(int addUserId, int toUserId) {
+    private void addFriendToFriendList(int addUserId, final int toUserId) {
+        // create post object
+        final JSONObject post = new JSONObject();
+        try {
+            post.put("follower_id", toUserId);
+            post.put("following_id", addUserId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String registrationResponseString = CloudUtilities.post(
+                        getString(R.string.sportstat_url)
+                                + "users/" + toUserId + "/user_relationships.json", post);
+
+                Log.d(getLocalClassName(), registrationResponseString);
+
+                try {
+                    JSONObject registrationResponse = new JSONObject(registrationResponseString);
+
+                    if (registrationResponse.has("status")) {
+                        makeToast("Follow failed.");
+                        return "failure";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "success";
+            }
+
+            private void makeToast(final String toast) {
+                handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }.execute();
     }
 
     @Override
@@ -298,5 +342,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                 + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees)
                 + linesep + "Average Shots Made: " + decimalFormat.format(avgShotsMade) + "%");
 
+    }
+
+    private boolean amAlreadyFollowing(int id){
+
+        return false;
     }
 }
