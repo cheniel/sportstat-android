@@ -94,6 +94,7 @@ public class GameSummaryActivity extends Activity {
         mDistanceRan = mGame.getDistance();
         mDuration = mGame.getDuration();
 
+
         //mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
 
         int shotsMade = mTwoPoints+mThreePoints;
@@ -341,6 +342,7 @@ public class GameSummaryActivity extends Activity {
 
         Intent i = new Intent(this, FriendViewActivity.class);
         final String enteredUserName = mGame.getUsername();
+        Log.d(TAG, "FUCKING USERNAME: "+enteredUserName);
         final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
 
         final Handler handler = new Handler(Looper.getMainLooper());
@@ -366,7 +368,7 @@ public class GameSummaryActivity extends Activity {
                         makeToast("Friend exists!");
 
                         Intent intent = new Intent(".activities.FriendViewActivity");
-                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
+                        intent.putExtra(FriendViewActivity.USER_ID, ""+userJSON.getInt("id"));
                         intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
                         startActivity(intent);
 

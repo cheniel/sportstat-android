@@ -127,16 +127,22 @@ public class NewsfeedFragment extends ListFragment {
                         getString(R.string.sportstat_url) + "users/" + userId
                                  + "/feed.json");
 
-                Log.d(getActivity().getLocalClassName(), newsfeedString);
+                String userInfoStr = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "users/" + userId
+                                + ".json");
+
+                Log.d(TAG, "FUCK THIS SHIT: "+userInfoStr);
 
                 try {
                     final JSONArray newsfeed = new JSONArray(newsfeedString);
+                    final JSONObject userInfo = new JSONObject(userInfoStr);
+
 
                     handler.post(
                         new Runnable() {
                             @Override
                             public void run() {
-                                updateViewUsingJSONArray(newsfeed);
+                                updateViewUsingJSONArray(newsfeed, userInfo);
                             }
                         }
                     );
@@ -154,7 +160,7 @@ public class NewsfeedFragment extends ListFragment {
 
     }
 
-    private void updateViewUsingJSONArray(JSONArray newsfeed) {
+    private void updateViewUsingJSONArray(JSONArray newsfeed, JSONObject userInfo) {
         ArrayList<BasketballGame> feed = new ArrayList<>();
 
         for (int i = 0; i < newsfeed.length(); i++) {
@@ -168,11 +174,18 @@ public class NewsfeedFragment extends ListFragment {
             }
         }
 
-        updateView(feed);
+        String imgId = "";
+        try{
+           imgId = userInfo.getString("avatar");
+        } catch(Exception e){
+            imgId = "9";
+        }
+
+        updateView(feed, imgId);
     }
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    private void updateView(ArrayList<BasketballGame> gamesArray) {
+    private void updateView(ArrayList<BasketballGame> gamesArray, String imgId) {
        ArrayList<HashMap<String, String>> games = new ArrayList<>();
 
         for(BasketballGame game : gamesArray){
@@ -188,9 +201,8 @@ public class NewsfeedFragment extends ListFragment {
             map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
             map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
             map.put(KEY_THREES, " "+game.getThreePoints()+" ");
-            //map.put(KEY_ARTIST, game.getLocation());
-            //map.put(KEY_DURATION, game.get)
-           // map.put(KEY_THUMB_URL, (user profile link))
+            map.put(KEY_THUMB_URL, imgId);
+
 
             mGamesArray.add(map);
 
@@ -221,7 +233,8 @@ public class NewsfeedFragment extends ListFragment {
         HashMap<String, String> selectedItem = mGamesArray.get(position);
         BasketballGame selectedGame = new BasketballGame();
         selectedGame.setUsername(selectedItem.get(KEY_USERNAME));
-        selectedGame.setUserId(Long.parseLong(selectedItem.get(KEY_ID)));
+        selectedGame.setUserId(Integer.parseInt(selectedItem.get(KEY_ID)));
+        Log.d(TAG, "DIS USER ID: "+Integer.parseInt(selectedItem.get(KEY_ID)));
         selectedGame.setAssists(Integer.parseInt(selectedItem.get(KEY_ASSISTS).substring(1,2)));
         selectedGame.setTwoPoints(Integer.parseInt(selectedItem.get(KEY_TWOS).substring(1,2)));
         selectedGame.setThreePoints(Integer.parseInt(selectedItem.get(KEY_THREES).substring(1,2)));
@@ -232,61 +245,7 @@ public class NewsfeedFragment extends ListFragment {
 
         startActivity(intent);
 
-//        Intent i = new Intent(this.getActivity(), FriendViewActivity.class);
-//        final String enteredUserName = mGamesArray.get(position).get(KEY_USERNAME);
-//        final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
-//
-//        final Handler handler = new Handler(Looper.getMainLooper());
-//        new AsyncTask<String, Void, String>() {
-//
-//            @Override
-//            protected String doInBackground(String... arg0) {
-//                String userLookupResponseString = CloudUtilities.getJSON(
-//                        getString(R.string.sportstat_url) + "user_id/" +
-//                                correctUserName + ".json");
-//
-//                Log.d(TAG, userLookupResponseString);
-//
-//                try {
-//                    JSONObject userJSON = new JSONObject(userLookupResponseString);
-//
-//                    if (userJSON.has("status")) {
-//                        makeToast("Friend does not exist");
-//                        return "failure";
-//                    }
-//
-//                    if (userJSON.has("id")) {
-//                        makeToast("Friend exists!");
-//
-//                        Intent intent = new Intent(".activities.FriendViewActivity");
-//                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
-//                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
-//                        startActivity(intent);
-//
-//                        return "success";
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                makeToast("Friend does not exist.");
-//                return "failure";
-//            }
-//
-//            private void makeToast(final String toast) {
-//                handler.post(
-//                        new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Toast.makeText(getActivity().getApplicationContext(),
-//                                        toast, Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                );
-//            }
-//        }.execute();
-//
+
 
     }
 

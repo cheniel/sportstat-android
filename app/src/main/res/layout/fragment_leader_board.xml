@@ -5,6 +5,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingStart="0dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/switch_friend_tab"
+    android:id="@+id/friends_switch_text_id"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_alignTop="@+id/textView"
+    android:layout_toStartOf="@+id/leaderboard_switch_id" />
+
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:switchMinWidth="80dp"
+        android:gravity="center"
+        android:layout_height="50dp"
+        android:padding="5dp"
+        android:textOff = "@string/leaderboard_local_text"
+        android:textOn = "@string/leaderboard_global_text"
+        android:id="@+id/leaderboard_switch_id"
+
+
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:text="@string/switch_global_tab"
+            android:layout_toEndOf="@id/leaderboard_switch_id"
+            android:id="@+id/textView" />
+
+    </RelativeLayout>
+
+
 
 
     <ListView

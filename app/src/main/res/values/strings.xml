@@ -84,5 +84,11 @@
     <string name="threesName">3-POINTS:</string>
     <string name="ui_button_view_title">View User Profile</string>
     <string name="stat_score_text">StatScore:</string>
+    <string name="leaderboard_local_text">Friends</string>
+    <string name="leaderboard_global_Text">Global</string>
+    <string name="leaderboard_global_text">Global</string>
+    <string name="switch_friend_tab">Friends</string>
+    <string name="switch_global_tab">Global</string>
+    <string name="remind_to_log">Log some games!</string>
 
 </resources>

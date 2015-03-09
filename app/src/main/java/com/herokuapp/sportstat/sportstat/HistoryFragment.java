@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
 
@@ -54,6 +55,8 @@ public class HistoryFragment extends ListFragment {
     public static final String KEY_DURATION = "duration";
     public static final String KEY_THUMB_URL = "thumb_url";
     private static final String TAG = "dis tag";
+
+    private boolean mIsEntries;
 
 
     /**
@@ -106,38 +109,48 @@ public class HistoryFragment extends ListFragment {
 
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    public void updateView(ArrayList<BasketballGame> gamesArray, Context context) {
-        ArrayList<HashMap<String, String>> games = new ArrayList<>();
-        mGamesArray = gamesArray;
+    public void updateView(ArrayList<BasketballGame> gamesArray, Context context, boolean isEntries) {
 
-        for(BasketballGame game : gamesArray){
+        mIsEntries = isEntries;
 
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put(KEY_ID, ""+game.getUserId()); //Stores user ID as string...
 
-            String capUserName = game.getUsername().substring(0,1).toUpperCase()
-                    + game.getUsername().substring(1, game.getUsername().length());
+        if(mIsEntries) {
 
-            map.put(KEY_USERNAME, capUserName);
-            map.put(KEY_TITLE, game.toStringForHistory());
-            map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
-            map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
-            map.put(KEY_THREES, " "+game.getThreePoints()+" ");
-            //map.put(KEY_ARTIST, game.getLocation());
-            //map.put(KEY_DURATION, game.get)
-            // map.put(KEY_THUMB_URL, (user profile link))
 
-            games.add(map);
+            ArrayList<HashMap<String, String>> games = new ArrayList<>();
+            mGamesArray = gamesArray;
+
+            for (BasketballGame game : gamesArray) {
+
+                HashMap<String, String> map = new HashMap<String, String>();
+                map.put(KEY_ID, "" + game.getUserId()); //Stores user ID as string...
+
+                String capUserName = game.getUsername().substring(0, 1).toUpperCase()
+                        + game.getUsername().substring(1, game.getUsername().length());
+
+                map.put(KEY_USERNAME, capUserName);
+                map.put(KEY_TITLE, game.toStringForHistory());
+                map.put(KEY_ASSISTS, " " + game.getAssists() + " ");
+                map.put(KEY_TWOS, " " + game.getTwoPoints() + " ");
+                map.put(KEY_THREES, " " + game.getThreePoints() + " ");
+                //map.put(KEY_ARTIST, game.getLocation());
+                //map.put(KEY_DURATION, game.get)
+                // map.put(KEY_THUMB_URL, (user profile link))
+
+                games.add(map);
+
+            }
+
+
+            LazyAdapter adapter = new LazyAdapter(this.getActivity(), games, false, false, getActivity());
+
+
+            //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
+            setListAdapter(adapter);
+
+        }else{
 
         }
-
-
-
-        LazyAdapter adapter = new LazyAdapter(this.getActivity(), games, false, false, getActivity());
-
-
-        //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
-        setListAdapter(adapter);
     }
 
     @Override

@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -155,11 +156,10 @@ public class StatsFragment extends Fragment {
         multiRenderer.setXLabels(0);
         multiRenderer.setChartTitle(c.getString(R.string.stats_chart_title));
 
-        multiRenderer.setXTitle("Entries from " + mGamesArray.get(0).getTimeString()
-                + " to " + mGamesArray.get(mGamesArray.size() - 1).getTimeString());
-        //multiRenderer.setXTitle(getString(R.string.stats_chart_x_label));
-        // multiRenderer.setYTitle(getString(R.string.stats_chart_y_label));
-
+          multiRenderer.setXTitle("Entries from " + mGamesArray.get(0).getTimeString()
+                  + " to " + mGamesArray.get(mGamesArray.size() - 1).getTimeString());
+          //multiRenderer.setXTitle(getString(R.string.stats_chart_x_label));
+          // multiRenderer.setYTitle(getString(R.string.stats_chart_y_label));
 
         /***
          * Customizing graphs
@@ -327,11 +327,16 @@ public class StatsFragment extends Fragment {
     }
 
     //Update graphs in the StatsFragent
-    public void updateStats(ArrayList<BasketballGame> gamesArray, Context context) {
-        Log.d(TAG, "Update stats");
-        mGamesArray = gamesArray;
-
-        openChart(context);
+    public void updateStats(ArrayList<BasketballGame> gamesArray, Context context, boolean areEntries) {
+        TextView reminder = (TextView) getView().findViewById(R.id.remind_to_log_text_id);
+        if(areEntries) {
+            mGamesArray = gamesArray;
+            reminder.setVisibility(View.INVISIBLE);
+            openChart(context);
+        }else{
+            reminder.setVisibility(View.VISIBLE);
+            reminder.setText(context.getString(R.string.remind_to_log));
+        }
 
     }
 
