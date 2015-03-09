@@ -100,6 +100,7 @@ public class GameSummaryActivity extends Activity {
         mShotsAttempted = mGame.getShotsAttempted();
         mDistanceRan = mGame.getDistance();
         mDuration = mGame.getDuration();
+        Log.d(getLocalClassName(), "duration:" + mDuration);
 
         mFirstLocation = new LatLng(mGame.getFirstLat(), mGame.getFirstLon());
         mGeocoder = new Geocoder(this, Locale.getDefault());

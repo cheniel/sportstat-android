@@ -92,9 +92,6 @@ public class LazyAdapter extends BaseAdapter {
 
         }
 
-
-        Log.d(TAG, "WHY");
-
         song = data.get(position);
 
 
