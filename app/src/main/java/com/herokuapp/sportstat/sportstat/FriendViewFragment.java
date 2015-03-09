@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 
 import org.json.JSONArray;
@@ -122,7 +123,9 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         super.onResume();
 
         ImageView imageView = (ImageView) getView().findViewById(R.id.profile_image_view);
-        imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(Globals.USER_PROFILE_IMG_ID, 99));
+        int profilePicId = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(Globals.USER_PROFILE_IMG_ID, 99);
+        LazyAdapter.setImage(profilePicId, imageView);
+       
 
 
         TextView textView = (TextView) getView().findViewById(R.id.profile_text_edit);
