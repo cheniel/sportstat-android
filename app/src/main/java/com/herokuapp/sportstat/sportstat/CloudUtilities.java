@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -101,6 +102,21 @@ public class CloudUtilities {
             e.printStackTrace();
         }
         return builder.toString();
+    }
+
+    public static void delete(String address){
+        HttpClient client = new DefaultHttpClient();
+        HttpDelete httpDelete = new HttpDelete(address);
+        try{
+            HttpResponse response = client.execute(httpDelete);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            Log.d("getJSON", "status code for " + address + ": " + statusCode);
+        }catch(ClientProtocolException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
 

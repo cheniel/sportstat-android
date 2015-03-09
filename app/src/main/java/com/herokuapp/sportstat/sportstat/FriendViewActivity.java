@@ -2,6 +2,7 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -57,6 +58,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private String mUserName;
     private int mCurrentUserId;
     private boolean isAlreadyFollowing = false;
+    private int mRelationShipId;
 
 
     @Override
@@ -79,12 +81,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mPassedUserId = extras.getInt(USER_ID, -1);
-            if (mPassedUserId == -1){
+            if (mPassedUserId == -1) {
                 Log.d(TAG, "failed to get user id from intent");
                 Toast.makeText(this, "User Not Found", Toast.LENGTH_SHORT);
                 mPassedUserId = mCurrentUserId;
-            }else {
-                isAlreadyFollowing = amAlreadyFollowing(mPassedUserId);
+            } else {
+                amAlreadyFollowing(mCurrentUserId, mPassedUserId);
             }
             mUserName = extras.getString(USERNAME, null);
         }
@@ -94,14 +96,12 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         ImageView imageView = (ImageView) findViewById(R.id.profile_image_view);
         imageView.setImageResource(PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_PROFILE_IMG_ID, 99));
 
-
         TextView textView = (TextView) findViewById(R.id.profile_text_edit);
         mFollowButton = (Button) findViewById(R.id.button_follow_user);
 
         if (mCurrentUserId != mPassedUserId) {
             mFollowButton.setVisibility(View.VISIBLE);
             mFollowButton.setEnabled(true);
-            mFollowButton.setText("Follow");
             mFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -109,10 +109,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                         mFollowButton.setText("Unfollow");
                         isAlreadyFollowing = true;
                         addFriendToFriendList(mPassedUserId, mCurrentUserId);
-                        mFollowButton.setEnabled(false);
                     } else {
-                        //mFollowButton.setText("Follow");
-                        //isAlreadyFollowing = false;
+                        mFollowButton.setText("Follow");
+                        isAlreadyFollowing = false;
+                        unFollowUser(mRelationShipId);
                     }
                 }
             });
@@ -167,55 +167,6 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             }
         });
 
-    }
-
-    private void addFriendToFriendList(int addUserId, final int toUserId) {
-        // create post object
-        final JSONObject post = new JSONObject();
-        try {
-            post.put("follower_id", toUserId);
-            post.put("following_id", addUserId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-        new AsyncTask<String, Void, String>() {
-
-            @Override
-            protected String doInBackground(String... arg0) {
-                String registrationResponseString = CloudUtilities.post(
-                        getString(R.string.sportstat_url)
-                                + "users/" + toUserId + "/user_relationships.json", post);
-
-                Log.d(getLocalClassName(), registrationResponseString);
-
-                try {
-                    JSONObject registrationResponse = new JSONObject(registrationResponseString);
-
-                    if (registrationResponse.has("status")) {
-                        makeToast("Follow failed.");
-                        return "failure";
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "success";
-            }
-
-            private void makeToast(final String toast) {
-                handler.post(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                );
-            }
-        }.execute();
     }
 
     @Override
@@ -344,8 +295,114 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
     }
 
-    private boolean amAlreadyFollowing(int id){
+    private void addFriendToFriendList(int addUserId, final int toUserId) {
+        // create post object
+        final JSONObject post = new JSONObject();
+        try {
+            post.put("follower_id", toUserId);
+            post.put("following_id", addUserId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        return false;
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String registrationResponseString = CloudUtilities.post(
+                        getString(R.string.sportstat_url)
+                                + "users/" + toUserId + "/user_relationships.json", post);
+
+                Log.d(getLocalClassName(), registrationResponseString);
+
+                try {
+                    JSONObject registrationResponse = new JSONObject(registrationResponseString);
+
+                    if (registrationResponse.has("status")) {
+                        makeToast("Follow failed.");
+                        return "failure";
+                    }
+
+                    if (registrationResponse.has("id")){
+                        mRelationShipId = registrationResponse.getInt("id");
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "success";
+            }
+
+            private void makeToast(final String toast) {
+                handler.post(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            }
+        }.execute();
+    }
+
+    private void amAlreadyFollowing(final int myId, final int potentialId) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String registrationResponseString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url)
+                                + "relationship/" + myId + "/" + potentialId + ".json");
+
+                Log.d(getLocalClassName(), registrationResponseString);
+
+                try {
+                    JSONObject registrationResponse = new JSONObject(registrationResponseString);
+
+                    if (registrationResponse.has("found")) {
+                        isAlreadyFollowing = registrationResponse.getBoolean("found");
+                        if (isAlreadyFollowing){
+                            mRelationShipId = registrationResponse.getInt("id");
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFollowButton.setText("Unfollow");
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFollowButton.setText("Follow");
+                                }
+                            });
+                        }
+                        return "success";
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "failure";
+            }
+        }.execute();
+    }
+
+    private void unFollowUser(final int relationshipId) {
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                CloudUtilities.delete(getString(R.string.sportstat_url) + "user_relationships/" +
+                                relationshipId + ".json");
+
+                return "success";
+            }
+        }.execute();
     }
 }
