@@ -15,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class LeaderBoardFragment extends ListFragment {
     public static final String KEY_ASSISTS = "assists";
     public static final String KEY_TWOS = "twos";
     public static final String KEY_THREES = "threes";
+    public static final String KEY_STATSCORE = "stat_score";
     public static final String KEY_ARTIST = "artist";
     public static final String KEY_DURATION = "duration";
     public static final String KEY_THUMB_URL = "thumb_url";
@@ -60,6 +63,10 @@ public class LeaderBoardFragment extends ListFragment {
     private ArrayList<HashMap<String, String>> mGamesArray;
     private ArrayList<BasketballGame> mBasketballGames;
     private String mStatScore;
+    private Switch mySwitch;
+    private String mUrl;
+    private AsyncTask<String, Void, String> mRefreshView;
+    private ArrayList<HashMap<String, String>> mFriendsArray;
 
 
     /**
@@ -118,94 +125,89 @@ public class LeaderBoardFragment extends ListFragment {
         final int userId = PreferenceManager.getDefaultSharedPreferences(
                 getActivity()).getInt(Globals.USER_ID, -1);
 
+        mySwitch = (Switch) getView().findViewById(R.id.leaderboard_switch_id);
+
+        //check the current state before we display the screen
+        if(mySwitch.isChecked()){
+            mUrl =  getString(R.string.sportstat_url) + "users.json";
+        }
+        else {
+            mUrl = getString(R.string.sportstat_url) + "users/" + userId
+                    + "/following.json";
+        }
+
+
+        //attach a listener to check for changes in state
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                if(isChecked){
+                    mUrl =  getString(R.string.sportstat_url) + "users.json";
+                    Log.d(TAG, "AAAAH");
+
+                }else{
+                   mUrl = getString(R.string.sportstat_url) + "users/" + userId
+                           + "/following.json";
+                }
+                getNewData();
+
+            }
+        });
+
+
+
         if (userId == -1) {
             Log.e(getActivity().getLocalClassName(), "preference error");
             return;
         }
 
-        final Handler handler = new Handler(Looper.getMainLooper());
-        new AsyncTask<String, Void, String>() {
+        getNewData();
 
-            @Override
-            protected String doInBackground(String... arg0) {
-                String newsfeedString = CloudUtilities.getJSON(
-                        getString(R.string.sportstat_url) + "users/" + userId
-                                + "/feed.json");
-
-                Log.d(getActivity().getLocalClassName(), newsfeedString);
-
-                try {
-                    final JSONArray newsfeed = new JSONArray(newsfeedString);
-
-                    handler.post(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    updateViewUsingJSONArray(newsfeed);
-                                }
-                            }
-                    );
-
-
-                    return "success";
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "failure";
-            }
-
-        }.execute();
 
     }
 
 
 
-    private void updateViewUsingJSONArray(JSONArray newsfeed) {
+    private void updateViewUsingJSONArray(JSONArray friends) {
         ArrayList<BasketballGame> feed = new ArrayList<>();
+        mFriendsArray = new ArrayList<>();
 
-        for (int i = 0; i < newsfeed.length(); i++) {
+        for (int i = 0; i < friends.length(); i++) {
             try {
-                JSONObject basketballObject = newsfeed.getJSONObject(i);
-                feed.add (feed.size()-i,
-                        BasketballGame.getBasketballGameFromJSONObject(
-                                basketballObject));
+                JSONObject friend = friends.getJSONObject(i);
+                HashMap<String, String> map = new HashMap<>();
+                map.put(KEY_USERNAME, friend.getString("username"));
+                map.put(KEY_ID, ""+friend.getInt("id"));
+
+
+                JSONArray usersGames = friend.getJSONArray("games");
+                for(int k = 0; k<usersGames.length(); k++){
+                    feed.add (feed.size()-k,
+                            BasketballGame.getBasketballGameFromJSONObject(
+                                    usersGames.getJSONObject(k)));
+                }
+
+                map.put(KEY_STATSCORE, findStatScore(feed));
+
+                mFriendsArray.add(map);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        updateView(feed);
+        updateViewLeaderBoard(mFriendsArray);
     }
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    private void updateView(ArrayList<BasketballGame> gamesArray) {
-        ArrayList<HashMap<String, String>> games = new ArrayList<>();
-
-        for(BasketballGame game : gamesArray){
-
-            HashMap<String, String> map = new HashMap<String, String>();
-            map.put(KEY_ID, ""+game.getUserId()); //Stores user ID as string...
-
-            String capUserName = game.getUsername().substring(0,1).toUpperCase()
-                    + game.getUsername().substring(1, game.getUsername().length());
-
-            map.put(KEY_USERNAME, capUserName);
-            map.put(KEY_TITLE, game.toStringForNewsFeed());
-            map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
-            map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
-            map.put(KEY_THREES, " "+game.getThreePoints()+" ");
-            //map.put(KEY_ARTIST, game.getLocation());
-            //map.put(KEY_DURATION, game.get)
-            // map.put(KEY_THUMB_URL, (user profile link))
-
-            mGamesArray.add(map);
-
-        }
+    private void updateViewLeaderBoard(ArrayList<HashMap<String, String>> friends) {
 
 
 
-        mAdapter = new LazyAdapter(this.getActivity(), mGamesArray, false, true, getActivity());
+        mAdapter = new LazyAdapter(this.getActivity(),friends, false, true, getActivity());
 
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
@@ -224,86 +226,95 @@ public class LeaderBoardFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Intent intent = new Intent(this.getActivity(), GameSummaryActivity.class);
-        HashMap<String, String> selectedItem = mGamesArray.get(position);
-        BasketballGame selectedGame = new BasketballGame();
-        selectedGame.setUsername(selectedItem.get(KEY_USERNAME));
-        selectedGame.setUserId(Long.parseLong(selectedItem.get(KEY_ID)));
-        selectedGame.setAssists(Integer.parseInt(selectedItem.get(KEY_ASSISTS).substring(1,2)));
-        selectedGame.setTwoPoints(Integer.parseInt(selectedItem.get(KEY_TWOS).substring(1,2)));
-        selectedGame.setThreePoints(Integer.parseInt(selectedItem.get(KEY_THREES).substring(1,2)));
+        Intent intent = new Intent(this.getActivity(), FriendViewActivity.class);
+        HashMap<String, String> selectedItem = mFriendsArray.get(position);
 
-
-        intent.putExtra(SportLoggingActivity.BASKETBALL_GAME, selectedGame);
-        intent.putExtra(SportLoggingActivity.CALLING_ACTIVITY, "history_fragment");
+        intent.putExtra(FriendViewActivity.USERNAME,selectedItem.get(KEY_USERNAME));
+        intent.putExtra(FriendViewActivity.USER_ID, selectedItem.get(KEY_ID));
 
         startActivity(intent);
-
-//        Intent i = new Intent(this.getActivity(), FriendViewActivity.class);
-//        final String enteredUserName = mGamesArray.get(position).get(KEY_USERNAME);
-//        final String correctUserName = enteredUserName.substring(0,1).toLowerCase()+enteredUserName.substring(1,enteredUserName.length());
-//
-//        final Handler handler = new Handler(Looper.getMainLooper());
-//        new AsyncTask<String, Void, String>() {
-//
-//            @Override
-//            protected String doInBackground(String... arg0) {
-//                String userLookupResponseString = CloudUtilities.getJSON(
-//                        getString(R.string.sportstat_url) + "user_id/" +
-//                                correctUserName + ".json");
-//
-//                Log.d(TAG, userLookupResponseString);
-//
-//                try {
-//                    JSONObject userJSON = new JSONObject(userLookupResponseString);
-//
-//                    if (userJSON.has("status")) {
-//                        makeToast("Friend does not exist");
-//                        return "failure";
-//                    }
-//
-//                    if (userJSON.has("id")) {
-//                        makeToast("Friend exists!");
-//
-//                        Intent intent = new Intent(".activities.FriendViewActivity");
-//                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
-//                        intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
-//                        startActivity(intent);
-//
-//                        return "success";
-//                    }
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                makeToast("Friend does not exist.");
-//                return "failure";
-//            }
-//
-//            private void makeToast(final String toast) {
-//                handler.post(
-//                        new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Toast.makeText(getActivity().getApplicationContext(),
-//                                        toast, Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                );
-//            }
-//        }.execute();
-//
 
     }
 
 
+    //Take the array of basketball games stored in the user's history and calculate StatScore
+    private String findStatScore(ArrayList<BasketballGame> mBasketballGames) {
+
+        double avgAssists, avgTwos, avgThrees;
+
+        int assistsSum = 0;
+        int twosSum = 0;
+        int threesSum = 0;
+        int count = 0;
+        //TextView avgTextView = (TextView) getView().findViewById(R.id.avg_stats_text_view);
+
+        for(BasketballGame game : mBasketballGames){
+            count++;
+            assistsSum+=game.getAssists();
+            twosSum+=game.getTwoPoints();
+            threesSum+=game.getThreePoints();
+        }
+
+        avgAssists = assistsSum/((double)count);
+        avgTwos = twosSum/((double)count);
+        avgThrees = threesSum/((double)count);
+
+        Log.d(TAG, "AVG NUMBERS: "+avgAssists+" two's" +avgTwos+" threes: "+avgThrees);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
 
+        String statScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
 
 
+        String linesep = System.getProperty("line.separator");
+        //avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
+        //+decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees));
+
+        return statScore;
+
+    }
 
 
+    //Create a new async task to populate the leaderboard
+    public void getNewData(){
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        mRefreshView = new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String resultString = CloudUtilities.getJSON(
+                        mUrl);
+
+
+                //This get's users friends^
+                Log.d(getActivity().getLocalClassName(), resultString);
+
+                try {
+                    final JSONArray leaderfeed = new JSONArray(resultString);
+
+                    handler.post(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateViewUsingJSONArray(leaderfeed);
+                                }
+                            }
+                    );
+
+
+                    return "success";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "failure";
+            }
+
+        }.execute();
+
+    }
 
 
 

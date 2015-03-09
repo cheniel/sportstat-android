@@ -75,13 +75,13 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         mUserName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
 
-        String userName = PreferenceManager.getDefaultSharedPreferences(this).getString(Globals.USERNAME, "");
+
         mCurrentUserId = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
 
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mPassedUserId = extras.getInt(USER_ID, -1);
+            mPassedUserId = Integer.parseInt(extras.getString(USER_ID, ""));
             mUserName = extras.getString(USERNAME, null);
         }
 
@@ -112,6 +112,8 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                     }
                 }
             });
+
+            mCurrentUserId = mPassedUserId;
         }
 
         String linesep = System.getProperty("line.separator");
@@ -174,6 +176,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             uid = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
         } else {
             uid = mPassedUserId;
+            Log.d(TAG, "ID: "+mPassedUserId);
         }
 
         final int userId = uid;
@@ -212,8 +215,14 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
                                     textView.setText(mUserName+linesep+"StatScore: "+mStatScore);
 
-                                    histFrag.updateView(mBasketballGames, getApplicationContext());
-                                    statFrag.updateStats(mBasketballGames, getApplicationContext());
+                                   if(mBasketballGames.size() == 0){
+                                       histFrag.updateView(mBasketballGames, getApplicationContext(), false);
+                                       statFrag.updateStats(mBasketballGames, getApplicationContext(), false);
+                                   }else {
+
+                                       histFrag.updateView(mBasketballGames, getApplicationContext(), true);
+                                       statFrag.updateStats(mBasketballGames, getApplicationContext(), true);
+                                   }
                                 }
                             }
                     );

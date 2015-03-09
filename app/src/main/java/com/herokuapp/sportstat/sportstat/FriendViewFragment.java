@@ -213,9 +213,17 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
 
                                     textView.setText(userName+linesep+"StatScore: "+mStatScore);
 
+                                    if(mBasketballGames.size()==0){
+                                        histFrag.updateView(mBasketballGames, getActivity(), false);
+                                        statFrag.updateStats(mBasketballGames, getActivity(), false);
+                                        slidingTabLayout.setVisibility(View.INVISIBLE);
+                                    }else{
+                                        slidingTabLayout.setVisibility(View.VISIBLE);
+                                        histFrag.updateView(mBasketballGames, getActivity(), true);
+                                        statFrag.updateStats(mBasketballGames, getActivity(), true);
+                                    }
 
-                                    histFrag.updateView(mBasketballGames, getActivity());
-                                    statFrag.updateStats(mBasketballGames, getActivity());
+
                                 }
                             }
                     );

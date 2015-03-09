@@ -6,7 +6,7 @@
     <string name="Start_Game_Tab">Start Game</string>
     <string name="Log_Game_Tab">Log Game</string>
     <string name="My_Profile_Tab">My Profile</string>
-    <string name="Newsfeed_Tab">Newsfeed</string>
+    <string name="Newsfeed_Tab">SportFeed</string>
     <string name="Leaderboard_Tab">Leaderboard</string>
     <string name="Settings_Tab">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -84,5 +84,11 @@
     <string name="threesName">3-POINTS:</string>
     <string name="ui_button_view_title">View User Profile</string>
     <string name="stat_score_text">StatScore:</string>
+    <string name="leaderboard_local_text">Friends</string>
+    <string name="leaderboard_global_Text">Global</string>
+    <string name="leaderboard_global_text">Global</string>
+    <string name="switch_friend_tab">Friends</string>
+    <string name="switch_global_tab">Global</string>
+    <string name="remind_to_log">Log some games!</string>
 
 </resources>

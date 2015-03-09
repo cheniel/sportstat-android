@@ -241,6 +241,7 @@ public class SettingsFragment extends Fragment {
 
         editor.apply();
 
+        Log.d(TAG, "url: "+ act.getString(R.string.sportstat_url) + "users/"+mUserId+".json");
 
         final JSONObject post = new JSONObject();
         try {
@@ -256,13 +257,14 @@ public class SettingsFragment extends Fragment {
             @Override
             protected String doInBackground(String... arg0) {
                 String postResponseString = CloudUtilities.post(
-                        act.getString(R.string.sportstat_url) + "user/"+mUserId+".json", post
+                        act.getString(R.string.sportstat_url) + "users/"+mUserId+".json", post
                 );
 
 
 
                 try {
                     JSONObject postResponse = new JSONObject(postResponseString);
+                    Log.d(TAG, "RESPONSE sTRING FROM SETTINGS: "+postResponseString);
 
                     if (postResponse.has("status")) {
                         Log.d(TAG, "Registration failed.");
@@ -292,7 +294,8 @@ public class SettingsFragment extends Fragment {
 
         if(sharedPref.contains(Globals.USER_PROFILE_IMG_ID)&&getFromSharedPrefs){
             mImageId = sharedPref.getInt(Globals.USER_PROFILE_IMG_ID, 99);
-            mImageView.setImageResource(mImageId);
+            //mImageView.setImageResource(mImageId);
+            setImage(mImageId);
         }
         if(sharedPref.contains(Globals.USERNAME)){
             mNameEditText.setText(sharedPref.getString(Globals.USERNAME, ""));
