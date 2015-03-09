@@ -301,6 +301,9 @@ public class SportStatDialogFragment extends DialogFragment {
 
                                     assists = 0;
                                 }
+
+                                Log.d(TAG, "Assists: "+assists);
+
                                 ((LogGameFragment)parent).setBasketBallGameAssists(assists);
                                 break;
                             case 2:
