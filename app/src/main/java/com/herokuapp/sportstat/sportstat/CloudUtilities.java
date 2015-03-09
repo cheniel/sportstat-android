@@ -75,5 +75,32 @@ public class CloudUtilities {
         }
         return builder.toString();
     }
+
+    public static String patch(String address, JSONObject json) {
+        StringBuilder builder = new StringBuilder();
+        HttpClient client = new DefaultHttpClient();
+        HttpPatch httpPost = new HttpPatch(address);
+        try{
+            httpPost.setEntity(new StringEntity(json.toString()));
+            httpPost.setHeader("Content-Type", "application/json");
+            httpPost.setHeader("Accept", "application/json");
+            HttpResponse response = client.execute(httpPost);
+            StatusLine statusLine = response.getStatusLine();
+            int statusCode = statusLine.getStatusCode();
+            Log.d("postJSON", "status code for " + address + ": " + statusCode);
+            HttpEntity entity = response.getEntity();
+            InputStream content = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+            String line;
+            while((line = reader.readLine()) != null){
+                builder.append(line);
+            }
+        }catch(ClientProtocolException e){
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return builder.toString();
+    }
 }
 

@@ -308,6 +308,8 @@ public class GameSummaryActivity extends Activity {
     //TODO: implement that when the user clicks Save or cancel, they are brought back to Newsfeed
     public void onSaveClicked(View v){
 
+        mGame.setmImageIdentifier(SettingsFragment.mImageId);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         mGame.setUsername(prefs.getString(Globals.USERNAME, null));
         mGame.setUserId(prefs.getInt(Globals.USER_ID, 0));

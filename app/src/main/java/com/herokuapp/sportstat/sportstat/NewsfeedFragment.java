@@ -127,22 +127,18 @@ public class NewsfeedFragment extends ListFragment {
                         getString(R.string.sportstat_url) + "users/" + userId
                                  + "/feed.json");
 
-                String userInfoStr = CloudUtilities.getJSON(
-                        getString(R.string.sportstat_url) + "users/" + userId
-                                + ".json");
 
-                Log.d(TAG, "FUCK THIS SHIT: "+userInfoStr);
 
                 try {
                     final JSONArray newsfeed = new JSONArray(newsfeedString);
-                    final JSONObject userInfo = new JSONObject(userInfoStr);
+
 
 
                     handler.post(
                         new Runnable() {
                             @Override
                             public void run() {
-                                updateViewUsingJSONArray(newsfeed, userInfo);
+                                updateViewUsingJSONArray(newsfeed);
                             }
                         }
                     );
@@ -160,8 +156,9 @@ public class NewsfeedFragment extends ListFragment {
 
     }
 
-    private void updateViewUsingJSONArray(JSONArray newsfeed, JSONObject userInfo) {
+    private void updateViewUsingJSONArray(JSONArray newsfeed) {
         ArrayList<BasketballGame> feed = new ArrayList<>();
+
 
         for (int i = 0; i < newsfeed.length(); i++) {
             try {
@@ -169,23 +166,17 @@ public class NewsfeedFragment extends ListFragment {
                 feed.add (feed.size()-i,
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        String imgId = "";
-        try{
-           imgId = userInfo.getString("avatar");
-        } catch(Exception e){
-            imgId = "9";
-        }
-
-        updateView(feed, imgId);
+        updateView(feed);
     }
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    private void updateView(ArrayList<BasketballGame> gamesArray, String imgId) {
+    private void updateView(ArrayList<BasketballGame> gamesArray) {
        ArrayList<HashMap<String, String>> games = new ArrayList<>();
 
         for(BasketballGame game : gamesArray){
@@ -201,7 +192,7 @@ public class NewsfeedFragment extends ListFragment {
             map.put(KEY_ASSISTS, " "+game.getAssists()+" ");
             map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
             map.put(KEY_THREES, " "+game.getThreePoints()+" ");
-            map.put(KEY_THUMB_URL, imgId);
+            map.put(KEY_THUMB_URL, ""+game.getmImageIdentifier());
 
 
             mGamesArray.add(map);

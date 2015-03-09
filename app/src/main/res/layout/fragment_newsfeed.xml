@@ -10,6 +10,7 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
+        android:divider="@color/transparent_background"
         android:layout_height="match_parent"
         android:paddingStart="0dp" />
 

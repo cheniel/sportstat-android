@@ -40,6 +40,7 @@ public class AvatarGalleryActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
                 SettingsFragment.setImage(position);
+                SettingsFragment.mImageId = position;
                 SettingsFragment.getFromSharedPrefs = false;
                 finish();
 

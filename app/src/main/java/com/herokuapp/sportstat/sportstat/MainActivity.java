@@ -320,9 +320,7 @@ public class MainActivity extends Activity
 
     }
 
-    public void onCancelClicked(View v){
-        LogGameFragment.onCancelClicked(v);
-    }
+
 
     //OnSave, OnCancel, and OnChangePhoto clicked methods for Settings Fragment
 

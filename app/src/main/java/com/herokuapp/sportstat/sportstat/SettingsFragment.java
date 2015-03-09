@@ -50,7 +50,7 @@ public class SettingsFragment extends Fragment {
     private static final String NAME_TEXT = "saved_name";
     private static final String EMAIL_TEXT = "saved_email";
     private static final java.lang.String GET_FROM_PREFS = "get_img_from_prefs";
-    private static int mImageId;
+    public static int mImageId;
 
     private static final String HANDLE = "user_handle";
     private static final int PHOTO_SELECTED = 99;
@@ -256,7 +256,7 @@ public class SettingsFragment extends Fragment {
 
             @Override
             protected String doInBackground(String... arg0) {
-                String postResponseString = CloudUtilities.post(
+                String postResponseString = CloudUtilities.patch(
                         act.getString(R.string.sportstat_url) + "users/"+mUserId+".json", post
                 );
 

@@ -117,39 +117,39 @@ public class StatsFragment extends Fragment {
         dataset.addSeries(threeSeries);
 
         // Creating XYSeriesRenderer to customize incomeSeries
-        XYSeriesRenderer incomeRenderer = new XYSeriesRenderer();
-        incomeRenderer.setColor(Color.BLACK); //color of the graph set to cyan
-        incomeRenderer.setFillPoints(true);
-        incomeRenderer.setLineWidth(7f);
-        incomeRenderer.setDisplayChartValues(true);
+        XYSeriesRenderer assistsRenderer = new XYSeriesRenderer();
+        assistsRenderer.setColor(Color.BLACK); //color of the graph set to cyan
+        assistsRenderer.setFillPoints(true);
+        assistsRenderer.setLineWidth(7f);
+        assistsRenderer.setDisplayChartValues(true);
         //setting chart value distance
-        incomeRenderer.setDisplayChartValuesDistance(10);
+        assistsRenderer.setDisplayChartValuesDistance(10);
         //setting line graph point style to circle
-        incomeRenderer.setPointStyle(PointStyle.CIRCLE);
+        assistsRenderer.setPointStyle(PointStyle.CIRCLE);
         //setting stroke of the line chart to solid
-        incomeRenderer.setStroke(BasicStroke.SOLID);
+        assistsRenderer.setStroke(BasicStroke.SOLID);
 
         // Creating XYSeriesRenderer to customize expenseSeries
-        XYSeriesRenderer expenseRenderer = new XYSeriesRenderer();
-        expenseRenderer.setColor(Color.BLUE);
-        expenseRenderer.setFillPoints(true);
-        expenseRenderer.setLineWidth(7f);
-        expenseRenderer.setDisplayChartValues(true);
+        XYSeriesRenderer twosRenderer = new XYSeriesRenderer();
+        twosRenderer.setColor(Color.BLUE);
+        twosRenderer.setFillPoints(true);
+        twosRenderer.setLineWidth(7f);
+        twosRenderer.setDisplayChartValues(true);
         //setting line graph point style to circle
-        expenseRenderer.setPointStyle(PointStyle.SQUARE);
+        twosRenderer.setPointStyle(PointStyle.SQUARE);
         //setting stroke of the line chart to solid
-        expenseRenderer.setStroke(BasicStroke.SOLID);
+        twosRenderer.setStroke(BasicStroke.SOLID);
 
         // Creating XYSeriesRenderer to customize expenseSeries
         XYSeriesRenderer threeRenderer = new XYSeriesRenderer();
-        expenseRenderer.setColor(Color.RED);
-        expenseRenderer.setFillPoints(true);
-        expenseRenderer.setLineWidth(7f);
-        expenseRenderer.setDisplayChartValues(true);
+        twosRenderer.setColor(Color.RED);
+        twosRenderer.setFillPoints(true);
+        twosRenderer.setLineWidth(7f);
+        twosRenderer.setDisplayChartValues(true);
         //setting line graph point style to circle
-        expenseRenderer.setPointStyle(PointStyle.SQUARE);
+        twosRenderer.setPointStyle(PointStyle.SQUARE);
         //setting stroke of the line chart to solid
-        expenseRenderer.setStroke(BasicStroke.SOLID);
+        twosRenderer.setStroke(BasicStroke.SOLID);
 
         // Creating a XYMultipleSeriesRenderer to customize the whole chart
         XYMultipleSeriesRenderer multiRenderer = new XYMultipleSeriesRenderer();
@@ -158,16 +158,15 @@ public class StatsFragment extends Fragment {
 
           multiRenderer.setXTitle("Entries from " + mGamesArray.get(0).getTimeString()
                   + " to " + mGamesArray.get(mGamesArray.size() - 1).getTimeString());
-          //multiRenderer.setXTitle(getString(R.string.stats_chart_x_label));
-          // multiRenderer.setYTitle(getString(R.string.stats_chart_y_label));
+
 
         /***
          * Customizing graphs
          */
         //setting text size of the title
-        multiRenderer.setChartTitleTextSize(28);
+        multiRenderer.setChartTitleTextSize(35);
         //setting text size of the axis title
-        multiRenderer.setAxisTitleTextSize(24);
+        multiRenderer.setAxisTitleTextSize(32);
         //setting text size of the graph lable
         multiRenderer.setLabelsTextSize(24);
 
@@ -204,11 +203,12 @@ public class StatsFragment extends Fragment {
         multiRenderer.setYLabelsAlign(Align.LEFT);
         //setting text style
         multiRenderer.setTextTypeface("sans_serif", Typeface.NORMAL);
+
         //setting no of values to display in y axis
         multiRenderer.setYLabels(10);
-        // setting y axis max value, Since i'm using static values inside the graph so i'm setting y max value to 4000.
-        // if you use dynamic values then get the max y value and set here
-        multiRenderer.setYAxisMax(Math.max(Math.max(findMax(assists), findMax(twos)), findMax(threes)));
+        // setting y axis max value
+        multiRenderer.setYAxisMax(2*Math.max(Math.max(findMax(assists), findMax(twos)), findMax(threes)));
+        multiRenderer.setYAxisMin(-Math.max(Math.max(findMax(assists), findMax(twos)), findMax(threes)));
         //setting used to move the graph on xaxiz to .5 to the right
         multiRenderer.setXAxisMin(-0.5);
         //setting used to move the graph on xaxiz to .5 to the right
@@ -230,11 +230,11 @@ public class StatsFragment extends Fragment {
         //            multiRenderer.addXTextLabel(i, mMonth[i]);
         //        }
 
-        // Adding incomeRenderer and expenseRenderer to multipleRenderer
+        // Adding assistsRenderer and twosRenderer to multipleRenderer
         // Note: The order of adding dataseries to dataset and renderers to multipleRenderer
         // should be same
-        multiRenderer.addSeriesRenderer(incomeRenderer);
-        multiRenderer.addSeriesRenderer(expenseRenderer);
+        multiRenderer.addSeriesRenderer(assistsRenderer);
+        multiRenderer.addSeriesRenderer(twosRenderer);
         multiRenderer.addSeriesRenderer(threeRenderer);
 
 

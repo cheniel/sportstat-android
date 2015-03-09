@@ -156,6 +156,8 @@ public class LogGameFragment extends ListFragment {
     //onSaveClicked saves the entry to the database
     public static void onSaveClicked(View v, final MainActivity act){
 
+        mGame.setmImageIdentifier(SettingsFragment.mImageId);
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(act);
         mGame.setUsername(prefs.getString(Globals.USERNAME, null));
         mGame.setUserId(prefs.getInt(Globals.USER_ID, 0));
@@ -206,10 +208,7 @@ public class LogGameFragment extends ListFragment {
 
     }
 
-    public static void onCancelClicked(View v){
 
-
-    }
 
     //Methods to set fields on a potential ExerciseEntry--------------------------------------
 
