@@ -47,36 +47,42 @@
         android:textColor="#040404"
         android:textSize="22dip"
         android:textStyle="bold"
-        android:typeface="sans" />
+        android:typeface="sans"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <!-- Title Of Song-->
     <TextView
         android:id="@+id/stat_score_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+
+        android:layout_below="@id/nameText"
 
         android:text="@string/stat_score_text"
         android:textColor="#040404"
-        android:textSize="22dip"
+        android:textSize="19dip"
         android:typeface="sans"
-        android:layout_alignBaseline="@id/nameText"
-        android:layout_toEndOf="@+id/nameText" />
+
+        android:layout_alignParentStart="true"
+
+        />
 
         <TextView
             android:id="@+id/stat_score_num"
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/stat_score_text"
             android:layout_marginLeft="2dp"
 
             android:text="24"
             android:textColor="#040404"
-            android:textSize="25dip"
+            android:textSize="22dip"
             android:textStyle="bold"
             android:typeface="sans"
-            android:layout_alignBaseline="@id/nameText"
-            android:layout_toEndOf="@+id/nameText" />
+            android:layout_alignBaseline="@id/stat_score_text"
+            android:layout_toEndOf="@+id/stat_score_text" />
 
 
     </RelativeLayout>

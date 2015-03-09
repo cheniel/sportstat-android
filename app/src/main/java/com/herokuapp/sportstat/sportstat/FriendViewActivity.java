@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 
@@ -52,7 +53,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private IntentFilter mMessageIntentFilter;
     private ArrayList<BasketballGame> mBasketballGames;
     private String mStatScore;
-    private int mPassedUserId = -1;
+    private int mPassedUserId;
     private String mUserName;
     private int mCurrentUserId;
     private boolean isAlreadyFollowing = false;
@@ -81,7 +82,11 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mPassedUserId = Integer.parseInt(extras.getString(USER_ID, ""));
+            mPassedUserId = extras.getInt(USER_ID, -1);
+            if (mPassedUserId == -1){
+                Log.d(TAG, "failed to get user id from intent");
+                Toast.makeText(this, "User Not Found", Toast.LENGTH_SHORT);
+            }
             mUserName = extras.getString(USERNAME, null);
         }
 
@@ -94,7 +99,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         TextView textView = (TextView) findViewById(R.id.profile_text_edit);
         mFollowButton = (Button) findViewById(R.id.button_follow_user);
 
-        if (mCurrentUserId != mPassedUserId){
+        if (mCurrentUserId != mPassedUserId) {
             mFollowButton.setVisibility(View.VISIBLE);
             mFollowButton.setEnabled(true);
 
@@ -103,22 +108,21 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             mFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isAlreadyFollowing){
+                    if (!isAlreadyFollowing) {
                         mFollowButton.setText("Unfollow");
                         isAlreadyFollowing = true;
+                        addFriendToFriendList(mPassedUserId, mCurrentUserId);
                     } else {
                         mFollowButton.setText("Follow");
                         isAlreadyFollowing = false;
                     }
                 }
             });
-
-            mCurrentUserId = mPassedUserId;
         }
 
         String linesep = System.getProperty("line.separator");
 
-        textView.setText(mUserName+linesep+"StatScore: "+mStatScore);
+        textView.setText(mUserName + linesep + "StatScore: " + mStatScore);
 
 
         // Define SlidingTabLayout (shown at top)
@@ -167,16 +171,19 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
     }
 
+    private void addFriendToFriendList(int addUserId, int toUserId) {
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         int uid;
-        if (mPassedUserId < 1) {
-            uid = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
+        if (mPassedUserId == mCurrentUserId) {
+            uid = mCurrentUserId;
         } else {
             uid = mPassedUserId;
-            Log.d(TAG, "ID: "+mPassedUserId);
+            Log.d(TAG, "ID: " + mPassedUserId);
         }
 
         final int userId = uid;
@@ -213,16 +220,16 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                                     String linesep = System.getProperty("line.separator");
 
 
-                                    textView.setText(mUserName+linesep+"StatScore: "+mStatScore);
+                                    textView.setText(mUserName + linesep + "StatScore: " + mStatScore);
 
-                                   if(mBasketballGames.size() == 0){
-                                       histFrag.updateView(mBasketballGames, getApplicationContext(), false);
-                                       statFrag.updateStats(mBasketballGames, getApplicationContext(), false);
-                                   }else {
+                                    if (mBasketballGames.size() == 0) {
+                                        histFrag.updateView(mBasketballGames, getApplicationContext(), false);
+                                        statFrag.updateStats(mBasketballGames, getApplicationContext(), false);
+                                    } else {
 
-                                       histFrag.updateView(mBasketballGames, getApplicationContext(), true);
-                                       statFrag.updateStats(mBasketballGames, getApplicationContext(), true);
-                                   }
+                                        histFrag.updateView(mBasketballGames, getApplicationContext(), true);
+                                        statFrag.updateStats(mBasketballGames, getApplicationContext(), true);
+                                    }
                                 }
                             }
                     );
@@ -267,29 +274,29 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         int count = 0;
         TextView avgTextView = (TextView) findViewById(R.id.avg_stats_text_view);
 
-        for(BasketballGame game : mBasketballGames){
+        for (BasketballGame game : mBasketballGames) {
             count++;
-            assistsSum+=game.getAssists();
-            twosSum+=game.getTwoPoints();
-            threesSum+=game.getThreePoints();
-            attempts+=game.getShotsAttempted();
+            assistsSum += game.getAssists();
+            twosSum += game.getTwoPoints();
+            threesSum += game.getThreePoints();
+            attempts += game.getShotsAttempted();
         }
 
-        avgAssists = assistsSum/((double)count);
-        avgTwos = twosSum/((double)count);
-        avgThrees = threesSum/((double)count);
-        if (attempts != 0){
+        avgAssists = assistsSum / ((double) count);
+        avgTwos = twosSum / ((double) count);
+        avgThrees = threesSum / ((double) count);
+        if (attempts != 0) {
             avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
-        mStatScore = decimalFormat.format(avgAssists+avgTwos+avgThrees);
+        mStatScore = decimalFormat.format(avgAssists + avgTwos + avgThrees);
 
         String linesep = System.getProperty("line.separator");
-        avgTextView.setText("Avg Assists: "+decimalFormat.format(avgAssists)+linesep+"Avg 2-Pointer's: "
-                +decimalFormat.format(avgTwos)+linesep+"Avg 3-Pointer's: "+decimalFormat.format(avgThrees)
-                +linesep+"Average Shots Made: "+decimalFormat.format(avgShotsMade) + "%");
+        avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
+                + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees)
+                + linesep + "Average Shots Made: " + decimalFormat.format(avgShotsMade) + "%");
 
     }
 }
