@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.herokuapp.sportstat.sportstat.view.SlidingTabLayout;
 
@@ -52,7 +53,7 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
     private IntentFilter mMessageIntentFilter;
     private ArrayList<BasketballGame> mBasketballGames;
     private String mStatScore;
-    private int mPassedUserId = -1;
+    private int mPassedUserId;
     private String mUserName;
     private int mCurrentUserId;
     private boolean isAlreadyFollowing = false;
@@ -81,7 +82,11 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mPassedUserId = Integer.parseInt(extras.getString(USER_ID, ""));
+            mPassedUserId = extras.getInt(USER_ID, -1);
+            if (mPassedUserId == -1){
+                Log.d(TAG, "failed to get user id from intent");
+                Toast.makeText(this, "User Not Found", Toast.LENGTH_SHORT);
+            }
             mUserName = extras.getString(USERNAME, null);
         }
 
@@ -113,8 +118,6 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                     }
                 }
             });
-
-            mCurrentUserId = mPassedUserId;
         }
 
         String linesep = System.getProperty("line.separator");
@@ -176,8 +179,8 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         super.onResume();
 
         int uid;
-        if (mPassedUserId < 1) {
-            uid = PreferenceManager.getDefaultSharedPreferences(this).getInt(Globals.USER_ID, -1);
+        if (mPassedUserId == mCurrentUserId) {
+            uid = mCurrentUserId;
         } else {
             uid = mPassedUserId;
             Log.d(TAG, "ID: " + mPassedUserId);
