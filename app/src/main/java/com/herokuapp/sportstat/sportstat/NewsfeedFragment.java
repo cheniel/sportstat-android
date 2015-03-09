@@ -187,7 +187,7 @@ public class NewsfeedFragment extends ListFragment {
     //Takes an ArrayList of BasketBallGame objects and updates the listview
     private void updateView(ArrayList<BasketballGame> gamesArray, String imgId) {
         mGamesArray.clear();
-        
+
         ArrayList<HashMap<String, String>> games = new ArrayList<>();
 
         for(BasketballGame game : gamesArray){
