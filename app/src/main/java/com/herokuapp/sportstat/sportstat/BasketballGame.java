@@ -31,6 +31,7 @@ public class BasketballGame implements Serializable {
     private Calendar mStartTime;
     private Calendar mEndTime;
     private String mComment;
+    private int mImageIdentifier;
 
     private double mDistance;
     private long mDuration;
@@ -51,6 +52,7 @@ public class BasketballGame implements Serializable {
         mStartTime = Calendar.getInstance(TimeZone.getTimeZone("Z"));
         mEndTime = mStartTime;
         mComment = "";
+
 
     }
 
@@ -112,6 +114,14 @@ public class BasketballGame implements Serializable {
             bg.setStartTime(startTime);
         }
 
+        String avatarId = j.optString("user_avatar");
+        if(avatarId!=null&&(!avatarId.equals("null") )){
+
+            bg.setmImageIdentifier(Integer.parseInt(avatarId));
+        }else{
+            bg.setmImageIdentifier(9);
+        }
+
         String endTime = j.optString("end_time");
         if (endTime != null) {
             bg.setEndTime(endTime);
@@ -142,6 +152,14 @@ public class BasketballGame implements Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getmImageIdentifier() {
+        return mImageIdentifier;
+    }
+
+    public void setmImageIdentifier(int mImageIdentifier) {
+        this.mImageIdentifier = mImageIdentifier;
     }
 
     public String getUsername() {
