@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.herokuapp.sportstat.sportstat.CustomListResources.LazyAdapter;
@@ -32,12 +31,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FriendViewFragment.OnFragmentInteractionListener} interface
+ * {@link MyProfileFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FriendViewFragment#newInstance} factory method to
+ * Use the {@link MyProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FriendViewFragment extends Fragment implements StatsFragment.OnFragmentInteractionListener {
+public class MyProfileFragment extends Fragment implements StatsFragment.OnFragmentInteractionListener {
 
 
     private static final String TAG = "tag";
@@ -81,8 +80,8 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
      * @return A new instance of fragment FriendViewFragment.
      */
 
-    public static FriendViewFragment newInstance(int sectionNumber) {
-        FriendViewFragment fragment = new FriendViewFragment();
+    public static MyProfileFragment newInstance(int sectionNumber) {
+        MyProfileFragment fragment = new MyProfileFragment();
 
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -90,7 +89,7 @@ public class FriendViewFragment extends Fragment implements StatsFragment.OnFrag
         return fragment;
     }
 
-    public FriendViewFragment() {
+    public MyProfileFragment() {
         // Required empty public constructor
     }
 

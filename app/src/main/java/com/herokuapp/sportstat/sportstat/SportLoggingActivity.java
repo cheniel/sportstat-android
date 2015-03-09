@@ -93,6 +93,11 @@ public class SportLoggingActivity extends Activity implements ServiceConnection 
         mTwoPointButton = (Button) findViewById(R.id.new_basketball_game_two_point_button);
         mThreePointButton = (Button) findViewById(R.id.new_basketball_game_three_point_button);
 
+
+
+
+
+
         locIntent = new Intent(this, TrackingService.class);
 
         mStartTimeInMillis = System.currentTimeMillis();

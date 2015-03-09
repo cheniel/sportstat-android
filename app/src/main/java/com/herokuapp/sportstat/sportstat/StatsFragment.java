@@ -121,7 +121,7 @@ public class StatsFragment extends Fragment {
         assistsRenderer.setColor(Color.BLACK); //color of the graph set to cyan
         assistsRenderer.setFillPoints(true);
         assistsRenderer.setLineWidth(7f);
-        assistsRenderer.setDisplayChartValues(true);
+        assistsRenderer.setDisplayChartValues(false);
         //setting chart value distance
         assistsRenderer.setDisplayChartValuesDistance(10);
         //setting line graph point style to circle
@@ -134,7 +134,7 @@ public class StatsFragment extends Fragment {
         twosRenderer.setColor(Color.BLUE);
         twosRenderer.setFillPoints(true);
         twosRenderer.setLineWidth(7f);
-        twosRenderer.setDisplayChartValues(true);
+        twosRenderer.setDisplayChartValues(false);
         //setting line graph point style to circle
         twosRenderer.setPointStyle(PointStyle.SQUARE);
         //setting stroke of the line chart to solid
@@ -145,7 +145,7 @@ public class StatsFragment extends Fragment {
         twosRenderer.setColor(Color.RED);
         twosRenderer.setFillPoints(true);
         twosRenderer.setLineWidth(7f);
-        twosRenderer.setDisplayChartValues(true);
+        twosRenderer.setDisplayChartValues(false);
         //setting line graph point style to circle
         twosRenderer.setPointStyle(PointStyle.SQUARE);
         //setting stroke of the line chart to solid
@@ -160,7 +160,8 @@ public class StatsFragment extends Fragment {
                   + " to " + mGamesArray.get(mGamesArray.size() - 1).getTimeString());
 
        // multiRenderer.setXLabelsColor(Color.GRAY);
-        multiRenderer.setLabelsColor(Color.GRAY);
+        multiRenderer.setLabelsColor(Color.DKGRAY);
+
 
 
         /***
@@ -173,6 +174,8 @@ public class StatsFragment extends Fragment {
         //setting text size of the graph lable
         multiRenderer.setLabelsTextSize(24);
 
+        multiRenderer.setYLabelsColor(0, Color.GRAY);
+        multiRenderer.setGridColor(Color.LTGRAY);
         multiRenderer.setLegendTextSize(30);
         //setting zoom buttons visiblity
         multiRenderer.setZoomButtonsVisible(false);
@@ -206,6 +209,8 @@ public class StatsFragment extends Fragment {
         multiRenderer.setYLabelsAlign(Align.LEFT);
         //setting text style
         multiRenderer.setTextTypeface("sans_serif", Typeface.NORMAL);
+
+
 
         //setting no of values to display in y axis
         multiRenderer.setYLabels(10);

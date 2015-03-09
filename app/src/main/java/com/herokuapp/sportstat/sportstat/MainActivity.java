@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,7 +13,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,12 +28,11 @@ import com.herokuapp.sportstat.sportstat.CustomListResources.DrawerItem;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, FriendViewFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, MyProfileFragment.OnFragmentInteractionListener {
 
     private static final String TAG = "a";
     /**
@@ -47,7 +44,7 @@ public class MainActivity extends Activity
     FragmentManager mFragmentManager;
     private StartGameFragment mFragmentStartGame;
     //private LogGameFragment mFragmentLogGame;
-    private FriendViewFragment mFragmentFriendView;
+    private MyProfileFragment mFragmentFriendView;
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
     private FriendFinderFragment mFragmentFriendFinder;
@@ -81,7 +78,7 @@ public class MainActivity extends Activity
         mFragmentManager = getFragmentManager();
         mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
        // mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
-        mFragmentFriendView = FriendViewFragment.newInstance(NavigationDrawerFragment.PROFILE_TAB_ID);
+        mFragmentFriendView = MyProfileFragment.newInstance(NavigationDrawerFragment.PROFILE_TAB_ID);
         mFragmentNewsfeed = NewsfeedFragment.newInstance(NavigationDrawerFragment.NEWSFEED_TAB_ID);
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
         mFragmentFriendFinder = FriendFinderFragment.newInstance(NavigationDrawerFragment.FRIEND_TAB_ID);

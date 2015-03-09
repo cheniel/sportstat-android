@@ -19,8 +19,8 @@
     <string name="title_activity_start_game">StartGameActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="Assist_Button">Assist</string>
-    <string name="Two_Point_Button">Two-Point</string>
-    <string name="Three_Point_Button">Three-Point</string>
+    <string name="Two_Point_Button">2-Point</string>
+    <string name="Three_Point_Button">3-Point</string>
     <string name="Done_Button">Done</string>
     <string name="title_activity_sport_logging">Sport Logger</string>
     <string name="title_activity_game_summary">Game Summary</string>
