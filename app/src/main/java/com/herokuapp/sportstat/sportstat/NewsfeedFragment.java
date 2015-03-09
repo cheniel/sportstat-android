@@ -167,6 +167,8 @@ public class NewsfeedFragment extends ListFragment {
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
 
+                //Log.d(TAG, "CCC: nF: "+feed.get(feed.size()-i).getmImageIdentifier());
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -198,6 +200,8 @@ public class NewsfeedFragment extends ListFragment {
             map.put(KEY_TWOS, " "+game.getTwoPoints()+" ");
             map.put(KEY_THREES, " "+game.getThreePoints()+" ");
             map.put(KEY_THUMB_URL, ""+game.getmImageIdentifier());
+
+            Log.d(TAG, "CCC: nFFinal: "+game.getmImageIdentifier());
 
 
             mGamesArray.add(map);

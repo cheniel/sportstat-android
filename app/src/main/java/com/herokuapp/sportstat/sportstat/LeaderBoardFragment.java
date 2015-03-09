@@ -185,12 +185,19 @@ public class LeaderBoardFragment extends ListFragment {
                 map.put(KEY_ID, ""+friend.getInt("id"));
 
 
+
                 JSONArray usersGames = friend.getJSONArray("games");
                 for(int k = 0; k<usersGames.length(); k++){
                     feed.add (
                             BasketballGame.getBasketballGameFromJSONObject(
                                     usersGames.getJSONObject(k)));
+
+                    //Log.d(TAG, "CCC: lb: "+feed.get(k).getmImageIdentifier());
                 }
+
+                map.put(KEY_THUMB_URL,friend.getString("avatar"));
+
+               
 
                 map.put(KEY_STATSCORE, findStatScore(feed));
 
@@ -233,6 +240,7 @@ public class LeaderBoardFragment extends ListFragment {
 
 
         mAdapter = new LazyAdapter(this.getActivity(),sortedFeed, false, true, getActivity());
+
 
 
         //defAdapter = new ArrayAdapter<BasketballGame>(this.getActivity(), R.layout.plain_textview, gamesArray);
