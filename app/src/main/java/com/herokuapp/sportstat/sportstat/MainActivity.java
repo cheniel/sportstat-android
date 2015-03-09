@@ -357,6 +357,7 @@ public class MainActivity extends Activity
                         Intent intent = new Intent(".activities.FriendViewActivity");
                         intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
                         intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
+                        intent.putExtra(FriendViewActivity.IMG_ID, userJSON.getString("avatar"));
                         startActivity(intent);
 
                         return "success";
