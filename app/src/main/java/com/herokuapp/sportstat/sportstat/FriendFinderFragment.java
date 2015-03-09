@@ -2,23 +2,26 @@ package com.herokuapp.sportstat.sportstat;
 
 import android.app.Activity;
 import android.app.ListFragment;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ListView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -34,8 +37,10 @@ public class FriendFinderFragment extends ListFragment {
 
     private int mSectionNumber;
     private ArrayAdapter<String> defAdapter;
-    private ArrayList<String> mFriendsArray;
+    private ArrayList<String> mFriendsUsernameArray;
     public static EditText mUserSearchEditText;
+    private ArrayList<Integer> mFriendsIdArray;
+    private ArrayList<String> mFriendsAvatarArray;
 
 
     /**
@@ -78,13 +83,6 @@ public class FriendFinderFragment extends ListFragment {
 
         }
 
-        mFriendsArray = new ArrayList<>();
-        mFriendsArray.add("Scruffy");
-        mFriendsArray.add("Ishmael");
-        mFriendsArray.add("This is filler data");
-
-        updateView(mFriendsArray);
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_friend_finder, container, false);
     }
@@ -95,20 +93,63 @@ public class FriendFinderFragment extends ListFragment {
 
         mUserSearchEditText = (EditText) getView().findViewById(R.id.friend_search_edit_text);
 
+        final int userId = PreferenceManager.getDefaultSharedPreferences(
+                getActivity()).getInt(Globals.USER_ID, -1);
 
+        if (userId == -1) {
+            Log.e(getActivity().getLocalClassName(), "preference error");
+            return;
+        }
+
+        final Handler handler = new Handler(Looper.getMainLooper());
+        new AsyncTask<String, Void, String>() {
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String resultString = CloudUtilities.getJSON(
+                        getString(R.string.sportstat_url) + "users/" + userId
+                                + "/following.json");
+                mFriendsUsernameArray = new ArrayList<String>();
+                mFriendsIdArray = new ArrayList<Integer>();
+                mFriendsAvatarArray = new ArrayList<String>();
+
+                try {
+                    final JSONArray friends = new JSONArray(resultString);
+
+                    for (int i = 0; i < friends.length(); i++) {
+                        JSONObject friend = friends.getJSONObject(i);
+
+                        mFriendsUsernameArray.add(friend.getString("username"));
+                        mFriendsIdArray.add(friend.getInt("id"));
+                        mFriendsAvatarArray.add(friend.getString("avatar"));
+                    }
+
+                    handler.post(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateView(mFriendsUsernameArray);
+                                }
+                            }
+                    );
+
+                    return "success";
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "failure";
+            }
+
+        }.execute();
 
     }
 
 
     //Takes an ArrayList of BasketBallGame objects and updates the listview
-    private void updateView(ArrayList<String> gamesArray) {
-
-
-        defAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.plain_textview, gamesArray);
+    private void updateView(ArrayList<String> friendsArray) {
+        defAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.plain_textview, friendsArray);
         setListAdapter(defAdapter);
-
-
-
     }
 
     @Override
@@ -123,6 +164,18 @@ public class FriendFinderFragment extends ListFragment {
         super.onDetach();
     }
 
+    @Override
+    //When user clicks someone's newsfeed entry, bring them to that users' page
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        Intent intent = new Intent(".activities.FriendViewActivity");
+        intent.putExtra(FriendViewActivity.USER_ID, mFriendsIdArray.get(position));
+        intent.putExtra(FriendViewActivity.USERNAME, mFriendsUsernameArray.get(position));
+        intent.putExtra(FriendViewActivity.IMG_ID, mFriendsAvatarArray.get(position));
+        startActivity(intent);
+
+    }
 
 }
 
