@@ -46,7 +46,7 @@ public class MainActivity extends Activity
     // the other fragments
     FragmentManager mFragmentManager;
     private StartGameFragment mFragmentStartGame;
-    private LogGameFragment mFragmentLogGame;
+    //private LogGameFragment mFragmentLogGame;
     private FriendViewFragment mFragmentFriendView;
     private SettingsFragment mFragmentSettings;
     private NewsfeedFragment mFragmentNewsfeed;
@@ -80,7 +80,7 @@ public class MainActivity extends Activity
 
         mFragmentManager = getFragmentManager();
         mFragmentStartGame = StartGameFragment.newInstance(NavigationDrawerFragment.START_TAB_ID);
-        mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
+       // mFragmentLogGame = LogGameFragment.newInstance(NavigationDrawerFragment.LOG_TAB_ID);
         mFragmentFriendView = FriendViewFragment.newInstance(NavigationDrawerFragment.PROFILE_TAB_ID);
         mFragmentNewsfeed = NewsfeedFragment.newInstance(NavigationDrawerFragment.NEWSFEED_TAB_ID);
         mFragmentSettings = SettingsFragment.newInstance(NavigationDrawerFragment.SETTINGS_TAB_ID);
@@ -148,12 +148,6 @@ public class MainActivity extends Activity
                 onSectionAttached(NavigationDrawerFragment.START_TAB_ID);
                 break;
 
-            case (NavigationDrawerFragment.LOG_TAB_ID):
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.container, mFragmentLogGame)
-                        .commit();
-                onSectionAttached(NavigationDrawerFragment.LOG_TAB_ID);
-                break;
 
             case (NavigationDrawerFragment.SETTINGS_TAB_ID):
                 mFragmentManager.beginTransaction()
@@ -214,9 +208,7 @@ public class MainActivity extends Activity
                 case NavigationDrawerFragment.START_TAB_ID:
                     mTitle = getString(R.string.Start_Game_Tab);
                     break;
-                case NavigationDrawerFragment.LOG_TAB_ID:
-                    mTitle = getString(R.string.Log_Game_Tab);
-                    break;
+
                 case NavigationDrawerFragment.PROFILE_TAB_ID:
                     mTitle = getString(R.string.My_Profile_Tab);
                     break;
@@ -310,15 +302,7 @@ public class MainActivity extends Activity
         startActivity(intent);
     }
 
-    //On save and on cancel clicked methods for LogGameFragment
-    public void onSaveClicked(View v){
-        LogGameFragment.onSaveClicked(v, this);
 
-        getFragmentManager().beginTransaction().remove(mFragmentLogGame).commit();
-
-        returnToNewsfeed();
-
-    }
 
 
 
@@ -432,7 +416,7 @@ public class MainActivity extends Activity
 
     //Helper method to restore the default view
     private void returnToNewsfeed(){
-        getFragmentManager().beginTransaction().remove(mFragmentLogGame).commit();
+       // getFragmentManager().beginTransaction().remove().commit();
 
         mFragmentManager.beginTransaction()
                 .replace(R.id.container, mFragmentNewsfeed)

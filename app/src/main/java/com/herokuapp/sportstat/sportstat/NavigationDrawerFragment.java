@@ -52,17 +52,16 @@ public class NavigationDrawerFragment extends Fragment {
 
 
     public static final int START_TAB_ID = 0;
-    public static final int LOG_TAB_ID = 1;
-    public static final int PROFILE_TAB_ID = 2;
-    public static final int NEWSFEED_TAB_ID = 3;
-    public static final int LEADERBOARD_TAB_ID = 4;
-    public static final int FRIEND_TAB_ID = 5;
-    public static final int SETTINGS_TAB_ID = 6;
+
+    public static final int PROFILE_TAB_ID = 1;
+    public static final int NEWSFEED_TAB_ID = 2;
+    public static final int LEADERBOARD_TAB_ID = 3;
+    public static final int FRIEND_TAB_ID = 4;
+    public static final int SETTINGS_TAB_ID = 5;
 
 
     private static final String[] allDrawers = {
             ACTIVITY_CREATE_NEW_GAME_AUTOMATIC,
-            ACTIVITY_CREATE_NEW_GAME_MANUAL,
             ACTIVITY_MY_PROFILE,
             ACTIVITY_NEWSFEED,
             ACTIVITY_LEADERBOARD,
@@ -163,12 +162,12 @@ public class NavigationDrawerFragment extends Fragment {
 
         List<DrawerItem> list = new ArrayList<>();
         list.add(new DrawerItem(allDrawers[0], R.drawable.basketball_icon4));
-        list.add(new DrawerItem(allDrawers[1], R.drawable.pencil_icon4));
-        list.add(new DrawerItem(allDrawers[2], R.drawable.profile_icon4));
-        list.add(new DrawerItem(allDrawers[3], R.drawable.newspaper_icon4));
-        list.add(new DrawerItem(allDrawers[4], R.drawable.trophy_icon4));
-        list.add(new DrawerItem(allDrawers[5], R.drawable.ic_action_group));
-        list.add(new DrawerItem(allDrawers[6], R.drawable.ic_action_settings));
+        //list.add(new DrawerItem(allDrawers[1], R.drawable.pencil_icon4));
+        list.add(new DrawerItem(allDrawers[1], R.drawable.profile_icon4));
+        list.add(new DrawerItem(allDrawers[2], R.drawable.newspaper_icon4));
+        list.add(new DrawerItem(allDrawers[3], R.drawable.trophy_icon4));
+        list.add(new DrawerItem(allDrawers[4], R.drawable.ic_action_group));
+        list.add(new DrawerItem(allDrawers[5], R.drawable.ic_action_settings));
 
 
 
