@@ -282,19 +282,19 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
        Log.d(TAG, "AAA: FriendView averages:"+avgAssists+" "+avgTwos+" "+avgThrees);
 
-        if (attempts != 0) {
-            avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
-        }
-
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String linesep = System.getProperty("line.separator");
 
         mStatScore = decimalFormat.format(avgAssists + avgTwos + avgThrees);
-
-        String linesep = System.getProperty("line.separator");
-        avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
-                + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees)
-                + linesep + "Average Shots Made: " + decimalFormat.format(avgShotsMade) + "%");
-
+        if (attempts > 0) {
+            avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
+            avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
+                    + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees)
+                    + linesep + "Average Shots Made: " + decimalFormat.format(avgShotsMade) + "%");
+        } else {
+            avgTextView.setText("Avg Assists: " + decimalFormat.format(avgAssists) + linesep + "Avg 2-Pointer's: "
+                    + decimalFormat.format(avgTwos) + linesep + "Avg 3-Pointer's: " + decimalFormat.format(avgThrees));
+        }
     }
 
     private void addFriendToFriendList(int addUserId, final int toUserId) {

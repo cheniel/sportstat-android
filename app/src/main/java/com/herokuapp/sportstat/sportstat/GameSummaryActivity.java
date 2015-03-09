@@ -395,7 +395,7 @@ public class GameSummaryActivity extends Activity {
                         makeToast("Friend exists!");
 
                         Intent intent = new Intent(".activities.FriendViewActivity");
-                        intent.putExtra(FriendViewActivity.USER_ID, ""+userJSON.getInt("id"));
+                        intent.putExtra(FriendViewActivity.USER_ID, userJSON.getInt("id"));
                         intent.putExtra(FriendViewActivity.USERNAME, userJSON.getString("username"));
                         startActivity(intent);
 
