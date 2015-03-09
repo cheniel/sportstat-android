@@ -78,13 +78,15 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mPassedUserId = extras.getInt(USER_ID, -1);
+            mPassedUserId = Integer.parseInt(extras.getString(USER_ID, null));
+            Log.d(TAG, "First passed ID: " + mPassedUserId);
             if (mPassedUserId == -1){
                 Log.d(TAG, "failed to get user id from intent");
                 Toast.makeText(this, "User Not Found", Toast.LENGTH_SHORT);
                 mPassedUserId = mCurrentUserId;
             }else {
                 isAlreadyFollowing = amAlreadyFollowing(mPassedUserId);
+
             }
             mUserName = extras.getString(USERNAME, null);
         }
@@ -225,9 +227,10 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
         int uid;
         if (mPassedUserId == mCurrentUserId) {
             uid = mCurrentUserId;
+            Log.d(TAG, "PASS ID: " + mPassedUserId);
         } else {
             uid = mPassedUserId;
-            Log.d(TAG, "ID: " + mPassedUserId);
+            Log.d(TAG, "PASS ID: " + mPassedUserId);
         }
 
         final int userId = uid;
@@ -299,6 +302,8 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
                 feed.add(
                         BasketballGame.getBasketballGameFromJSONObject(
                                 basketballObject));
+
+                Log.d(TAG, "BBB: FV ID: "+basketballObject.getInt("id"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -326,9 +331,14 @@ public class FriendViewActivity extends Activity implements StatsFragment.OnFrag
             attempts += game.getShotsAttempted();
         }
 
+        Log.d(TAG, "AAA: FriendView sums:"+assistsSum+" "+twosSum+" "+threesSum );
+
         avgAssists = assistsSum / ((double) count);
         avgTwos = twosSum / ((double) count);
         avgThrees = threesSum / ((double) count);
+
+       Log.d(TAG, "AAA: FriendView averages:"+avgAssists+" "+avgTwos+" "+avgThrees);
+
         if (attempts != 0) {
             avgShotsMade = ((twosSum + threesSum) / attempts) * 100;
         }
