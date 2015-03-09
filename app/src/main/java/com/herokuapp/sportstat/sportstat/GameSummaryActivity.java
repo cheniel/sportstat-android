@@ -90,15 +90,13 @@ public class GameSummaryActivity extends Activity {
             setContentView(R.layout.activity_game_summary_external);
         }
 
-
-
         mGame = (BasketballGame)i.getSerializableExtra(SportLoggingActivity.BASKETBALL_GAME);
-
 
         mAssists = mGame.getAssists();
         mTwoPoints = mGame.getTwoPoints();
         mThreePoints = mGame.getThreePoints();
         mPossessions = mGame.getPossessions();
+        mShotsAttempted = mGame.getShotsAttempted();
         mDistanceRan = mGame.getDistance();
         mDuration = mGame.getDuration();
 
@@ -123,26 +121,24 @@ public class GameSummaryActivity extends Activity {
             e.printStackTrace();
         }
 
-        //mShotsAttempted = i.getIntExtra(SportLoggingActivity.SHOTS_ATTEMPTED, 0);
-
-        //mShotsAttempted = mGame.getShotsAttempted();
-
+        TextView statsText = (TextView) findViewById(R.id.stats_text_view);
+        String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
 
         int shotsMade = mTwoPoints+mThreePoints;
         String shotsMadePctStr = "";
-//         if(mShotsAttempted!=0){
-//             shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100+"%";
-//         }
+        if(mShotsAttempted < 0){
+            shotsMadePctStr = ""+(shotsMade/mShotsAttempted)*100+"%";
+
+            statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
+                    +lineSep+"Shots Made %age: "+shotsMadePctStr+lineSep+"Possessions: "+mPossessions
+                    +lineSep+"Distance Ran (m): "+mDistanceRan+lineSep+"Duration of Game: "+formatDuration(mDuration));
+        } else {
+            statsText.setText("Shots made: "+shotsMade+lineSep+"Possessions: "+mPossessions
+                    +lineSep+"Distance Ran (m): "+mDistanceRan+lineSep+"Duration of Game: "
+                    +formatDuration(mDuration));
+        }
 
 
-        mTime = i.getStringExtra(SportLoggingActivity.GAME_TIME);
-        //TODO: insert other stats
-
-        TextView statsText = (TextView) findViewById(R.id.stats_text_view);
-        String lineSep = System.getProperty("line.separator"); //The lineSep declaration was found on stackoverflow
-        statsText.setText("Shots attempted: "+mShotsAttempted+lineSep+"Shots made: "+shotsMade
-        +lineSep+"Shots Made %age: "+shotsMadePctStr+lineSep+"Possessions: "+mPossessions
-        +lineSep+"Distance Ran (m): "+mDistanceRan+lineSep+"Duration of Game: "+formatDuration(mDuration));
 
         //Display bargraph
         openChart();
@@ -371,8 +367,6 @@ public class GameSummaryActivity extends Activity {
     }
 
     private void launchUserProfile() {
-
-
         Intent i = new Intent(this, FriendViewActivity.class);
         final String enteredUserName = mGame.getUsername();
         Log.d(TAG, "FUCKING USERNAME: "+enteredUserName);
